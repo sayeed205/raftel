@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Navigate } from '@tanstack/react-router';
+import { Navigate, useLocation } from '@tanstack/react-router';
 import useAuthCheck from '@/hooks/use-auth.ts';
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
+  const { href } = useLocation();
   const { isAuthenticated } = useAuthCheck();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -26,6 +27,12 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
       </div>
     );
   }
+
+  if (isAuthenticated && href === '/login') {
+    return <Navigate to='/dashboard' />;
+  }
+
+  if (!isAuthenticated && href === '/login') return children;
 
   if (!isAuthenticated) {
     return <Navigate to='/login' replace />;

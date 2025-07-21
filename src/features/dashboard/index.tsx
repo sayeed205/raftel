@@ -15,10 +15,9 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { useIsMobile } from '@/hooks/use-mobile';
 
+import { useIsMobile } from '@/hooks/use-mobile';
 import { ProfileDropdown } from '@/components/profile-dropdown.tsx';
-// import { AddTorrentModal } from '@/components/ui/add-torrent-modal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -33,6 +32,7 @@ import {
 import { useTorrentStore } from '@/stores/torrent-store';
 import { Header } from '@/components/layout/header.tsx';
 import { Main } from '@/components/layout/main.tsx';
+import { AddTorrentModal } from '@/features/torrents/components/add-torrent-modal.tsx';
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -526,14 +526,14 @@ export default function DashboardPage() {
         </div>
       </Main>
 
-      {/* <AddTorrentModal*/}
-      {/*  open={addModalOpen}*/}
-      {/*  onOpenChange={setAddModalOpen}*/}
-      {/*  onAdded={() => {*/}
-      {/*    setAddModalOpen(false);*/}
-      {/*    fetchTorrents();*/}
-      {/*  }}*/}
-      {/* />*/}
+      <AddTorrentModal
+        open={addModalOpen}
+        onOpenChange={setAddModalOpen}
+        onAdded={() => {
+          setAddModalOpen(false);
+          fetchTorrents();
+        }}
+      />
     </>
   );
 }

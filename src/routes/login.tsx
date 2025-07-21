@@ -1,4 +1,4 @@
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Download, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
@@ -26,15 +26,6 @@ const loginSearchSchema = z.object({
 export const Route = createFileRoute('/login')({
   validateSearch: loginSearchSchema,
   component: Login,
-  beforeLoad: ({ search }) => {
-    // If user is already authenticated, redirect to intended destination or dashboard
-    const { isAuthenticated } = useAuthStore.getState();
-    if (isAuthenticated) {
-      throw redirect({
-        to: search.redirect || '/torrents',
-      });
-    }
-  },
 });
 
 const loginSchema = z.object({
