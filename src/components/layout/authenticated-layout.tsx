@@ -14,6 +14,7 @@ interface Props {
 export function AuthenticatedLayout({ children }: Props) {
   const defaultOpen = Cookies.get('sidebar_state') !== 'false';
   return (
+    // <AuthGuard>
     <SidebarProvider defaultOpen={defaultOpen}>
       <SkipToMain />
       <AppSidebar />
@@ -32,5 +33,6 @@ export function AuthenticatedLayout({ children }: Props) {
         {children ? children : <Outlet />}
       </div>
     </SidebarProvider>
+    // </AuthGuard>
   );
 }
