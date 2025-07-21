@@ -2,7 +2,7 @@
 
 <@tanstack/react-router_api>
 Always Apply: false - This rule should only be applied when relevant files are open
-Always apply this rule in these files: src/**/*.ts, src/**/*.tsx
+Always apply this rule in these files: src/**/\*.ts, src/**/\*.tsx
 
 # ActiveLinkOptions type
 
@@ -1024,7 +1024,8 @@ type beforeLoad = (
   not. To do this, you can either return or throw a `redirect` object from this function.
 
 > 🚧 `opts.navigate` has been deprecated and will be removed in the next major release. Use
-`throw redirect({ to: '/somewhere' })` instead. Read more about the `redirect` function [here](../redirectFunction.md).
+> `throw redirect({ to: '/somewhere' })` instead. Read more about the `redirect`
+> function [here](../redirectFunction.md).
 
 ### `loader` method
 
@@ -1063,7 +1064,8 @@ type loader = (
 - Deps must be returned by your `loaderDeps` function in order to appear.
 
 > 🚧 `opts.navigate` has been deprecated and will be removed in the next major release. Use
-`throw redirect({ to: '/somewhere' })` instead. Read more about the `redirect` function [here](../redirectFunction.md).
+> `throw redirect({ to: '/somewhere' })` instead. Read more about the `redirect`
+> function [here](../redirectFunction.md).
 
 ### `loaderDeps` method
 
@@ -1818,8 +1820,8 @@ An instance of the `Router` has the following properties and methods:
 - The current state of the router.
 
 > ⚠️⚠️⚠️ **`router.state` is always up to date, but NOT REACTIVE. If you use `router.state` in a component, the
-component will not re-render when the router state changes. To get a reactive version of the router state, use
-the [`useRouterState`](../useRouterStateHook.md) hook.**
+> component will not re-render when the router state changes. To get a reactive version of the router state, use
+> the [`useRouterState`](../useRouterStateHook.md) hook.**
 
 ### `.subscribe` method
 
@@ -1977,7 +1979,7 @@ Remove cached route matches.
 Loads all of the currently matched route matches and resolves when they are all loaded and ready to be rendered.
 
 > ⚠️⚠️⚠️ **`router.load()` respects `route.staleTime` and will not forcefully reload a route match if it is still fresh.
-If you need to forcefully reload a route match, use `router.invalidate()` instead.**
+> If you need to forcefully reload a route match, use `router.invalidate()` instead.**
 
 - Type: `(opts?: {sync?: boolean}) => Promise<void>`
 - if `sync` is true, the promise returned by this function will only resolve once all loaders have finished.
@@ -1989,7 +1991,7 @@ If you need to forcefully reload a route match, use `router.invalidate()` instea
 Preloads all of the matches that match the provided `NavigateOptions`.
 
 > ⚠️⚠️⚠️ **Preloaded route matches are not stored long-term in the router state. They are only stored until the next
-attempted navigation action.**
+> attempted navigation action.**
 
 - Type: `(opts?: NavigateOptions) => Promise<RouteMatch[]>`
 - Properties
@@ -3644,7 +3646,7 @@ down to the leaf-most match. **It does not include the current match, which can 
 
 > [!IMPORTANT]
 > If the router has pending matches and they are showing their pending component fallbacks,
-`router.state.pendingMatches` will used instead of `router.state.matches`.
+> `router.state.pendingMatches` will used instead of `router.state.matches`.
 
 ## useChildMatches options
 
@@ -4293,7 +4295,7 @@ using the `useMatch` hook.**
 
 > [!IMPORTANT]
 > If the router has pending matches and they are showing their pending component fallbacks,
-`router.state.pendingMatches` will used instead of `router.state.matches`.
+> `router.state.pendingMatches` will used instead of `router.state.matches`.
 
 ## useParentMatches options
 
@@ -4387,8 +4389,8 @@ hook is useful for accessing the router instance in a component.
 - The current [`Router`](../RouterType.md) instance.
 
 > ⚠️⚠️⚠️ **`router.state` is always up to date, but NOT REACTIVE. If you use `router.state` in a component, the
-component will not re-render when the router state changes. To get a reactive version of the router state, use
-the [`useRouterState`](../useRouterStateHook.md) hook.**
+> component will not re-render when the router state changes. To get a reactive version of the router state, use
+> the [`useRouterState`](../useRouterStateHook.md) hook.**
 
 ## Examples
 
@@ -4410,7 +4412,8 @@ accessing the current state of the router in a component.
 
 > [!TIP]
 > If you want to access the current location or the current matches, you should try out the [
-`useLocation`](../useLocationHook.md) and [`useMatches`](../useMatchesHook.md) hooks first. These hooks are designed to
+> `useLocation`](../useLocationHook.md) and [`useMatches`](../useMatchesHook.md) hooks first. These hooks are designed
+> to
 > be more ergonomic and easier to use than accessing the router state directly.
 
 ## useRouterState options
@@ -4536,7 +4539,7 @@ function Component() {
 
 <@tanstack/react-router_guide>
 Always Apply: false - This rule should only be applied when relevant files are open
-Always apply this rule in these files: src/**/*.ts, src/**/*.tsx
+Always apply this rule in these files: src/**/\*.ts, src/**/\*.tsx
 
 # Authenticated Routes
 
@@ -4593,7 +4596,7 @@ export const Route = createFileRoute('/_authenticated')({
 
 > [!TIP]
 > The `redirect()` function takes all of the same options as the `navigate` function, so you can pass options like
-`replace: true` if you want to replace the current history entry instead of adding a new one.
+> `replace: true` if you want to replace the current history entry instead of adding a new one.
 
 Once you have authenticated a user, it's also common practice to redirect them back to the page they were trying to
 access. To do this, you can utilize the `redirect` search param that we added in our original redirect. Since we'll be
@@ -4748,7 +4751,6 @@ TanStack Router separates code into two categories:
 
 - **Critical Route Configuration** - The code that is required to render the current route and kick off the data loading
   process as early as possible.
-
     - Path Parsing/Serialization
     - Search Param Validation
     - Loaders, Before Load
@@ -4769,9 +4771,12 @@ TanStack Router separates code into two categories:
 > 🧠 **Why is the loader not split?**
 >
 > - The loader is already an asynchronous boundary, so you pay double to both get the chunk _and_ wait for the loader to
+
     execute.
+
 > - Categorically, it is less likely to contribute to a large bundle size than a component.
 > - The loader is one of the most important preloadable assets for a route, especially if you're using a default preload
+
     intent, like hovering over a link, so it's important for the loader to be available without any additional async
     overhead.
     >
@@ -5967,7 +5972,7 @@ In this example, we'll create a function in our route context to fetch posts, th
 
 > 🧠 Context is a powerful tool for dependency injection. You can use it to inject services, hooks, and other objects
 > into your router and routes. You can also additively pass data down the route tree at every route using a route's
-`beforeLoad` option.
+> `beforeLoad` option.
 
 - `/utils/fetchPosts.tsx`
 
@@ -6530,6 +6535,7 @@ function PostIdComponent() {
 
 > [!TIP]
 > If your component is code-split, you can use
+>
 >
 the [getRouteApi function](../code-splitting.md#manually-accessing-route-apis-in-other-files-with-the-getrouteapi-helper)
 > to avoid having to import the `Route` configuration to get access to the typed `useLoaderData()` hook.
@@ -8300,8 +8306,8 @@ now. Let's move on!
 # Not Found Errors
 
 > ⚠️ This page covers the newer `notFound` function and `notFoundComponent` API for handling not found errors. The
-`NotFoundRoute` route is deprecated and will be removed in a future release. See [Migrating from
-`NotFoundRoute`](#migrating-from-notfoundroute) for more information.
+> `NotFoundRoute` route is deprecated and will be removed in a future release. See [Migrating from
+> `NotFoundRoute`](#migrating-from-notfoundroute) for more information.
 
 ## Overview
 
@@ -8438,7 +8444,7 @@ export const Route = createFileRoute('/posts/$postId')({
 You may want to provide a default not-found component for every route in your app with child routes.
 
 > Why only routes with children? **Leaf-node routes (routes without children) will never render an `Outlet` and
-therefore are not able to handle not-found errors.**
+> therefore are not able to handle not-found errors.**
 
 To do this, pass a `defaultNotFoundComponent` to the `createRouter` function:
 
@@ -8460,8 +8466,8 @@ const router = createRouter({
 You can manually throw not-found errors in loader methods and components using the `notFound` function. This is useful
 when you need to signal that a resource cannot be found.
 
-The `notFound` function works in a similar fashion to the `redirect` function. To cause a not-found error, you can *
-*throw a `notFound()`**.
+The `notFound` function works in a similar fashion to the `redirect` function. To cause a not-found error, you can \*
+\*throw a `notFound()`\*\*.
 
 ```tsx
 export const Route = createFileRoute('/posts/$postId')({
@@ -8673,8 +8679,8 @@ We haven't covered this yet. Stay tuned!
 
 # Path Params
 
-Path params are used to match a single segment (the text until the next `/`) and provide its value back to you as a *
-*named** variable. They are defined by using the `$` character prefix in the path, followed by the key variable to
+Path params are used to match a single segment (the text until the next `/`) and provide its value back to you as a \*
+\*named\*\* variable. They are defined by using the `$` character prefix in the path, followed by the key variable to
 assign it to. The following are valid path param paths:
 
 - `$postId`
@@ -8746,6 +8752,7 @@ function PostComponent() {
 ```
 
 > 🧠 Quick tip: If your component is code-split, you can use
+>
 >
 the [getRouteApi function](../code-splitting.md#manually-accessing-route-apis-in-other-files-with-the-getrouteapi-helper)
 > to avoid having to import the `Route` configuration to get access to the typed `useParams()` hook.
@@ -10350,7 +10357,7 @@ The default `getKey` is `(location) => location.state.__TSR_key!`, where `__TSR_
 each entry in the history.
 
 > Older versions, prior to `v1.121.34`, used `state.key` as the default key, but this has been deprecated in favor of
-`state.__TSR_key`. For now, `location.state.key` will still be available for compatibility, but it will be removed in
+> `state.__TSR_key`. For now, `location.state.key` will still be available for compatibility, but it will be removed in
 > the next major version.
 
 ## Examples
@@ -10955,6 +10962,7 @@ const ProductList = () => {
 > [!TIP]
 > If your component is code-split, you can use
 >
+>
 the [getRouteApi function](../code-splitting.md#manually-accessing-route-apis-in-other-files-with-the-getrouteapi-helper)
 > to avoid having to import the `Route` configuration to get access to the typed `useSearch()` hook.
 
@@ -11403,7 +11411,7 @@ client and then stream the less-critical third-party data to the client as it is
 
 > [!NOTE]
 > This streaming pattern is all automatic as long as you are using either `defaultStreamHandler` or
-`renderRouterToStream`.
+> `renderRouterToStream`.
 
 using `defaultStreamHandler`
 
@@ -11893,6 +11901,7 @@ route you are rendering within.
 
 > 🧠 Quick tip: If your component is code-split, you can use
 >
+>
 the [getRouteApi function](../code-splitting.md#manually-accessing-route-apis-in-other-files-with-the-getrouteapi-helper)
 > to avoid having to pass in the `Route.fullPath` to get access to the typed `useParams()` and `useSearch()` hooks.
 
@@ -12367,7 +12376,7 @@ const { enable, disable, navigate } = useConditionalNavigate({
 
 <@tanstack/react-router_routing>
 Always Apply: false - This rule should only be applied when relevant files are open
-Always apply this rule in these files: src/**/*.ts, src/**/*.tsx
+Always apply this rule in these files: src/**/\*.ts, src/**/\*.tsx
 
 # Code-Based Routing
 
@@ -12659,6 +12668,7 @@ function PostComponent() {
 
 > [!TIP]
 > If your component is code-split, you can use
+>
 >
 the [getRouteApi function](../../guide/code-splitting.md#manually-accessing-route-apis-in-other-files-with-the-getrouteapi-helper)
 > to avoid having to import the `postIdRoute` configuration to get access to the typed `useParams()` hook.
@@ -13073,10 +13083,10 @@ Here are some resources to help you ignore the generated route tree file:
 
 -
 
-Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
--
-ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
--
+## Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
+
+## ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
+
 Biome - [https://biomejs.dev/reference/configuration/#filesignore](https://biomejs.dev/reference/configuration/#filesignore)
 
 > [!WARNING]
@@ -13188,10 +13198,10 @@ Here are some resources to help you ignore the generated route tree file:
 
 -
 
-Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
--
-ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
--
+## Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
+
+## ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
+
 Biome - [https://biomejs.dev/reference/configuration/#filesignore](https://biomejs.dev/reference/configuration/#filesignore)
 
 > [!WARNING]
@@ -13293,10 +13303,10 @@ Here are some resources to help you ignore the generated route tree file:
 
 -
 
-Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
--
-ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
--
+## Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
+
+## ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
+
 Biome - [https://biomejs.dev/reference/configuration/#filesignore](https://biomejs.dev/reference/configuration/#filesignore)
 
 > [!WARNING]
@@ -13398,10 +13408,10 @@ Here are some resources to help you ignore the generated route tree file:
 
 -
 
-Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
--
-ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
--
+## Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
+
+## ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
+
 Biome - [https://biomejs.dev/reference/configuration/#filesignore](https://biomejs.dev/reference/configuration/#filesignore)
 
 > [!WARNING]
@@ -13492,10 +13502,10 @@ Here are some resources to help you ignore the generated route tree file:
 
 -
 
-Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
--
-ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
--
+## Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
+
+## ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
+
 Biome - [https://biomejs.dev/reference/configuration/#filesignore](https://biomejs.dev/reference/configuration/#filesignore)
 
 > [!WARNING]
@@ -13845,7 +13855,7 @@ function PostComponent() {
 ```
 
 > 🧠 Dynamic segments work at **each** segment of the path. For example, you could have a route with the path of
-`/posts/$postId/$revisionId` and each `$` segment would be captured into the `params` object.
+> `/posts/$postId/$revisionId` and each `$` segment would be captured into the `params` object.
 
 ## Splat / Catch-All Routes
 
@@ -14556,7 +14566,7 @@ functions from the `@tanstack/virtual-file-routes` package:
 
 <@tanstack/react-router_setup-and-architecture>
 Always Apply: false - This rule should only be applied when relevant files are open
-Always apply this rule in these files: package.json, vite.config.ts, tsconfig.json, src/**/*.ts, src/**/*.tsx
+Always apply this rule in these files: package.json, vite.config.ts, tsconfig.json, src/**/\*.ts, src/**/\*.tsx
 
 # Overview
 
@@ -15410,7 +15420,7 @@ export const Route = createFileRoute('/')({
 ```
 
 > You will need to move any related components and logic needed for the index route from the `src/index.tsx` file to the
-`src/routes/index.tsx` file.
+> `src/routes/index.tsx` file.
 
 ### Step 7: Create the posts route file
 
@@ -15450,7 +15460,7 @@ function Posts() {
 ```
 
 > You will need to move any related components and logic needed for the posts route from the `src/index.tsx` file to the
-`src/routes/posts.tsx` file.
+> `src/routes/posts.tsx` file.
 
 ### Step 8: Create the posts index route file
 
@@ -15622,7 +15632,6 @@ function PathlessLayoutRouteComponent() {
 ```
 
 </details>
-
 
 </@tanstack/react-router_setup-and-architecture>
 

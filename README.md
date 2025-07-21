@@ -1,9 +1,9 @@
 # 🏴‍☠️ Raftel
 
-> *The Grand Line of Torrent UIs – sail smoothly through your downloads.*
+> _The Grand Line of Torrent UIs – sail smoothly through your downloads._
 
 **Raftel** is a modern, feature-rich UI for managing your qBittorrent instance, inspired by the adventurous world of
-*One Piece* and the elegance of tools like VueTorrent.
+_One Piece_ and the elegance of tools like VueTorrent.
 
 ---
 
@@ -41,3 +41,4 @@ git clone https://github.com/sayeed/raftel
 cd raftel
 bun isntall
 bun dev
+```

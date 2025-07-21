@@ -9,7 +9,7 @@
     "serve": "vite preview",
     "test": "vitest run",
     "lint": "eslint",
-    "format": "prettier",
+    "format": "prettier --write .",
     "check": "prettier --write . && eslint --fix"
   },
   "dependencies": {
@@ -34,6 +34,7 @@
     "@tanstack/eslint-config": "^0.1.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
+    "@types/node": "22",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",
