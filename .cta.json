@@ -1,0 +1,16 @@
+{
+  "projectName": "raftel",
+  "mode": "file-router",
+  "typescript": true,
+  "tailwind": true,
+  "packageManager": "bun",
+  "git": true,
+  "version": 1,
+  "framework": "react-cra",
+  "chosenAddOns": [
+    "eslint",
+    "shadcn",
+    "store",
+    "tanstack-query"
+  ]
+}
