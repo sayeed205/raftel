@@ -1,4 +1,8 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  useNavigate,
+  useSearch,
+} from '@tanstack/react-router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Download, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
@@ -37,6 +41,9 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function Login() {
   const navigate = useNavigate();
+  const { redirect } = useSearch({ from: '/login' }) as unknown as {
+    redirect: string;
+  };
   const { login, isLoading, error, clearError } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -57,7 +64,7 @@ export default function Login() {
 
     try {
       await login(data);
-      await navigate({ to: '/torrents' });
+      await navigate({ to: redirect ? redirect : '/torrents' });
     } catch (err: any) {
       toast.error(err);
       // Error is handled by the store

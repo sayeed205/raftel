@@ -41,12 +41,12 @@ const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error) => {
       const navigate = useNavigate();
-      const { href } = useLocation();
+      const { pathname } = useLocation();
       if (error instanceof AxiosError) {
         if (error.response?.status === 401) {
           toast.error('Session expired!');
           // useAuthStore.getState().auth.reset();
-          const redirect = `${href}`;
+          const redirect = `${pathname}`;
           navigate({ to: '/login', search: { redirect } });
         }
         if (error.response?.status === 500) {

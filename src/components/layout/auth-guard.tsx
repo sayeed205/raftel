@@ -4,7 +4,7 @@ import { Navigate, useLocation } from '@tanstack/react-router';
 import useAuthCheck from '@/hooks/use-auth.ts';
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { href } = useLocation();
+  const { pathname } = useLocation();
   const { isAuthenticated } = useAuthCheck();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -28,11 +28,11 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (isAuthenticated && href === '/login') {
+  if (isAuthenticated && pathname === '/login') {
     return <Navigate to='/dashboard' />;
   }
 
-  if (!isAuthenticated && href === '/login') return children;
+  if (!isAuthenticated && pathname === '/login') return children;
 
   if (!isAuthenticated) {
     return <Navigate to='/login' replace />;
