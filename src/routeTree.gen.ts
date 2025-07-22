@@ -12,8 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedTorrentsRouteImport } from './routes/_authenticated/torrents'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedTorrentsIndexRouteImport } from './routes/_authenticated/torrents/index'
+import { Route as AuthenticatedTorrentsHashRouteImport } from './routes/_authenticated/torrents/$hash'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -29,28 +30,37 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedTorrentsRoute = AuthenticatedTorrentsRouteImport.update({
-  id: '/torrents',
-  path: '/torrents',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedTorrentsIndexRoute =
+  AuthenticatedTorrentsIndexRouteImport.update({
+    id: '/torrents/',
+    path: '/torrents/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedTorrentsHashRoute =
+  AuthenticatedTorrentsHashRouteImport.update({
+    id: '/torrents/$hash',
+    path: '/torrents/$hash',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/torrents': typeof AuthenticatedTorrentsRoute
+  '/torrents/$hash': typeof AuthenticatedTorrentsHashRoute
+  '/torrents': typeof AuthenticatedTorrentsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/torrents': typeof AuthenticatedTorrentsRoute
+  '/torrents/$hash': typeof AuthenticatedTorrentsHashRoute
+  '/torrents': typeof AuthenticatedTorrentsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -58,20 +68,22 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
-  '/_authenticated/torrents': typeof AuthenticatedTorrentsRoute
+  '/_authenticated/torrents/$hash': typeof AuthenticatedTorrentsHashRoute
+  '/_authenticated/torrents/': typeof AuthenticatedTorrentsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/dashboard' | '/torrents'
+  fullPaths: '/' | '/login' | '/dashboard' | '/torrents/$hash' | '/torrents'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/dashboard' | '/torrents'
+  to: '/' | '/login' | '/dashboard' | '/torrents/$hash' | '/torrents'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/login'
     | '/_authenticated/dashboard'
-    | '/_authenticated/torrents'
+    | '/_authenticated/torrents/$hash'
+    | '/_authenticated/torrents/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -103,13 +115,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/torrents': {
-      id: '/_authenticated/torrents'
-      path: '/torrents'
-      fullPath: '/torrents'
-      preLoaderRoute: typeof AuthenticatedTorrentsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -117,17 +122,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/torrents/': {
+      id: '/_authenticated/torrents/'
+      path: '/torrents'
+      fullPath: '/torrents'
+      preLoaderRoute: typeof AuthenticatedTorrentsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/torrents/$hash': {
+      id: '/_authenticated/torrents/$hash'
+      path: '/torrents/$hash'
+      fullPath: '/torrents/$hash'
+      preLoaderRoute: typeof AuthenticatedTorrentsHashRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  AuthenticatedTorrentsRoute: typeof AuthenticatedTorrentsRoute
+  AuthenticatedTorrentsHashRoute: typeof AuthenticatedTorrentsHashRoute
+  AuthenticatedTorrentsIndexRoute: typeof AuthenticatedTorrentsIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
-  AuthenticatedTorrentsRoute: AuthenticatedTorrentsRoute,
+  AuthenticatedTorrentsHashRoute: AuthenticatedTorrentsHashRoute,
+  AuthenticatedTorrentsIndexRoute: AuthenticatedTorrentsIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
