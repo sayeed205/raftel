@@ -350,5 +350,5 @@ class QBittorrentApi {
 }
 
 // Export singleton instance
-export const qbApi = new QBittorrentApi();
+const qbApi = new QBittorrentApi();
 export default qbApi;

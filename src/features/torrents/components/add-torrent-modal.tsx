@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { qbApi } from '@/lib/api';
+import qbApi from '@/lib/api';
 
 export function AddTorrentModal({
   open,

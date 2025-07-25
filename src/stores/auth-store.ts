@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { LoginRequest } from '@/types/api';
-import { qbApi } from '@/lib/api';
+import qbApi from '@/lib/api';
 
 interface AuthState {
   isAuthenticated: boolean;
