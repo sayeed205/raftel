@@ -169,7 +169,7 @@ export default function TorrentDetailsPage() {
   }, [hash]);
 
   const handleBack = () => {
-    navigate('/dashboard');
+    navigate({ to: '/dashboard' });
   };
 
   if (!hash) {
@@ -240,7 +240,7 @@ export default function TorrentDetailsPage() {
 
   return (
     <>
-      <Header>
+      <Header fixed>
         <Breadcrumb className='min-w-0 flex-1'>
           <BreadcrumbList>
             <BreadcrumbItem>

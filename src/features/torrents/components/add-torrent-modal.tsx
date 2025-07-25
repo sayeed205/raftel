@@ -1,4 +1,3 @@
-import { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -9,6 +8,8 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import qbApi from '@/lib/api';
+import { useRef, useState } from 'react';
+import { toast } from 'sonner';
 
 export function AddTorrentModal({
   open,
@@ -32,8 +33,8 @@ export function AddTorrentModal({
       await qbApi.addTorrents({ torrents: Array.from(files) });
       onAdded();
       onOpenChange(false);
-    } catch (err) {
-      // Optionally show error toast
+    } catch (err: any) {
+      toast.error('Failed to add torrent: ' + err.message);
       console.error('Failed to add torrent:', err);
     } finally {
       setAdding(false);
@@ -66,7 +67,8 @@ export function AddTorrentModal({
       setMagnet('');
       onAdded();
       onOpenChange(false);
-    } catch (err) {
+    } catch (err: any) {
+      toast.error('Failed to add magnet: ' + err.message);
       console.error('Failed to add magnet:', err);
     } finally {
       setAdding(false);

@@ -356,7 +356,6 @@ export function KeyboardShortcutsHelpButton({
  */
 export function KeyboardShortcutsHeaderButton({
   shortcuts,
-  useCommandDialog = true,
 }: KeyboardShortcutsHelpProps) {
   const shortcutText = React.useMemo(() => {
     const platform = getPlatform();
@@ -366,7 +365,6 @@ export function KeyboardShortcutsHeaderButton({
   return (
     <KeyboardShortcutsHelp
       shortcuts={shortcuts}
-      useCommandDialog={useCommandDialog}
       trigger={
         <Button
           variant='ghost'

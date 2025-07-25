@@ -24,12 +24,13 @@ export function getRatioColor(ratio: number): string {
 export function getTorrentStateColor(state: TorrentState): string {
   switch (state) {
     case 'downloading':
+      return 'bg-green-500';
     case 'metaDL':
     case 'forcedDL':
       return 'bg-blue-500';
     case 'uploading':
     case 'forcedUP':
-      return 'bg-green-500';
+      return 'bg-teal-500';
     case 'pausedDL':
     case 'pausedUP':
       return 'bg-gray-500';
@@ -45,10 +46,10 @@ export function getTorrentStateColor(state: TorrentState): string {
       return 'bg-orange-500';
     case 'stalledDL':
     case 'stalledUP':
-      return 'bg-purple-500';
+      return 'bg-yellow-500';
     case 'stoppedDL':
     case 'allocating':
-      return 'bg-purple-300';
+      return 'bg-stone-800';
     case 'moving':
       return 'bg-indigo-500';
     default:

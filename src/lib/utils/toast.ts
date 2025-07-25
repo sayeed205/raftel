@@ -74,17 +74,41 @@ export const showToast = {
   },
 };
 
-// Specialized toast functions for common torrent actions
-export const torrentToast = {
-  actionSuccess: (action: string, count: number = 1) => {
-    const itemText = count === 1 ? 'torrent' : `${count} torrents`;
-    showToast.success(`${action} completed`, {
-      description: `Successfully ${action.toLowerCase()}ed ${itemText}`,
-    });
-  },
+// Progress tracking for long-running operations
+export class ProgressToast {
+  private toastId: string | number;
+  private total: number;
+  private completed = 0;
+  private action: string;
 
-  actionError: (action: string, error: string, retry?: () => void) => {
-    showToast.error(`Failed to ${action.toLowerCase()}`, {
+  constructor(action: string, total: number) {
+    this.action = action;
+    this.total = total;
+    this.toastId = showToast.loading(`${action} starting...`, {
+      description: `0/${total} completed (0%)`,
+    });
+  }
+
+  update(completed: number, message?: string) {
+    this.completed = completed;
+    const progress = Math.round((completed / this.total) * 100);
+
+    toast.loading(message || `${this.action} in progress`, {
+      id: this.toastId,
+      description: `${completed}/${this.total} completed (${progress}%)`,
+    });
+  }
+
+  success(message?: string) {
+    toast.success(message || `${this.action} completed`, {
+      id: this.toastId,
+      description: `Successfully processed ${this.total} items`,
+    });
+  }
+
+  error(error: string, retry?: () => void) {
+    toast.error(`${this.action} failed`, {
+      id: this.toastId,
       description: error,
       action: retry
         ? {
@@ -92,6 +116,43 @@ export const torrentToast = {
             onClick: retry,
           }
         : undefined,
+    });
+  }
+
+  dismiss() {
+    toast.dismiss(this.toastId);
+  }
+}
+
+// Specialized toast functions for common torrent actions
+export const torrentToast = {
+  actionSuccess: (action: string, count: number = 1) => {
+    const itemText = count === 1 ? 'torrent' : `${count} torrents`;
+    const actionText = action.charAt(0).toUpperCase() + action.slice(1);
+    showToast.success(`${actionText} completed`, {
+      description: `Successfully ${action.toLowerCase()}ed ${itemText}`,
+      duration: 3000,
+    });
+  },
+
+  actionError: (action: string, error: string, retry?: () => void) => {
+    showToast.error(`Failed to ${action.toLowerCase()}`, {
+      description: error,
+      duration: 5000,
+      action: retry
+        ? {
+            label: 'Retry',
+            onClick: retry,
+          }
+        : undefined,
+    });
+  },
+
+  actionStarted: (action: string, count: number = 1) => {
+    const itemText = count === 1 ? 'torrent' : `${count} torrents`;
+    const actionText = action.charAt(0).toUpperCase() + action.slice(1);
+    return showToast.loading(`${actionText}ing ${itemText}...`, {
+      description: 'Please wait while the operation completes',
     });
   },
 
@@ -107,6 +168,76 @@ export const torrentToast = {
     const progress = Math.round((completed / total) * 100);
     return showToast.loading(`${action} in progress`, {
       description: `${completed}/${total} completed (${progress}%)`,
+    });
+  },
+
+  // Connection and sync notifications
+  connectionError: (retry?: () => void) => {
+    showToast.error('Connection failed', {
+      description: 'Unable to connect to qBittorrent server',
+      action: retry
+        ? {
+            label: 'Retry',
+            onClick: retry,
+          }
+        : undefined,
+    });
+  },
+
+  syncSuccess: () => {
+    showToast.success('Sync completed', {
+      description: 'Torrent data updated successfully',
+      duration: 2000, // Shorter duration for frequent sync notifications
+    });
+  },
+
+  syncError: (error: string, retry?: () => void) => {
+    showToast.error('Sync failed', {
+      description: error,
+      action: retry
+        ? {
+            label: 'Retry',
+            onClick: retry,
+          }
+        : undefined,
+    });
+  },
+
+  // Upload/download notifications
+  uploadProgress: (filename: string, progress: number) => {
+    return showToast.loading(`Uploading ${filename}`, {
+      description: `${progress}% completed`,
+    });
+  },
+
+  uploadSuccess: (filename: string) => {
+    showToast.success('Upload completed', {
+      description: `${filename} uploaded successfully`,
+    });
+  },
+
+  uploadError: (filename: string, error: string, retry?: () => void) => {
+    showToast.error('Upload failed', {
+      description: `Failed to upload ${filename}: ${error}`,
+      action: retry
+        ? {
+            label: 'Retry',
+            onClick: retry,
+          }
+        : undefined,
+    });
+  },
+
+  // Settings notifications
+  settingsSaved: () => {
+    showToast.success('Settings saved', {
+      description: 'Your preferences have been updated',
+    });
+  },
+
+  settingsError: (error: string) => {
+    showToast.error('Failed to save settings', {
+      description: error,
     });
   },
 };

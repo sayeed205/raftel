@@ -532,11 +532,15 @@ class QBitProvider {
       data.set('urls', urls);
     }
 
-    await this.request('/torrents/add', {
-      method: 'POST',
-      body: data,
-      headers: torrents.length > 0 ? {} : undefined, // Don't set Content-Type for FormData
-    });
+    await this.request(
+      '/torrents/add',
+      {
+        method: 'POST',
+        body: data,
+        headers: torrents.length > 0 ? {} : undefined, // Don't set Content-Type for FormData
+      },
+      { responseType: 'text' },
+    );
   }
 
   async setTorrentFilePriority(
