@@ -27,7 +27,7 @@ export const columns: ColumnDef<TorrentInfo>[] = [
           table.toggleAllPageRowsSelected(!!value)
         }
         aria-label='Select all'
-        className='translate-y-[2px]'
+        className='m-2 translate-y-[2px]'
       />
     ),
     cell: ({ row }) => (
@@ -35,7 +35,7 @@ export const columns: ColumnDef<TorrentInfo>[] = [
         checked={row.getIsSelected()}
         onCheckedChange={(value: any) => row.toggleSelected(!!value)}
         aria-label='Select row'
-        className='translate-y-[2px]'
+        className='m-2 translate-y-[2px]'
       />
     ),
     enableSorting: false,
@@ -52,7 +52,10 @@ export const columns: ColumnDef<TorrentInfo>[] = [
       return (
         <div className='flex space-x-2'>
           {category && <Badge variant='outline'>{category}</Badge>}
-          <span className='max-w-[500px] truncate font-medium'>
+          <span
+            className='max-w-96 truncate font-medium'
+            title={row.getValue('name')}
+          >
             {row.getValue('name')}
           </span>
         </div>
