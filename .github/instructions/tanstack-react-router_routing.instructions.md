@@ -1,9 +1,7 @@
 ---
-applyTo: '**'
+applyTo: "**"
 ---
-
 # routing
-
 ## TanStack Router: Routing
 
 # Code-Based Routing
@@ -296,9 +294,7 @@ function PostComponent() {
 
 > [!TIP]
 > If your component is code-split, you can use
->
->
-the [getRouteApi function](../../guide/code-splitting.md#manually-accessing-route-apis-in-other-files-with-the-getrouteapi-helper)
+> the [getRouteApi function](../../guide/code-splitting.md#manually-accessing-route-apis-in-other-files-with-the-getrouteapi-helper)
 > to avoid having to import the `postIdRoute` configuration to get access to the typed `useParams()` hook.
 
 ## Splat / Catch-All Routes
@@ -710,11 +706,10 @@ This file is managed by TanStack Router and therefore shouldn't be changed by yo
 Here are some resources to help you ignore the generated route tree file:
 
 -
-
-## Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
-
-## ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
-
+Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
+-
+ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
+-
 Biome - [https://biomejs.dev/reference/configuration/#filesignore](https://biomejs.dev/reference/configuration/#filesignore)
 
 > [!WARNING]
@@ -788,7 +783,6 @@ files.
 ```
 
 [//]: # 'AfterScripts'
-
 [//]: # 'AfterScripts'
 
 You shouldn't forget to _ignore_ the generated route tree file. Head over to
@@ -825,11 +819,10 @@ This file is managed by TanStack Router and therefore shouldn't be changed by yo
 Here are some resources to help you ignore the generated route tree file:
 
 -
-
-## Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
-
-## ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
-
+Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
+-
+ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
+-
 Biome - [https://biomejs.dev/reference/configuration/#filesignore](https://biomejs.dev/reference/configuration/#filesignore)
 
 > [!WARNING]
@@ -874,7 +867,6 @@ If these defaults work for your project, you don't need to configure anything at
 the configuration, you can do so by creating a `tsr.config.json` file in the root of your project directory.
 
 [//]: # 'TargetConfiguration'
-
 [//]: # 'TargetConfiguration'
 
 You can find all the available configuration options in
@@ -930,11 +922,10 @@ This file is managed by TanStack Router and therefore shouldn't be changed by yo
 Here are some resources to help you ignore the generated route tree file:
 
 -
-
-## Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
-
-## ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
-
+Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
+-
+ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
+-
 Biome - [https://biomejs.dev/reference/configuration/#filesignore](https://biomejs.dev/reference/configuration/#filesignore)
 
 > [!WARNING]
@@ -1035,11 +1026,10 @@ This file is managed by TanStack Router and therefore shouldn't be changed by yo
 Here are some resources to help you ignore the generated route tree file:
 
 -
-
-## Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
-
-## ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
-
+Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
+-
+ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
+-
 Biome - [https://biomejs.dev/reference/configuration/#filesignore](https://biomejs.dev/reference/configuration/#filesignore)
 
 > [!WARNING]
@@ -1129,11 +1119,10 @@ This file is managed by TanStack Router and therefore shouldn't be changed by yo
 Here are some resources to help you ignore the generated route tree file:
 
 -
-
-## Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
-
-## ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
-
+Prettier - [https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore](https://prettier.io/docs/en/ignore.html#ignoring-files-prettierignore)
+-
+ESLint - [https://eslint.org/docs/latest/use/configure/ignore#ignoring-files](https://eslint.org/docs/latest/use/configure/ignore#ignoring-files)
+-
 Biome - [https://biomejs.dev/reference/configuration/#filesignore](https://biomejs.dev/reference/configuration/#filesignore)
 
 > [!WARNING]
@@ -1483,7 +1472,7 @@ function PostComponent() {
 ```
 
 > 🧠 Dynamic segments work at **each** segment of the path. For example, you could have a route with the path of
-> `/posts/$postId/$revisionId` and each `$` segment would be captured into the `params` object.
+`/posts/$postId/$revisionId` and each `$` segment would be captured into the `params` object.
 
 ## Splat / Catch-All Routes
 
@@ -2189,3 +2178,4 @@ functions from the `@tanstack/virtual-file-routes` package:
   }
 }
 ```
+

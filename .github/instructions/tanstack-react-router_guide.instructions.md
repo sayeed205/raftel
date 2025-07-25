@@ -1,9 +1,7 @@
 ---
-applyTo: '**'
+applyTo: "**"
 ---
-
 # guide
-
 ## TanStack Router: Guide
 
 # Authenticated Routes
@@ -61,7 +59,7 @@ export const Route = createFileRoute('/_authenticated')({
 
 > [!TIP]
 > The `redirect()` function takes all of the same options as the `navigate` function, so you can pass options like
-> `replace: true` if you want to replace the current history entry instead of adding a new one.
+`replace: true` if you want to replace the current history entry instead of adding a new one.
 
 Once you have authenticated a user, it's also common practice to redirect them back to the page they were trying to
 access. To do this, you can utilize the `redirect` search param that we added in our original redirect. Since we'll be
@@ -100,8 +98,7 @@ authentication state to TanStack Router using `router.context` option.
 
 > [!IMPORTANT]
 > React hooks are not meant to be consumed outside of React components. If you need to use a hook outside of a React
-> component, you need to extract the returned state from the hook in a component that wraps your `<RouterProvider />`
-> and
+> component, you need to extract the returned state from the hook in a component that wraps your `<RouterProvider />` and
 > then pass the returned value down to TanStack Router.
 
 We'll cover the `router.context` options in-detail in the [Router Context](../router-context.md) section.
@@ -216,6 +213,7 @@ TanStack Router separates code into two categories:
 
 - **Critical Route Configuration** - The code that is required to render the current route and kick off the data loading
   process as early as possible.
+
     - Path Parsing/Serialization
     - Search Param Validation
     - Loaders, Before Load
@@ -236,12 +234,9 @@ TanStack Router separates code into two categories:
 > 🧠 **Why is the loader not split?**
 >
 > - The loader is already an asynchronous boundary, so you pay double to both get the chunk _and_ wait for the loader to
-
     execute.
-
 > - Categorically, it is less likely to contribute to a large bundle size than a component.
 > - The loader is one of the most important preloadable assets for a route, especially if you're using a default preload
-
     intent, like hovering over a link, so it's important for the loader to be available without any additional async
     overhead.
     >
@@ -1437,7 +1432,7 @@ In this example, we'll create a function in our route context to fetch posts, th
 
 > 🧠 Context is a powerful tool for dependency injection. You can use it to inject services, hooks, and other objects
 > into your router and routes. You can also additively pass data down the route tree at every route using a route's
-> `beforeLoad` option.
+`beforeLoad` option.
 
 - `/utils/fetchPosts.tsx`
 
@@ -2000,9 +1995,7 @@ function PostIdComponent() {
 
 > [!TIP]
 > If your component is code-split, you can use
->
->
-the [getRouteApi function](../code-splitting.md#manually-accessing-route-apis-in-other-files-with-the-getrouteapi-helper)
+> the [getRouteApi function](../code-splitting.md#manually-accessing-route-apis-in-other-files-with-the-getrouteapi-helper)
 > to avoid having to import the `Route` configuration to get access to the typed `useLoaderData()` hook.
 
 The `Await` component resolves the promise by triggering the nearest suspense boundary until it is resolved, after which
@@ -2288,8 +2281,7 @@ export const Route = createRootRoute({
 
 > [!IMPORTANT]
 > This guide is geared towards external state management libraries and their integration with TanStack Router for data
-> fetching, ssr, hydration/dehydration and streaming. If you haven't read the
-> standard [Data Loading](../data-loading.md)
+> fetching, ssr, hydration/dehydration and streaming. If you haven't read the standard [Data Loading](../data-loading.md)
 > guide, please do so first.
 
 ## To **Store** or to **Coordinate**?
@@ -3771,8 +3763,8 @@ now. Let's move on!
 # Not Found Errors
 
 > ⚠️ This page covers the newer `notFound` function and `notFoundComponent` API for handling not found errors. The
-> `NotFoundRoute` route is deprecated and will be removed in a future release. See [Migrating from
-> `NotFoundRoute`](#migrating-from-notfoundroute) for more information.
+`NotFoundRoute` route is deprecated and will be removed in a future release. See [Migrating from
+`NotFoundRoute`](#migrating-from-notfoundroute) for more information.
 
 ## Overview
 
@@ -3909,7 +3901,7 @@ export const Route = createFileRoute('/posts/$postId')({
 You may want to provide a default not-found component for every route in your app with child routes.
 
 > Why only routes with children? **Leaf-node routes (routes without children) will never render an `Outlet` and
-> therefore are not able to handle not-found errors.**
+therefore are not able to handle not-found errors.**
 
 To do this, pass a `defaultNotFoundComponent` to the `createRouter` function:
 
@@ -3931,8 +3923,8 @@ const router = createRouter({
 You can manually throw not-found errors in loader methods and components using the `notFound` function. This is useful
 when you need to signal that a resource cannot be found.
 
-The `notFound` function works in a similar fashion to the `redirect` function. To cause a not-found error, you can \*
-\*throw a `notFound()`\*\*.
+The `notFound` function works in a similar fashion to the `redirect` function. To cause a not-found error, you can *
+*throw a `notFound()`**.
 
 ```tsx
 export const Route = createFileRoute('/posts/$postId')({
@@ -4144,8 +4136,8 @@ We haven't covered this yet. Stay tuned!
 
 # Path Params
 
-Path params are used to match a single segment (the text until the next `/`) and provide its value back to you as a \*
-\*named\*\* variable. They are defined by using the `$` character prefix in the path, followed by the key variable to
+Path params are used to match a single segment (the text until the next `/`) and provide its value back to you as a *
+*named** variable. They are defined by using the `$` character prefix in the path, followed by the key variable to
 assign it to. The following are valid path param paths:
 
 - `$postId`
@@ -4217,9 +4209,7 @@ function PostComponent() {
 ```
 
 > 🧠 Quick tip: If your component is code-split, you can use
->
->
-the [getRouteApi function](../code-splitting.md#manually-accessing-route-apis-in-other-files-with-the-getrouteapi-helper)
+> the [getRouteApi function](../code-splitting.md#manually-accessing-route-apis-in-other-files-with-the-getrouteapi-helper)
 > to avoid having to import the `Route` configuration to get access to the typed `useParams()` hook.
 
 ## Path Params outside of Routes
@@ -5822,7 +5812,7 @@ The default `getKey` is `(location) => location.state.__TSR_key!`, where `__TSR_
 each entry in the history.
 
 > Older versions, prior to `v1.121.34`, used `state.key` as the default key, but this has been deprecated in favor of
-> `state.__TSR_key`. For now, `location.state.key` will still be available for compatibility, but it will be removed in
+`state.__TSR_key`. For now, `location.state.key` will still be available for compatibility, but it will be removed in
 > the next major version.
 
 ## Examples
@@ -6426,9 +6416,7 @@ const ProductList = () => {
 
 > [!TIP]
 > If your component is code-split, you can use
->
->
-the [getRouteApi function](../code-splitting.md#manually-accessing-route-apis-in-other-files-with-the-getrouteapi-helper)
+> the [getRouteApi function](../code-splitting.md#manually-accessing-route-apis-in-other-files-with-the-getrouteapi-helper)
 > to avoid having to import the `Route` configuration to get access to the typed `useSearch()` hook.
 
 ### Search Params outside of Route Components
@@ -6705,8 +6693,7 @@ export const Route = createFileRoute('/search')({
 
 > [!WARNING]
 > While every effort has been made to separate these APIs from changes to Tanstack Start, there are underlying shared
-> implementations internally. Therefore these can be subject to change and should be regarded as experimental until
-> Start
+> implementations internally. Therefore these can be subject to change and should be regarded as experimental until Start
 > reaches stable status.
 
 Server Side Rendering (SSR) is the process of rendering a component on the server and sending the HTML markup to the
@@ -6876,7 +6863,7 @@ client and then stream the less-critical third-party data to the client as it is
 
 > [!NOTE]
 > This streaming pattern is all automatic as long as you are using either `defaultStreamHandler` or
-> `renderRouterToStream`.
+`renderRouterToStream`.
 
 using `defaultStreamHandler`
 
@@ -7365,9 +7352,7 @@ Every hook and component that requires a context hint will have a `from` param w
 route you are rendering within.
 
 > 🧠 Quick tip: If your component is code-split, you can use
->
->
-the [getRouteApi function](../code-splitting.md#manually-accessing-route-apis-in-other-files-with-the-getrouteapi-helper)
+> the [getRouteApi function](../code-splitting.md#manually-accessing-route-apis-in-other-files-with-the-getrouteapi-helper)
 > to avoid having to pass in the `Route.fullPath` to get access to the typed `useParams()` and `useSearch()` hooks.
 
 ### What if I don't know the route? What if it's a shared component?
@@ -7836,3 +7821,4 @@ const { enable, disable, navigate } = useConditionalNavigate({
   params: { postId: 'postId' },
 })
 ```
+

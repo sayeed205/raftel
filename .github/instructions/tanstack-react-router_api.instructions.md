@@ -1,9 +1,7 @@
 ---
-applyTo: '**'
+applyTo: "**"
 ---
-
 # api
-
 ## TanStack Router: API
 
 # ActiveLinkOptions type
@@ -1026,8 +1024,7 @@ type beforeLoad = (
   not. To do this, you can either return or throw a `redirect` object from this function.
 
 > 🚧 `opts.navigate` has been deprecated and will be removed in the next major release. Use
-> `throw redirect({ to: '/somewhere' })` instead. Read more about the `redirect`
-> function [here](../redirectFunction.md).
+`throw redirect({ to: '/somewhere' })` instead. Read more about the `redirect` function [here](../redirectFunction.md).
 
 ### `loader` method
 
@@ -1066,8 +1063,7 @@ type loader = (
 - Deps must be returned by your `loaderDeps` function in order to appear.
 
 > 🚧 `opts.navigate` has been deprecated and will be removed in the next major release. Use
-> `throw redirect({ to: '/somewhere' })` instead. Read more about the `redirect`
-> function [here](../redirectFunction.md).
+`throw redirect({ to: '/somewhere' })` instead. Read more about the `redirect` function [here](../redirectFunction.md).
 
 ### `loaderDeps` method
 
@@ -1822,8 +1818,8 @@ An instance of the `Router` has the following properties and methods:
 - The current state of the router.
 
 > ⚠️⚠️⚠️ **`router.state` is always up to date, but NOT REACTIVE. If you use `router.state` in a component, the
-> component will not re-render when the router state changes. To get a reactive version of the router state, use
-> the [`useRouterState`](../useRouterStateHook.md) hook.**
+component will not re-render when the router state changes. To get a reactive version of the router state, use
+the [`useRouterState`](../useRouterStateHook.md) hook.**
 
 ### `.subscribe` method
 
@@ -1981,7 +1977,7 @@ Remove cached route matches.
 Loads all of the currently matched route matches and resolves when they are all loaded and ready to be rendered.
 
 > ⚠️⚠️⚠️ **`router.load()` respects `route.staleTime` and will not forcefully reload a route match if it is still fresh.
-> If you need to forcefully reload a route match, use `router.invalidate()` instead.**
+If you need to forcefully reload a route match, use `router.invalidate()` instead.**
 
 - Type: `(opts?: {sync?: boolean}) => Promise<void>`
 - if `sync` is true, the promise returned by this function will only resolve once all loaders have finished.
@@ -1993,7 +1989,7 @@ Loads all of the currently matched route matches and resolves when they are all 
 Preloads all of the matches that match the provided `NavigateOptions`.
 
 > ⚠️⚠️⚠️ **Preloaded route matches are not stored long-term in the router state. They are only stored until the next
-> attempted navigation action.**
+attempted navigation action.**
 
 - Type: `(opts?: NavigateOptions) => Promise<RouteMatch[]>`
 - Properties
@@ -3648,7 +3644,7 @@ down to the leaf-most match. **It does not include the current match, which can 
 
 > [!IMPORTANT]
 > If the router has pending matches and they are showing their pending component fallbacks,
-> `router.state.pendingMatches` will used instead of `router.state.matches`.
+`router.state.pendingMatches` will used instead of `router.state.matches`.
 
 ## useChildMatches options
 
@@ -4297,7 +4293,7 @@ using the `useMatch` hook.**
 
 > [!IMPORTANT]
 > If the router has pending matches and they are showing their pending component fallbacks,
-> `router.state.pendingMatches` will used instead of `router.state.matches`.
+`router.state.pendingMatches` will used instead of `router.state.matches`.
 
 ## useParentMatches options
 
@@ -4391,8 +4387,8 @@ hook is useful for accessing the router instance in a component.
 - The current [`Router`](../RouterType.md) instance.
 
 > ⚠️⚠️⚠️ **`router.state` is always up to date, but NOT REACTIVE. If you use `router.state` in a component, the
-> component will not re-render when the router state changes. To get a reactive version of the router state, use
-> the [`useRouterState`](../useRouterStateHook.md) hook.**
+component will not re-render when the router state changes. To get a reactive version of the router state, use
+the [`useRouterState`](../useRouterStateHook.md) hook.**
 
 ## Examples
 
@@ -4414,8 +4410,7 @@ accessing the current state of the router in a component.
 
 > [!TIP]
 > If you want to access the current location or the current matches, you should try out the [
-> `useLocation`](../useLocationHook.md) and [`useMatches`](../useMatchesHook.md) hooks first. These hooks are designed
-> to
+`useLocation`](../useLocationHook.md) and [`useMatches`](../useMatchesHook.md) hooks first. These hooks are designed to
 > be more ergonomic and easier to use than accessing the router state directly.
 
 ## useRouterState options
@@ -4536,3 +4531,4 @@ function Component() {
   // ...
 }
 ```
+

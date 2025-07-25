@@ -1,9 +1,7 @@
 ---
-applyTo: '**'
+applyTo: "**"
 ---
-
 # setup-and-architecture
-
 ## TanStack Router: Setup and Architecture
 
 # Overview
@@ -858,7 +856,7 @@ export const Route = createFileRoute('/')({
 ```
 
 > You will need to move any related components and logic needed for the index route from the `src/index.tsx` file to the
-> `src/routes/index.tsx` file.
+`src/routes/index.tsx` file.
 
 ### Step 7: Create the posts route file
 
@@ -898,7 +896,7 @@ function Posts() {
 ```
 
 > You will need to move any related components and logic needed for the posts route from the `src/index.tsx` file to the
-> `src/routes/posts.tsx` file.
+`src/routes/posts.tsx` file.
 
 ### Step 8: Create the posts index route file
 
@@ -1070,3 +1068,4 @@ function PathlessLayoutRouteComponent() {
 ```
 
 </details>
+
