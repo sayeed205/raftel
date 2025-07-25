@@ -7,20 +7,20 @@ import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
 export const Route = createRootRouteWithContext<{}>()({
-    component: () => {
-        return (
-            <>
-                <NavigationProgress />
-                <AuthGuard>
-                    <Outlet />
-                </AuthGuard>
-                <Toaster duration={50000} />
-                {import.meta.env.DEV && (
-                    <TanStackRouterDevtools position='bottom-left' />
-                )}
-            </>
-        );
-    },
-    notFoundComponent: NotFoundError,
-    errorComponent: GeneralError,
+  component: () => {
+    return (
+      <>
+        <NavigationProgress />
+        <AuthGuard>
+          <Outlet />
+        </AuthGuard>
+        <Toaster duration={50000} />
+        {import.meta.env.DEV && (
+          <TanStackRouterDevtools position='bottom-left' />
+        )}
+      </>
+    );
+  },
+  notFoundComponent: NotFoundError,
+  errorComponent: GeneralError,
 });

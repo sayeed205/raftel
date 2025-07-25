@@ -1,14 +1,33 @@
-import { ChevronDown, ChevronRight, Edit, File, Folder, FolderOpen, Search } from 'lucide-react';
+import {
+  ChevronDown,
+  ChevronRight,
+  Edit,
+  File,
+  Folder,
+  FolderOpen,
+  Search,
+} from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 import { toast } from 'sonner';
 import type { TorrentFile, TorrentInfo } from '@/types/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 import { formatBytes, formatProgress } from '@/lib/utils';
 

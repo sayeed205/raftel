@@ -9,12 +9,23 @@ import {
   TorrentSpeedTab,
   TorrentTrackersTab,
 } from './components/tabs';
-import type { TorrentFile, TorrentInfo, TorrentPeer, TorrentProperties, TorrentTracker } from '@/types/api';
+import type {
+  TorrentFile,
+  TorrentInfo,
+  TorrentPeer,
+  TorrentProperties,
+  TorrentTracker,
+} from '@/types/api';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import qbApi from '@/lib/api';
-import { formatBytes, formatProgress, getStateColor, getStateText } from '@/lib/utils';
+import {
+  formatBytes,
+  formatProgress,
+  getStateColor,
+  getStateText,
+} from '@/lib/utils';
 
 import {
   Breadcrumb,
