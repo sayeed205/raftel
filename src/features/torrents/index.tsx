@@ -6,13 +6,24 @@ import { Main } from '@/components/layout/main.tsx';
 import { ProfileDropdown } from '@/components/profile-dropdown.tsx';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  BulkActionConfirmationDialog,
+  ConfirmationDialog,
+  DeleteConfirmationDialog,
+} from '@/components/ui/confirmation-dialog';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { AddTorrentModal } from '@/features/torrents/components/add-torrent-modal.tsx';
 import { TableExport } from '@/features/torrents/components/table-export.tsx';
 import { EnhancedTorrentTable } from '@/features/torrents/components/torrent-table.tsx';
+import {
+  useBulkActionConfirmation,
+  useConfirmationDialog,
+  useDeleteConfirmation,
+} from '@/hooks/use-confirmation-dialog';
 import { useAdaptiveLayout } from '@/hooks/use-responsive';
 import qbApi from '@/lib/api';
+import { showToast, torrentToast } from '@/lib/utils/toast';
 import { useTorrentStore } from '@/stores/torrent-store';
 
 export default function TorrentsPage() {
@@ -45,6 +56,18 @@ export default function TorrentsPage() {
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [filteredTorrents, setFilteredTorrents] = useState(torrents);
+
+  // Confirmation dialog hooks
+  const { confirmationState, showConfirmation, hideConfirmation } =
+    useConfirmationDialog();
+  const {
+    deleteState,
+    showDeleteConfirmation,
+    hideDeleteConfirmation,
+    setDeleteFiles,
+  } = useDeleteConfirmation();
+  const { bulkState, showBulkConfirmation, hideBulkConfirmation } =
+    useBulkActionConfirmation();
 
   // Stable callback functions for shortcuts
   // const handleRefresh = useCallback(() => {
@@ -145,100 +168,197 @@ export default function TorrentsPage() {
   const handleTorrentAction = async (action: string, hash?: string) => {
     if (selectedTorrents.length === 0 && !hash) return;
     const torrentsToActOn = hash ? [hash] : selectedTorrents;
+    const isMultiple = torrentsToActOn.length > 1;
+    const torrentName = hash
+      ? torrents.find((t) => t.hash === hash)?.name
+      : undefined;
 
+    // Handle delete action with confirmation
+    if (action === 'delete') {
+      showDeleteConfirmation({
+        itemName: torrentName,
+        itemCount: torrentsToActOn.length,
+        onConfirm: async (deleteFiles: boolean) => {
+          try {
+            await deleteTorrents(torrentsToActOn, deleteFiles);
+            torrentToast.deleteSuccess(torrentsToActOn.length, deleteFiles);
+          } catch (error) {
+            torrentToast.actionError(
+              'delete',
+              error instanceof Error ? error.message : 'Unknown error',
+            );
+          }
+        },
+      });
+      return;
+    }
+
+    // Handle bulk actions that need confirmation
+    const bulkActions = ['pause', 'resume', 'recheck', 'reannounce'];
+    if (isMultiple && bulkActions.includes(action)) {
+      showBulkConfirmation({
+        action: action.charAt(0).toUpperCase() + action.slice(1),
+        itemCount: torrentsToActOn.length,
+        onConfirm: async () => {
+          await performTorrentAction(action, torrentsToActOn);
+        },
+      });
+      return;
+    }
+
+    // Handle single torrent actions or non-bulk actions directly
+    await performTorrentAction(action, torrentsToActOn, torrentName);
+  };
+
+  const performTorrentAction = async (
+    action: string,
+    torrentsToActOn: string[],
+    _torrentName?: string,
+  ) => {
     try {
       switch (action) {
         case 'pause':
           await pauseTorrents(torrentsToActOn);
+          torrentToast.actionSuccess('pause', torrentsToActOn.length);
           break;
         case 'resume':
           await resumeTorrents(torrentsToActOn);
-          break;
-        case 'delete':
-          await deleteTorrents(torrentsToActOn);
+          torrentToast.actionSuccess('resume', torrentsToActOn.length);
           break;
         case 'recheck':
           await recheckTorrents(torrentsToActOn);
+          torrentToast.actionSuccess('recheck', torrentsToActOn.length);
           break;
         case 'reannounce':
           await reannounceTorrents(torrentsToActOn);
+          torrentToast.actionSuccess('reannounce', torrentsToActOn.length);
           break;
         case 'forceStart':
           await qbApi.setForceStart(torrentsToActOn.join('|'), true);
           fetchTorrents();
+          showToast.success('Force start enabled');
           break;
         case 'setLocation': {
-          const newPath = prompt('Enter new location path:');
-          if (newPath) {
-            await qbApi.setTorrentLocation({
-              hashes: torrentsToActOn.join('|'),
-              location: newPath,
-            });
-            fetchTorrents();
-          }
+          showConfirmation({
+            title: 'Set Location',
+            description:
+              'Enter the new location path for the selected torrent(s):',
+            confirmText: 'Set Location',
+            onConfirm: async () => {
+              const newPath = prompt('Enter new location path:');
+              if (newPath) {
+                await qbApi.setTorrentLocation({
+                  hashes: torrentsToActOn.join('|'),
+                  location: newPath,
+                });
+                fetchTorrents();
+                showToast.success('Location updated successfully');
+              }
+            },
+          });
           break;
         }
         case 'setCategory': {
-          const newCategory = prompt('Enter category:');
-          if (newCategory) {
-            await qbApi.setTorrentCategory({
-              hashes: torrentsToActOn.join('|'),
-              category: newCategory,
-            });
-            fetchTorrents();
-          }
+          showConfirmation({
+            title: 'Set Category',
+            description: 'Enter the category for the selected torrent(s):',
+            confirmText: 'Set Category',
+            onConfirm: async () => {
+              const newCategory = prompt('Enter category:');
+              if (newCategory) {
+                await qbApi.setTorrentCategory({
+                  hashes: torrentsToActOn.join('|'),
+                  category: newCategory,
+                });
+                fetchTorrents();
+                showToast.success('Category updated successfully');
+              }
+            },
+          });
           break;
         }
         case 'setTags': {
-          const newTags = prompt('Enter tags (comma separated):');
-          if (newTags) {
-            await qbApi.setTorrentTags({
-              hashes: torrentsToActOn.join('|'),
-              tags: newTags,
-            });
-            fetchTorrents();
-          }
+          showConfirmation({
+            title: 'Set Tags',
+            description:
+              'Enter tags (comma separated) for the selected torrent(s):',
+            confirmText: 'Set Tags',
+            onConfirm: async () => {
+              const newTags = prompt('Enter tags (comma separated):');
+              if (newTags) {
+                await qbApi.setTorrentTags({
+                  hashes: torrentsToActOn.join('|'),
+                  tags: newTags,
+                });
+                fetchTorrents();
+                showToast.success('Tags updated successfully');
+              }
+            },
+          });
           break;
         }
         case 'autoTMM':
           await qbApi.setAutoTMM(torrentsToActOn.join('|'), true);
           fetchTorrents();
+          showToast.success('Automatic torrent management enabled');
           break;
         case 'limitDownload': {
-          const limit = prompt(
-            'Set download limit (bytes/sec, 0 = unlimited):',
-          );
-          if (limit !== null) {
-            await qbApi.setTorrentDownloadLimit({
-              hashes: torrentsToActOn.join('|'),
-              limit: Number(limit),
-            });
-            fetchTorrents();
-          }
+          showConfirmation({
+            title: 'Set Download Limit',
+            description: 'Set download limit (bytes/sec, 0 = unlimited):',
+            confirmText: 'Set Limit',
+            onConfirm: async () => {
+              const limit = prompt(
+                'Set download limit (bytes/sec, 0 = unlimited):',
+              );
+              if (limit !== null) {
+                await qbApi.setTorrentDownloadLimit({
+                  hashes: torrentsToActOn.join('|'),
+                  limit: Number(limit),
+                });
+                fetchTorrents();
+                showToast.success('Download limit updated');
+              }
+            },
+          });
           break;
         }
         case 'limitUpload': {
-          const limit = prompt('Set upload limit (bytes/sec, 0 = unlimited):');
-          if (limit !== null) {
-            await qbApi.setTorrentUploadLimit({
-              hashes: torrentsToActOn.join('|'),
-              limit: Number(limit),
-            });
-            fetchTorrents();
-          }
+          showConfirmation({
+            title: 'Set Upload Limit',
+            description: 'Set upload limit (bytes/sec, 0 = unlimited):',
+            confirmText: 'Set Limit',
+            onConfirm: async () => {
+              const limit = prompt(
+                'Set upload limit (bytes/sec, 0 = unlimited):',
+              );
+              if (limit !== null) {
+                await qbApi.setTorrentUploadLimit({
+                  hashes: torrentsToActOn.join('|'),
+                  limit: Number(limit),
+                });
+                fetchTorrents();
+                showToast.success('Upload limit updated');
+              }
+            },
+          });
           break;
         }
         case 'sequential':
           await qbApi.setSequentialDownload(torrentsToActOn.join('|'));
           fetchTorrents();
+          showToast.success('Sequential download enabled');
           break;
         case 'firstLastPiece':
           await qbApi.setFirstLastPiecePriority(torrentsToActOn.join('|'));
           fetchTorrents();
+          showToast.success('First/last piece priority enabled');
           break;
       }
     } catch (error) {
-      console.error('Action failed:', error);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
+      torrentToast.actionError(action, errorMessage);
     }
   };
 
@@ -493,6 +613,39 @@ export default function TorrentsPage() {
               setAddModalOpen(false);
               fetchTorrents();
             }}
+          />
+
+          {/* Confirmation Dialogs */}
+          <ConfirmationDialog
+            open={confirmationState.isOpen}
+            onOpenChange={hideConfirmation}
+            title={confirmationState.title}
+            description={confirmationState.description}
+            confirmText={confirmationState.confirmText}
+            cancelText={confirmationState.cancelText}
+            variant={confirmationState.variant}
+            onConfirm={confirmationState.onConfirm}
+            isLoading={confirmationState.isLoading}
+          />
+
+          <DeleteConfirmationDialog
+            open={deleteState.isOpen}
+            onOpenChange={hideDeleteConfirmation}
+            itemName={deleteState.itemName}
+            itemCount={deleteState.itemCount}
+            deleteFiles={deleteState.deleteFiles}
+            onDeleteFilesChange={setDeleteFiles}
+            onConfirm={() => deleteState.onConfirm(deleteState.deleteFiles)}
+            isLoading={deleteState.isLoading}
+          />
+
+          <BulkActionConfirmationDialog
+            open={bulkState.isOpen}
+            onOpenChange={hideBulkConfirmation}
+            action={bulkState.action}
+            itemCount={bulkState.itemCount}
+            onConfirm={bulkState.onConfirm}
+            isLoading={bulkState.isLoading}
           />
         </div>
       </Main>
