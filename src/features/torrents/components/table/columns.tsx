@@ -42,6 +42,7 @@ export const columns: ColumnDef<TorrentInfo>[] = [
     enableHiding: false,
   },
   {
+    id: 'name',
     accessorKey: 'name',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Name' />
