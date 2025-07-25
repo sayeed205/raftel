@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+
 import type { ServerState, TorrentInfo, TorrentsInfoParams } from '@/types/api';
-import { qbApi } from '@/lib/api';
+import qbApi from '@/lib/api';
 
 interface TorrentState {
   torrents: Array<TorrentInfo>;

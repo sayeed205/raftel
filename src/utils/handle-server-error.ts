@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios';
+import { HTTPError } from 'ky';
 import { toast } from 'sonner';
 
 export function handleServerError(error: unknown) {
@@ -15,8 +15,13 @@ export function handleServerError(error: unknown) {
     errMsg = 'Content not found.';
   }
 
-  if (error instanceof AxiosError) {
-    errMsg = error.response?.data.title;
+  if (error instanceof HTTPError) {
+    try {
+      // Try to extract error message from response
+      errMsg = error.response.statusText || `HTTP ${error.response.status}`;
+    } catch {
+      errMsg = `HTTP ${error.response.status}`;
+    }
   }
 
   toast.error(errMsg);
