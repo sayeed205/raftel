@@ -1,21 +1,6 @@
 import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { Link, useNavigate } from '@tanstack/react-router';
-import {
-  TorrentContentTab,
-  TorrentGeneralTab,
-  TorrentPeersTab,
-  TorrentSpeedTab,
-  TorrentTrackersTab,
-} from './components/tabs';
-import type {
-  TorrentFile,
-  TorrentInfo,
-  TorrentPeer,
-  TorrentProperties,
-  TorrentTracker,
-} from '@/types/api';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -26,7 +11,24 @@ import {
   getStateColor,
   getStateText,
 } from '@/lib/utils';
+import type {
+  TorrentFile,
+  TorrentInfo,
+  TorrentPeer,
+  TorrentProperties,
+  TorrentTracker,
+} from '@/types/api';
+import { Link, useNavigate } from '@tanstack/react-router';
+import {
+  TorrentContentTab,
+  TorrentGeneralTab,
+  TorrentPeersTab,
+  TorrentSpeedTab,
+  TorrentTrackersTab,
+} from './components/tabs';
 
+import { Header } from '@/components/layout/header.tsx';
+import { Main } from '@/components/layout/main.tsx';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -35,10 +37,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { ProfileDropdown } from '@/components/profile-dropdown.tsx';
 import { Route as TorrentDetailsRoute } from '@/routes/_authenticated/torrents/$hash';
-import { Header } from '@/components/layout/header.tsx';
-import { Main } from '@/components/layout/main.tsx';
 
 interface TorrentDetailsData {
   torrent: TorrentInfo | null;
@@ -257,21 +256,6 @@ export default function TorrentDetailsPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-
-        <div className='ml-4 flex items-center gap-2'>
-          <Button
-            size='icon'
-            variant='ghost'
-            onClick={fetchTorrentData}
-            disabled={isLoading}
-            aria-label='Refresh'
-          >
-            <RefreshCw
-              className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
-            />
-          </Button>
-          <ProfileDropdown />
-        </div>
       </Header>
       <Main>
         <div className='space-y-6'>

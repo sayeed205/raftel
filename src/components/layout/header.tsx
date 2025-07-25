@@ -1,7 +1,9 @@
-import React from 'react';
-import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
+import { cn } from '@/lib/utils';
+import React from 'react';
+import { ProfileDropdown } from '../profile-dropdown';
+import { ThemeToggle } from '../theme-toggle';
 
 interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   fixed?: boolean;
@@ -26,6 +28,10 @@ export const Header = ({
       <SidebarTrigger variant='outline' className='scale-125 sm:scale-100' />
       <Separator orientation='vertical' className='h-6' />
       {children}
+      <div className='ml-auto flex items-center gap-2'>
+        <ThemeToggle />
+        <ProfileDropdown />
+      </div>
     </header>
   );
 };

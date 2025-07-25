@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { Header } from '@/components/layout/header.tsx';
 import { Main } from '@/components/layout/main.tsx';
-import { ProfileDropdown } from '@/components/profile-dropdown.tsx';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -381,9 +380,6 @@ export default function TorrentsPage() {
             />
           </div>
         </section>
-        <div className='ml-auto flex items-center gap-2'>
-          <ProfileDropdown />
-        </div>
       </Header>
 
       <Main>

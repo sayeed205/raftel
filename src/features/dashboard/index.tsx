@@ -18,7 +18,6 @@ import { useEffect, useState } from 'react';
 
 import { Header } from '@/components/layout/header.tsx';
 import { Main } from '@/components/layout/main.tsx';
-import { ProfileDropdown } from '@/components/profile-dropdown.tsx';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -125,9 +124,6 @@ export default function DashboardPage() {
         <h3 className={isMobile ? 'text-lg font-semibold' : 'text-2xl'}>
           Dashboard
         </h3>
-        <div className='ml-auto flex items-center gap-2 sm:gap-4'>
-          <ProfileDropdown />
-        </div>
       </Header>
       <Main>
         <div className={isMobile ? 'space-y-4' : 'space-y-6'}>
