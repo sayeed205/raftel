@@ -1,16 +1,12 @@
-import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
-import type { QueryClient } from '@tanstack/react-query';
-import { Toaster } from '@/components/ui/sonner';
-import { NavigationProgress } from '@/components/navigation-progress';
-import GeneralError from '@/features/errors/general-error';
-import NotFoundError from '@/features/errors/not-found-error';
 import AuthGuard from '@/components/layout/auth-guard.tsx';
+import { NavigationProgress } from '@/components/navigation-progress';
+import { Toaster } from '@/components/ui/sonner';
+// QueryErrorBoundary removed
+// QueryClient removed
+import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
-export const Route = createRootRouteWithContext<{
-  queryClient: QueryClient;
-}>()({
+export const Route = createRootRouteWithContext<{}>()({
   component: () => {
     return (
       <>
@@ -19,11 +15,8 @@ export const Route = createRootRouteWithContext<{
           <Outlet />
         </AuthGuard>
         <Toaster duration={50000} />
-        {import.meta.env.MODE === 'development' && (
-          <>
-            <ReactQueryDevtools buttonPosition='bottom-left' />
-            <TanStackRouterDevtools position='bottom-right' />
-          </>
+        {import.meta.env.DEV && (
+          <TanStackRouterDevtools position='b"ttom-right' ">
         )}
       </>
     );

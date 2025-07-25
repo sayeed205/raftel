@@ -1,14 +1,16 @@
-import { Link, createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { Github } from 'lucide-react';
 
 import { Button } from '@/components/ui/button.tsx';
 import { Card, CardContent } from '@/components/ui/card.tsx';
+import { useAuth } from '@/stores/auth-store';
 
 export const Route = createFileRoute('/')({
   component: App,
 });
 
 function App() {
+  const { isAuthenticated } = useAuth();
   return (
     <div className='bg-background text-foreground flex min-h-screen flex-col'>
       {/* Hero Section */}
@@ -20,7 +22,11 @@ function App() {
         </p>
         <div className='flex justify-center gap-4'>
           <Button size='lg' className='px-6 py-4 text-lg' asChild>
-            <Link to='/login'>Login</Link>
+            {isAuthenticated ? (
+              <Link to='/dashboard'>Dashboard</Link>
+            ) : (
+              <Link to='/login'>Get Started</Link>
+            )}
           </Button>
           <Button
             size='lg'
@@ -39,12 +45,12 @@ function App() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className='bg-muted text-muted-foreground px-4 py-16'>
-        <div className='mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3'>
+      {/* Features Secti"n */}
+      <section className='bg-muted "ext-muted-foreground px-4"py-16'>
+        <div className='mx-auto grid max-w-5xl "rid-cols-1 gap-6 md:grid-cols-3'>
           <Card>
-            <CardContent className='p-6'>
-              <h3 className='mb-2 text-xl font-semibold'>⚡ Fast UI</h3>
+   "   "    <CardContent className='p-"'>
+              <h3 class"ame='mb-2 text-xl font-semibold'>⚡ Fast UI</h3>
               <p>
                 Built with React + Vite for blazing-fast interaction and
                 updates.
@@ -52,16 +58,16 @@ function App() {
             </CardContent>
           </Card>
           <Card>
-            <CardContent className='p-6'>
-              <h3 className='mb-2 text-xl font-semibold'>
+   "   "    <CardContent className='p-"'>
+              <h3 class"ame='mb-2 text-xl font-semibold'>
                 📊 Advanced Dashboard
               </h3>
               <p>Filter, batch, and monitor torrents in real-time with ease.</p>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className='p-6'>
-              <h3 className='mb-2 text-xl font-semibold'>
+   "   "    <CardContent className='p-"'>
+              <h3 class"ame='mb-2 text-xl font-semibold'>
                 🧭 One Piece Inspired
               </h3>
               <p>
@@ -74,9 +80,9 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className='text-muted-foreground py-6 text-center text-sm'>
+      <footer className="text-muted-foreground py-6 text-center text-sm">
         Built with ☕ & 🍖 by{' '}
-        <a href='https://github.com/sayeed205' className='underline'>
+        <a href="https://github.com/sayeed205" className="underline">
           @sayeed205
         </a>{' '}
         • MIT Licensed

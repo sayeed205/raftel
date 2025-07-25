@@ -1,15 +1,14 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   createFileRoute,
   useNavigate,
   useSearch,
 } from '@tanstack/react-router';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Download, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { toast } from 'sonner';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -22,6 +21,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuthStore } from '@/stores/auth-store';
+import { toast } from 'sonner';
 
 const loginSearchSchema = z.object({
   redirect: z.string().optional(),
@@ -66,7 +66,8 @@ export default function Login() {
       await login(data);
       await navigate({ to: redirect ? redirect : '/torrents' });
     } catch (err: any) {
-      toast.error(err);
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      toast.error(errorMessage);
       // Error is handled by the store
     }
   };

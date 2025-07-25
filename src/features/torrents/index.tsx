@@ -1,19 +1,19 @@
 import { Plus, RefreshCw, Search as SearchIcon } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
-import { useAdaptiveLayout } from '@/hooks/use-responsive';
+import { Header } from '@/components/layout/header.tsx';
+import { Main } from '@/components/layout/main.tsx';
 import { ProfileDropdown } from '@/components/profile-dropdown.tsx';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import qbApi from '@/lib/api';
-import { useTorrentStore } from '@/stores/torrent-store';
-import { Header } from '@/components/layout/header.tsx';
-import { Main } from '@/components/layout/main.tsx';
+import { AddTorrentModal } from '@/features/torrents/components/add-torrent-modal.tsx';
 import { TableExport } from '@/features/torrents/components/table-export.tsx';
 import { EnhancedTorrentTable } from '@/features/torrents/components/torrent-table.tsx';
-import { AddTorrentModal } from '@/features/torrents/components/add-torrent-modal.tsx';
+import { useAdaptiveLayout } from '@/hooks/use-responsive';
+import qbApi from '@/lib/api';
+import { useTorrentStore } from '@/stores/torrent-store';
 
 export default function TorrentsPage() {
   const layout = useAdaptiveLayout();

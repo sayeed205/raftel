@@ -1,3 +1,4 @@
+import { Link, useNavigate } from '@tanstack/react-router';
 import {
   Activity,
   ArrowRight,
@@ -14,14 +15,16 @@ import {
   Wifi,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from '@tanstack/react-router';
 
-import { useIsMobile } from '@/hooks/use-mobile';
+import { Header } from '@/components/layout/header.tsx';
+import { Main } from '@/components/layout/main.tsx';
 import { ProfileDropdown } from '@/components/profile-dropdown.tsx';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { AddTorrentModal } from '@/features/torrents/components/add-torrent-modal.tsx';
+import { useIsMobile } from '@/hooks/use-mobile';
 import {
   formatBytes,
   formatProgress,
@@ -30,9 +33,6 @@ import {
   getStateText,
 } from '@/lib/utils';
 import { useTorrentStore } from '@/stores/torrent-store';
-import { Header } from '@/components/layout/header.tsx';
-import { Main } from '@/components/layout/main.tsx';
-import { AddTorrentModal } from '@/features/torrents/components/add-torrent-modal.tsx';
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -442,7 +442,13 @@ export default function DashboardPage() {
                     <div
                       key={torrent.hash}
                       className='hover:bg-muted/50 flex cursor-pointer items-center justify-between rounded-lg border p-3 transition-colors'
-                      onClick={() => navigate(`/torrents/${torrent.hash}`)}
+                      onClick={() =>
+                        navigate({
+                          to: '/torrents/$hash',
+                          params: { hash: torrent.hash },
+                          search: { tab: '' },
+                        })
+                      }
                     >
                       <div className='min-w-0 flex-1'>
                         <div className='flex items-center gap-2'>
