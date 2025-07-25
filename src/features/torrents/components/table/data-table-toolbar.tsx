@@ -6,7 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { getStateText } from '@/lib/utils';
 import { useTorrentStore } from '@/stores/torrent-store';
-import { X } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
+import { useState } from 'react';
+import { AddTorrentModal } from '../add-torrent-modal';
 import { DataTableFacetedFilter } from './data-table-faceted-filter';
 import { DataTableViewOptions } from './data-table-view-options';
 
@@ -20,7 +22,9 @@ export function DataTableToolbar<TData>({
   data,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
-  const { categories, tags } = useTorrentStore();
+  const [addModalOpen, setAddModalOpen] = useState(false);
+
+  const { categories, tags, fetchTorrents } = useTorrentStore();
   const statuses = data.reduce((acc, torrent) => {
     const state = torrent.state;
     if (!acc.includes(state)) {
@@ -77,7 +81,21 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      <DataTableViewOptions table={table} />
+      <div className='flex gap-2'>
+        <Button onClick={() => setAddModalOpen(true)} className='h-8'>
+          <Plus className='mx-auto mb-1 h-6 w-6' />
+          <span>Add Torrent</span>
+        </Button>
+        <DataTableViewOptions table={table} />
+      </div>
+      <AddTorrentModal
+        open={addModalOpen}
+        onOpenChange={setAddModalOpen}
+        onAdded={() => {
+          setAddModalOpen(false);
+          fetchTorrents();
+        }}
+      />
     </div>
   );
 }
