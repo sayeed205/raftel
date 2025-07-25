@@ -6,9 +6,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
 import {
   formatBytes,
+  formatEta,
   formatProgress,
   formatRatio,
-  formatTime,
   getStateColor,
   getStateText,
 } from '@/lib/utils';
@@ -113,8 +113,12 @@ export const columns: ColumnDef<TorrentInfo>[] = [
       <DataTableColumnHeader column={column} title='Seeds' />
     ),
     cell: ({ row }) => {
-      const seeds = row.original.num_seeds;
-      <span className='text-center text-xs'>{seeds.toString()}</span>;
+      const og = row.original;
+      return (
+        <span className='text-center text-xs'>
+          {og.num_seeds}/{og.num_complete}
+        </span>
+      );
     },
   },
   {
@@ -123,7 +127,12 @@ export const columns: ColumnDef<TorrentInfo>[] = [
       <DataTableColumnHeader column={column} title='Peers' />
     ),
     cell: ({ row }) => {
-      <span className='text-center text-xs'>{row.original.num_leechs}</span>;
+      const og = row.original;
+      return (
+        <span className='text-center text-xs'>
+          {og.num_leechs}/{og.num_incomplete}
+        </span>
+      );
     },
   },
   {
@@ -153,7 +162,7 @@ export const columns: ColumnDef<TorrentInfo>[] = [
     ),
     cell: ({ row }) => {
       const eta = row.getValue('eta') as number;
-      return <span className='text-xs tabular-nums'>{formatTime(eta)}</span>;
+      return <span className='text-xs tabular-nums'>{formatEta(eta)}</span>;
     },
   },
   {

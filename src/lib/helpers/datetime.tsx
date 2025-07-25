@@ -10,7 +10,7 @@ export function formatEta(
   const MAX_UNITS = 2; // Will display 2 units max, from highest to lowest
 
   if (value >= QBIT_MAX_ETA || (isForced && value === 0)) {
-    return <Infinity className='h-2 w-2 text-sm' />;
+    return <Infinity className='h-6 w-6 text-sm' />;
   }
 
   const minute = 60;
@@ -49,7 +49,7 @@ export function formatEta(
 
 export function formatDuration(seconds: number): string | React.ReactNode {
   if (seconds === QBIT_MAX_ETA || seconds < 0)
-    return <Infinity className='h-2 w-2 text-sm' />;
+    return <Infinity className='h-6 w-6 text-sm' />;
 
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
