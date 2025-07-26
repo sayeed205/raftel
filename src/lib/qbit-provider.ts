@@ -188,17 +188,29 @@ class QBitProvider {
   // / AuthController ///
 
   async createFeed(payload: CreateFeedPayload): Promise<void> {
-    await this.post('/rss/addFeed', {
-      url: payload.url,
-      path: payload.name,
-    });
+    await this.post(
+      '/rss/addFeed',
+      {
+        url: payload.url,
+        path: payload.name,
+      },
+      {
+        responseType: 'text',
+      },
+    );
   }
 
   async setRule(ruleName: string, ruleDef: FeedRule): Promise<void> {
-    await this.post('/rss/setRule', {
-      ruleName,
-      ruleDef: JSON.stringify(ruleDef),
-    });
+    await this.post(
+      '/rss/setRule',
+      {
+        ruleName,
+        ruleDef: JSON.stringify(ruleDef),
+      },
+      {
+        responseType: 'text',
+      },
+    );
   }
 
   // / LogController ///
@@ -241,31 +253,61 @@ class QBitProvider {
   }
 
   async renameFeed(oldName: string, newName: string): Promise<void> {
-    await this.post('/rss/moveItem', {
-      itemPath: oldName,
-      destPath: newName,
-    });
+    await this.post(
+      '/rss/moveItem',
+      {
+        itemPath: oldName,
+        destPath: newName,
+      },
+      {
+        responseType: 'text',
+      },
+    );
   }
 
   async setFeedUrl(path: string, url: string): Promise<void> {
-    await this.post('/rss/setFeedURL', { path, url });
+    await this.post(
+      '/rss/setFeedURL',
+      { path, url },
+      {
+        responseType: 'text',
+      },
+    );
   }
 
   async renameRule(ruleName: string, newRuleName: string): Promise<void> {
-    await this.post('/rss/renameRule', {
-      ruleName,
-      newRuleName,
-    });
+    await this.post(
+      '/rss/renameRule',
+      {
+        ruleName,
+        newRuleName,
+      },
+      {
+        responseType: 'text',
+      },
+    );
   }
 
   async deleteRule(ruleName: string): Promise<void> {
-    await this.post('/rss/removeRule', { ruleName });
+    await this.post(
+      '/rss/removeRule',
+      { ruleName },
+      {
+        responseType: 'text',
+      },
+    );
   }
 
   async deleteFeed(name: string): Promise<void> {
-    await this.post('/rss/removeItem', {
-      path: name,
-    });
+    await this.post(
+      '/rss/removeItem',
+      {
+        path: name,
+      },
+      {
+        responseType: 'text',
+      },
+    );
   }
 
   async markAsRead(itemPath: string, articleId?: string): Promise<void> {
@@ -273,13 +315,21 @@ class QBitProvider {
     if (articleId) {
       params['articleId'] = articleId;
     }
-    await this.post('/rss/markAsRead', params);
+    await this.post('/rss/markAsRead', params, {
+      responseType: 'text',
+    });
   }
 
   async refreshFeed(itemPath: string): Promise<void> {
-    await this.post('/rss/refreshItem', {
-      itemPath,
-    });
+    await this.post(
+      '/rss/refreshItem',
+      {
+        itemPath,
+      },
+      {
+        responseType: 'text',
+      },
+    );
   }
 
   async getMatchingArticles(
@@ -997,7 +1047,18 @@ class QBitProvider {
 
       switch (responseType) {
         case 'json':
-          return response.json<T>();
+          try {
+            const text = await response.text();
+            if (!text.trim()) {
+              // Return empty object for empty responses
+              return {} as T;
+            }
+            return JSON.parse(text) as T;
+          } catch (jsonError) {
+            throw new Error(
+              `Failed to parse JSON response: ${jsonError instanceof Error ? jsonError.message : 'Invalid JSON'}`,
+            );
+          }
         case 'text':
           return response.text() as Promise<T>;
         case 'arraybuffer':

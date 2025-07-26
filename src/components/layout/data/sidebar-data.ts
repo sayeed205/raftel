@@ -1,5 +1,5 @@
-import { Download, LayoutDashboard } from 'lucide-react';
 import type { SidebarData } from '@/components/layout/types';
+import { Download, LayoutDashboard, Rss } from 'lucide-react';
 
 export const sidebarData: SidebarData = {
   user: {
@@ -18,6 +18,11 @@ export const sidebarData: SidebarData = {
           title: 'Torrents',
           icon: Download,
           url: '/torrents',
+        },
+        {
+          title: 'RSS',
+          icon: Rss,
+          url: '/rss',
         },
       ],
     },

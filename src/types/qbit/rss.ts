@@ -15,6 +15,8 @@ export interface FeedArticle {
   title: string;
   /** Torrent URL */
   torrentURL?: string;
+  /** Feed name (added for store compatibility) */
+  feedName?: string;
 }
 
 export interface Feed {
