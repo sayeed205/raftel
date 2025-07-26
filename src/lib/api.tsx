@@ -1,5 +1,4 @@
 // qBittorrent WebAPI Client - Enhanced with VueTorrent patterns
-import qbitProvider from './qbit-provider';
 import type {
   AddTorrentParams,
   AppVersion,
@@ -20,6 +19,7 @@ import type {
   TorrentTracker,
   TorrentsInfoParams,
 } from '@/types/api';
+import qbitProvider from './qbit-provider';
 
 /**
  * Legacy QBittorrentApi class for backward compatibility
@@ -337,6 +337,58 @@ class QBittorrentApi {
     ruleName: string,
   ): Promise<Record<string, Array<string>>> {
     return this.provider.getMatchingArticles(ruleName);
+  }
+
+  // Search methods
+  async getSearchPlugins(): Promise<Array<any>> {
+    return this.provider.getSearchPlugins();
+  }
+
+  async startSearch(
+    pattern: string,
+    category: string,
+    plugins: Array<string>,
+  ): Promise<any> {
+    return this.provider.startSearch(pattern, category, plugins);
+  }
+
+  async stopSearch(id: number): Promise<boolean> {
+    return this.provider.stopSearch(id);
+  }
+
+  async getSearchStatus(id?: number): Promise<Array<any>> {
+    return this.provider.getSearchStatus(id);
+  }
+
+  async getSearchResults(
+    id: number,
+    offset?: number,
+    limit?: number,
+  ): Promise<any> {
+    return this.provider.getSearchResults(id, offset, limit);
+  }
+
+  async deleteSearch(id: number): Promise<boolean> {
+    return this.provider.deleteSearchPlugin(id);
+  }
+
+  async installSearchPlugin(sources: Array<string>): Promise<boolean> {
+    return this.provider.installSearchPlugin(sources);
+  }
+
+  async uninstallSearchPlugin(names: Array<string>): Promise<void> {
+    return this.provider.uninstallSearchPlugin(names);
+  }
+
+  async enableSearchPlugin(
+    names: Array<string>,
+    enable: boolean,
+  ): Promise<void> {
+    return this.provider.enableSearchPlugin(names, enable);
+  }
+
+  async updateSearchPlugins(): Promise<void> {
+    return this.provider.updateSearchPlugins();
   }
 
   // Utility methods

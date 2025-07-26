@@ -74,7 +74,7 @@ export interface SearchPlugin {
   /** Whether plugin is enabled */
   enabled: boolean;
   /** Supported categories */
-  supportedCategories: Array<string>;
+  supportedCategories: Array<{ id: string; name: string }>;
   /** Full name */
   fullName: string;
 }

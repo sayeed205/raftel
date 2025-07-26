@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated/search'
 import { Route as AuthenticatedRssRouteImport } from './routes/_authenticated/rss'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedTorrentsIndexRouteImport } from './routes/_authenticated/torrents/index'
@@ -30,6 +31,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedSearchRoute = AuthenticatedSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedRssRoute = AuthenticatedRssRouteImport.update({
   id: '/rss',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/rss': typeof AuthenticatedRssRoute
+  '/search': typeof AuthenticatedSearchRoute
   '/torrents/$hash': typeof AuthenticatedTorrentsHashRoute
   '/torrents': typeof AuthenticatedTorrentsIndexRoute
 }
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/rss': typeof AuthenticatedRssRoute
+  '/search': typeof AuthenticatedSearchRoute
   '/torrents/$hash': typeof AuthenticatedTorrentsHashRoute
   '/torrents': typeof AuthenticatedTorrentsIndexRoute
 }
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/rss': typeof AuthenticatedRssRoute
+  '/_authenticated/search': typeof AuthenticatedSearchRoute
   '/_authenticated/torrents/$hash': typeof AuthenticatedTorrentsHashRoute
   '/_authenticated/torrents/': typeof AuthenticatedTorrentsIndexRoute
 }
@@ -87,10 +96,18 @@ export interface FileRouteTypes {
     | '/login'
     | '/dashboard'
     | '/rss'
+    | '/search'
     | '/torrents/$hash'
     | '/torrents'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/dashboard' | '/rss' | '/torrents/$hash' | '/torrents'
+  to:
+    | '/'
+    | '/login'
+    | '/dashboard'
+    | '/rss'
+    | '/search'
+    | '/torrents/$hash'
+    | '/torrents'
   id:
     | '__root__'
     | '/'
@@ -98,6 +115,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/_authenticated/dashboard'
     | '/_authenticated/rss'
+    | '/_authenticated/search'
     | '/_authenticated/torrents/$hash'
     | '/_authenticated/torrents/'
   fileRoutesById: FileRoutesById
@@ -130,6 +148,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/search': {
+      id: '/_authenticated/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof AuthenticatedSearchRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/rss': {
       id: '/_authenticated/rss'
@@ -165,6 +190,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedRssRoute: typeof AuthenticatedRssRoute
+  AuthenticatedSearchRoute: typeof AuthenticatedSearchRoute
   AuthenticatedTorrentsHashRoute: typeof AuthenticatedTorrentsHashRoute
   AuthenticatedTorrentsIndexRoute: typeof AuthenticatedTorrentsIndexRoute
 }
@@ -172,6 +198,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedRssRoute: AuthenticatedRssRoute,
+  AuthenticatedSearchRoute: AuthenticatedSearchRoute,
   AuthenticatedTorrentsHashRoute: AuthenticatedTorrentsHashRoute,
   AuthenticatedTorrentsIndexRoute: AuthenticatedTorrentsIndexRoute,
 }
