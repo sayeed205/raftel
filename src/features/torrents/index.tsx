@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 
+import { columns } from './components/table/columns';
+import { DataTable } from './components/table/data-table';
 import { Header } from '@/components/layout/header.tsx';
 import { Main } from '@/components/layout/main.tsx';
 import { useTorrentStore } from '@/stores/torrent-store';
-import { columns } from './components/table/columns';
-import { DataTable } from './components/table/data-table';
 
 const POLL_KEY = 'torrents_poll_interval';
 

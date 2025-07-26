@@ -1,5 +1,8 @@
-import { type ColumnDef } from '@tanstack/react-table';
+import { DataTableColumnHeader } from './data-table-column-header';
+import { DataTableRowActions } from './data-table-row-actions';
+import type { ColumnDef } from '@tanstack/react-table';
 
+import type { TorrentInfo } from '@/types/api';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 
@@ -12,12 +15,13 @@ import {
   getStateColor,
   getStateText,
 } from '@/lib/utils';
-import type { TorrentInfo } from '@/types/api';
-import type { TorrentState } from '@/types/qbit/constants';
-import { DataTableColumnHeader } from './data-table-column-header';
-import { DataTableRowActions } from './data-table-row-actions';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip.tsx';
 
-export const columns: ColumnDef<TorrentInfo>[] = [
+export const columns: Array<ColumnDef<TorrentInfo>> = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -52,12 +56,16 @@ export const columns: ColumnDef<TorrentInfo>[] = [
       return (
         <div className='flex space-x-2'>
           {category && <Badge variant='outline'>{category}</Badge>}
-          <span
-            className='max-w-96 truncate font-medium'
-            title={row.getValue('name')}
-          >
-            {row.getValue('name')}
-          </span>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className='max-w-96 truncate font-medium'>
+                {row.getValue('name')}
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{row.getValue('name')}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       );
     },
@@ -68,7 +76,7 @@ export const columns: ColumnDef<TorrentInfo>[] = [
       <DataTableColumnHeader column={column} title='Size' />
     ),
     cell: ({ row }) => {
-      const field = row.getValue('size') as number;
+      const field = row.original.size;
       return <div>{formatBytes(field)}</div>;
     },
   },
@@ -78,7 +86,7 @@ export const columns: ColumnDef<TorrentInfo>[] = [
       <DataTableColumnHeader column={column} title='Progress' />
     ),
     cell: ({ row }) => {
-      const progress = row.getValue('progress') as number;
+      const progress = row.original.progress;
       return (
         <div>
           <Progress value={progress * 100} className='h-1.5' />
@@ -95,7 +103,7 @@ export const columns: ColumnDef<TorrentInfo>[] = [
       <DataTableColumnHeader column={column} title='Status' />
     ),
     cell: ({ row }) => {
-      const status = row.getValue('state') as TorrentState;
+      const status = row.original.state;
 
       return (
         <Badge className={`text-xs ${getStateColor(status)} text-white`}>
@@ -141,7 +149,7 @@ export const columns: ColumnDef<TorrentInfo>[] = [
       <DataTableColumnHeader column={column} title='Download Speed' />
     ),
     cell: ({ row }) => {
-      const field = row.getValue('dlspeed') as number;
+      const field = row.original.dlspeed;
       return <div>{formatBytes(field)}</div>;
     },
   },
@@ -151,7 +159,7 @@ export const columns: ColumnDef<TorrentInfo>[] = [
       <DataTableColumnHeader column={column} title='Upload Speed' />
     ),
     cell: ({ row }) => {
-      const field = row.getValue('upspeed') as number;
+      const field = row.original.upspeed;
       return <div>{formatBytes(field)}</div>;
     },
   },
@@ -161,7 +169,7 @@ export const columns: ColumnDef<TorrentInfo>[] = [
       <DataTableColumnHeader column={column} title='ETA' />
     ),
     cell: ({ row }) => {
-      const eta = row.getValue('eta') as number;
+      const eta = row.original.eta;
       return <span className='text-xs tabular-nums'>{formatEta(eta)}</span>;
     },
   },
@@ -171,7 +179,7 @@ export const columns: ColumnDef<TorrentInfo>[] = [
       <DataTableColumnHeader column={column} title='Ratio' />
     ),
     cell: ({ row }) => {
-      const ratio = row.getValue('ratio') as number;
+      const ratio = row.original.ratio;
       return <span className='text-xs tabular-nums'>{formatRatio(ratio)}</span>;
     },
   },
@@ -193,7 +201,7 @@ export const columns: ColumnDef<TorrentInfo>[] = [
       <DataTableColumnHeader column={column} title='Added' />
     ),
     cell: ({ row }) => {
-      const addedOn = row.getValue('added_on') as number;
+      const addedOn = row.original.added_on;
       return (
         <span className='text-xs'>
           {addedOn ? new Date(addedOn * 1000).toLocaleDateString() : '-'}
@@ -207,7 +215,7 @@ export const columns: ColumnDef<TorrentInfo>[] = [
       <DataTableColumnHeader column={column} title='Completed' />
     ),
     cell: ({ row }) => {
-      const completionOn = row.getValue('completion_on') as number;
+      const completionOn = row.original.completion_on;
       return (
         <span className='text-xs'>
           {completionOn

@@ -1,11 +1,11 @@
+import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import AuthGuard from '@/components/layout/auth-guard.tsx';
 import { NavigationProgress } from '@/components/navigation-progress';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import GeneralError from '@/features/errors/general-error';
 import NotFoundError from '@/features/errors/not-found-error';
-import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
 export const Route = createRootRouteWithContext<{}>()({
   component: () => {
@@ -17,7 +17,7 @@ export const Route = createRootRouteWithContext<{}>()({
         </AuthGuard>
         <Toaster duration={5000} />
         {import.meta.env.DEV && (
-          <TanStackRouterDevtools position='bottom-left' />
+          <TanStackRouterDevtools position='bottom-right' />
         )}
       </ThemeProvider>
     );
