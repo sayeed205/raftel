@@ -28,7 +28,10 @@ import {
   searchSettings,
   settingsCategories,
 } from '../utils/settings-categories';
+import { SettingsExportDialog } from './settings-export-dialog';
+import { SettingsImportDialog } from './settings-import-dialog';
 import { SettingsNavigation } from './settings-navigation';
+import { SettingsResetDialog } from './settings-reset-dialog';
 import { SettingsSearch } from './settings-search';
 import { SettingsValidationDisplay } from './settings-validation-display';
 
@@ -45,6 +48,7 @@ export function SettingsLayout({
 
   const {
     preferences,
+    webUISettings,
     isLoading,
     isSaving,
     isDirty,
@@ -57,14 +61,17 @@ export function SettingsLayout({
     fetchPreferences,
     saveChanges,
     discardChanges,
-    exportSettings,
     importSettings,
     resetToDefaults,
+    resetPreferences,
     clearError,
   } = useSettingsActions();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
+  const [showExportDialog, setShowExportDialog] = useState(false);
+  const [showImportDialog, setShowImportDialog] = useState(false);
+  const [showResetDialog, setShowResetDialog] = useState(false);
 
   // Load preferences on mount
   useEffect(() => {
@@ -92,49 +99,56 @@ export function SettingsLayout({
 
   // Handle export settings
   const handleExport = () => {
-    try {
-      const settingsJson = exportSettings();
-      const blob = new Blob([settingsJson], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `qbittorrent-settings-${new Date().toISOString().split('T')[0]}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Failed to export settings:', error);
-    }
+    setShowExportDialog(true);
   };
 
   // Handle import settings
-  const handleImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  const handleImport = () => {
+    setShowImportDialog(true);
+  };
 
+  // Handle import with options
+  const handleImportWithOptions = async (data: any, options: any) => {
     try {
-      const text = await file.text();
-      await importSettings(text);
-      // Reset file input
-      event.target.value = '';
+      // Create filtered import data based on options
+      const filteredData: any = {};
+
+      if (options.importPreferences && data.preferences) {
+        filteredData.preferences = data.preferences;
+      }
+
+      if (options.importWebUISettings && data.webUISettings) {
+        filteredData.webUISettings = data.webUISettings;
+      }
+
+      const jsonString = JSON.stringify(filteredData);
+      await importSettings(jsonString);
     } catch (error) {
       console.error('Failed to import settings:', error);
+      throw error;
     }
   };
 
   // Handle reset to defaults
-  const handleReset = async () => {
-    if (
-      window.confirm(
-        'Are you sure you want to reset all settings to defaults? This action cannot be undone.',
-      )
-    ) {
-      try {
+  const handleReset = () => {
+    setShowResetDialog(true);
+  };
+
+  // Handle reset with options
+  const handleResetWithOptions = async (options: any) => {
+    try {
+      if (options.resetPreferences && options.resetWebUISettings) {
         await resetToDefaults();
-      } catch (error) {
-        console.error('Failed to reset settings:', error);
+      } else if (options.resetPreferences) {
+        await resetPreferences();
+      } else if (options.resetWebUISettings) {
+        // Reset WebUI settings only - we need to get the action from the store
+        const store = useSettingsActions();
+        store.resetWebUISettings();
       }
+    } catch (error) {
+      console.error('Failed to reset settings:', error);
+      throw error;
     }
   };
 
@@ -159,235 +173,254 @@ export function SettingsLayout({
   const currentSectionInfo = getCurrentSection();
 
   return (
-    <div className='flex h-full'>
-      {/* Sidebar Navigation */}
-      <div className='bg-muted/10 w-64 border-r p-4'>
-        {/* Search */}
-        <div className='relative mb-4'>
-          <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
-          <Input
-            placeholder='Search settings...'
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setShowSearch(e.target.value.length > 0);
-            }}
-            className='pl-9'
-          />
-          {showSearch && searchQuery && (
-            <SettingsSearch
-              query={searchQuery}
-              results={searchResults}
-              onSelect={handleSearchResultSelect}
-              onClose={() => setShowSearch(false)}
+    <>
+      <div className='flex h-full'>
+        {/* Sidebar Navigation */}
+        <div className='bg-muted/10 w-64 border-r p-4'>
+          {/* Search */}
+          <div className='relative mb-4'>
+            <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2' />
+            <Input
+              placeholder='Search settings...'
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setShowSearch(e.target.value.length > 0);
+              }}
+              className='pl-9'
             />
-          )}
+            {showSearch && searchQuery && (
+              <SettingsSearch
+                query={searchQuery}
+                results={searchResults}
+                onSelect={handleSearchResultSelect}
+                onClose={() => setShowSearch(false)}
+              />
+            )}
+          </div>
+
+          {/* Navigation */}
+          <SettingsNavigation currentSection={currentSection} />
         </div>
 
-        {/* Navigation */}
-        <SettingsNavigation currentSection={currentSection} />
-      </div>
-
-      {/* Main Content */}
-      <div className='flex flex-1 flex-col'>
-        {/* Header */}
-        <div className='border-b p-4'>
-          <div className='flex items-center justify-between'>
-            <div>
-              <h1 className='text-2xl font-bold'>Settings</h1>
-              {currentSectionInfo && (
-                <div className='mt-1 flex items-center gap-2'>
-                  <Badge variant='secondary'>
-                    {currentSectionInfo.category.title}
-                  </Badge>
-                  <span className='text-muted-foreground text-sm'>
-                    {currentSectionInfo.section.title}
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {/* Action Buttons */}
-            <div className='flex items-center gap-2'>
-              {/* Import/Export */}
-              <div className='flex items-center gap-1'>
-                <input
-                  type='file'
-                  accept='.json'
-                  onChange={handleImport}
-                  className='hidden'
-                  id='import-settings'
-                />
-                <Button
-                  variant='outline'
-                  size='sm'
-                  onClick={() =>
-                    document.getElementById('import-settings')?.click()
-                  }
-                  disabled={isLoading || isSaving}
-                >
-                  <Upload className='mr-1 h-4 w-4' />
-                  Import
-                </Button>
-                <Button
-                  variant='outline'
-                  size='sm'
-                  onClick={handleExport}
-                  disabled={isLoading}
-                >
-                  <Download className='mr-1 h-4 w-4' />
-                  Export
-                </Button>
+        {/* Main Content */}
+        <div className='flex flex-1 flex-col'>
+          {/* Header */}
+          <div className='border-b p-4'>
+            <div className='flex items-center justify-between'>
+              <div>
+                <h1 className='text-2xl font-bold'>Settings</h1>
+                {currentSectionInfo && (
+                  <div className='mt-1 flex items-center gap-2'>
+                    <Badge variant='secondary'>
+                      {currentSectionInfo.category.title}
+                    </Badge>
+                    <span className='text-muted-foreground text-sm'>
+                      {currentSectionInfo.section.title}
+                    </span>
+                  </div>
+                )}
               </div>
 
-              <Separator orientation='vertical' className='h-6' />
-
-              {/* Save/Discard */}
-              {isDirty && (
-                <>
+              {/* Action Buttons */}
+              <div className='flex items-center gap-2'>
+                {/* Import/Export */}
+                <div className='flex items-center gap-1'>
                   <Button
                     variant='outline'
                     size='sm'
-                    onClick={handleDiscard}
-                    disabled={isSaving}
+                    onClick={handleImport}
+                    disabled={isLoading || isSaving}
                   >
-                    <RotateCcw className='mr-1 h-4 w-4' />
-                    Discard
+                    <Upload className='mr-1 h-4 w-4' />
+                    Import
                   </Button>
                   <Button
+                    variant='outline'
                     size='sm'
-                    onClick={handleSave}
-                    disabled={isSaving || validationErrors.length > 0}
+                    onClick={handleExport}
+                    disabled={isLoading}
                   >
-                    <Save className='mr-1 h-4 w-4' />
-                    {isSaving ? 'Saving...' : 'Save Changes'}
+                    <Download className='mr-1 h-4 w-4' />
+                    Export
                   </Button>
-                </>
-              )}
+                </div>
 
-              {/* Reset */}
-              <Button
-                variant='destructive'
-                size='sm'
-                onClick={handleReset}
-                disabled={isLoading || isSaving}
-              >
-                <RotateCcw className='mr-1 h-4 w-4' />
-                Reset All
-              </Button>
-            </div>
-          </div>
+                <Separator orientation='vertical' className='h-6' />
 
-          {/* Pending Changes Indicator */}
-          {isDirty && Object.keys(pendingChanges).length > 0 && (
-            <div className='mt-2'>
-              <Badge variant='outline' className='text-xs'>
-                {Object.keys(pendingChanges).length} unsaved change
-                {Object.keys(pendingChanges).length !== 1 ? 's' : ''}
-              </Badge>
-            </div>
-          )}
-        </div>
+                {/* Save/Discard */}
+                {isDirty && (
+                  <>
+                    <Button
+                      variant='outline'
+                      size='sm'
+                      onClick={handleDiscard}
+                      disabled={isSaving}
+                    >
+                      <RotateCcw className='mr-1 h-4 w-4' />
+                      Discard
+                    </Button>
+                    <Button
+                      size='sm'
+                      onClick={handleSave}
+                      disabled={isSaving || validationErrors.length > 0}
+                    >
+                      <Save className='mr-1 h-4 w-4' />
+                      {isSaving ? 'Saving...' : 'Save Changes'}
+                    </Button>
+                  </>
+                )}
 
-        {/* Error Display */}
-        {error && (
-          <div className='p-4'>
-            <Alert variant='destructive'>
-              <AlertCircle className='h-4 w-4' />
-              <AlertDescription className='flex items-center justify-between'>
-                {error}
-                <Button variant='ghost' size='sm' onClick={clearError}>
-                  Dismiss
+                {/* Reset */}
+                <Button
+                  variant='destructive'
+                  size='sm'
+                  onClick={handleReset}
+                  disabled={isLoading || isSaving}
+                >
+                  <RotateCcw className='mr-1 h-4 w-4' />
+                  Reset All
                 </Button>
-              </AlertDescription>
-            </Alert>
-          </div>
-        )}
-
-        {/* Validation Errors */}
-        {validationErrors.length > 0 && (
-          <div className='p-4'>
-            <SettingsValidationDisplay errors={validationErrors} />
-          </div>
-        )}
-
-        {/* Content */}
-        <div className='flex-1 overflow-auto'>
-          {isLoading ? (
-            <div className='space-y-4 p-6'>
-              <Skeleton className='h-8 w-64' />
-              <Skeleton className='h-4 w-full' />
-              <Skeleton className='h-4 w-3/4' />
-              <div className='space-y-2'>
-                <Skeleton className='h-10 w-full' />
-                <Skeleton className='h-10 w-full' />
-                <Skeleton className='h-10 w-2/3' />
               </div>
             </div>
-          ) : preferences ? (
-            <div className='p-6'>
-              {children || (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Welcome to Settings</CardTitle>
-                    <CardDescription>
-                      Configure qBittorrent and customize your experience. Use
-                      the navigation on the left to explore different settings
-                      categories.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-                      {settingsCategories.map((category) => (
-                        <Card
-                          key={category.id}
-                          className='hover:bg-muted/50 cursor-pointer transition-colors'
-                        >
-                          <CardHeader className='pb-3'>
-                            <CardTitle className='text-lg'>
-                              {category.title}
-                            </CardTitle>
-                            <CardDescription>
-                              {category.description}
-                            </CardDescription>
-                          </CardHeader>
-                          <CardContent>
-                            <div className='space-y-1'>
-                              {category.sections.map((section) => (
-                                <Button
-                                  key={section.id}
-                                  variant='ghost'
-                                  size='sm'
-                                  className='w-full justify-start'
-                                  onClick={() =>
-                                    navigate({ to: `/settings/${section.id}` })
-                                  }
-                                >
-                                  <section.icon className='mr-2 h-4 w-4' />
-                                  {section.title}
-                                </Button>
-                              ))}
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-          ) : (
-            <div className='p-6'>
-              <Alert>
+
+            {/* Pending Changes Indicator */}
+            {isDirty && Object.keys(pendingChanges).length > 0 && (
+              <div className='mt-2'>
+                <Badge variant='outline' className='text-xs'>
+                  {Object.keys(pendingChanges).length} unsaved change
+                  {Object.keys(pendingChanges).length !== 1 ? 's' : ''}
+                </Badge>
+              </div>
+            )}
+          </div>
+
+          {/* Error Display */}
+          {error && (
+            <div className='p-4'>
+              <Alert variant='destructive'>
                 <AlertCircle className='h-4 w-4' />
-                <AlertDescription>
-                  Failed to load settings. Please try refreshing the page.
+                <AlertDescription className='flex items-center justify-between'>
+                  {error}
+                  <Button variant='ghost' size='sm' onClick={clearError}>
+                    Dismiss
+                  </Button>
                 </AlertDescription>
               </Alert>
             </div>
           )}
+
+          {/* Validation Errors */}
+          {validationErrors.length > 0 && (
+            <div className='p-4'>
+              <SettingsValidationDisplay errors={validationErrors} />
+            </div>
+          )}
+
+          {/* Content */}
+          <div className='flex-1 overflow-auto'>
+            {isLoading ? (
+              <div className='space-y-4 p-6'>
+                <Skeleton className='h-8 w-64' />
+                <Skeleton className='h-4 w-full' />
+                <Skeleton className='h-4 w-3/4' />
+                <div className='space-y-2'>
+                  <Skeleton className='h-10 w-full' />
+                  <Skeleton className='h-10 w-full' />
+                  <Skeleton className='h-10 w-2/3' />
+                </div>
+              </div>
+            ) : preferences ? (
+              <div className='p-6'>
+                {children || (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Welcome to Settings</CardTitle>
+                      <CardDescription>
+                        Configure qBittorrent and customize your experience. Use
+                        the navigation on the left to explore different settings
+                        categories.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                        {settingsCategories.map((category) => (
+                          <Card
+                            key={category.id}
+                            className='hover:bg-muted/50 cursor-pointer transition-colors'
+                          >
+                            <CardHeader className='pb-3'>
+                              <CardTitle className='text-lg'>
+                                {category.title}
+                              </CardTitle>
+                              <CardDescription>
+                                {category.description}
+                              </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                              <div className='space-y-1'>
+                                {category.sections.map((section) => (
+                                  <Button
+                                    key={section.id}
+                                    variant='ghost'
+                                    size='sm'
+                                    className='w-full justify-start'
+                                    onClick={() =>
+                                      navigate({
+                                        to: `/settings/${section.id}`,
+                                      })
+                                    }
+                                  >
+                                    <section.icon className='mr-2 h-4 w-4' />
+                                    {section.title}
+                                  </Button>
+                                ))}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            ) : (
+              <div className='p-6'>
+                <Alert>
+                  <AlertCircle className='h-4 w-4' />
+                  <AlertDescription>
+                    Failed to load settings. Please try refreshing the page.
+                  </AlertDescription>
+                </Alert>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Dialogs */}
+      <SettingsExportDialog
+        open={showExportDialog}
+        onOpenChange={setShowExportDialog}
+        preferences={preferences}
+        webUISettings={webUISettings}
+      />
+
+      <SettingsImportDialog
+        open={showImportDialog}
+        onOpenChange={setShowImportDialog}
+        onImport={handleImportWithOptions}
+        currentPreferences={preferences}
+        currentWebUISettings={webUISettings}
+      />
+
+      <SettingsResetDialog
+        open={showResetDialog}
+        onOpenChange={setShowResetDialog}
+        onReset={handleResetWithOptions}
+        preferences={preferences}
+        webUISettings={webUISettings}
+      />
+    </>
   );
 }

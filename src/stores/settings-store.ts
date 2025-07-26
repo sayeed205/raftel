@@ -84,6 +84,7 @@ interface SettingsActions {
 
   // Reset functionality
   resetToDefaults: () => Promise<void>;
+  resetPreferences: () => Promise<void>;
 
   // Utility
   clearError: () => void;
@@ -310,6 +311,7 @@ export const useSettingsStore = create<SettingsStore>()(
           webUISettings: state.webUISettings,
           exportedAt: new Date().toISOString(),
           version: '1.0',
+          exportedBy: 'Raftel qBittorrent WebUI',
         };
         return JSON.stringify(exportData, null, 2);
       },
@@ -322,18 +324,49 @@ export const useSettingsStore = create<SettingsStore>()(
 
           // Validate import data structure
           if (!importData.preferences && !importData.webUISettings) {
-            throw new Error('Invalid settings file format');
+            throw new Error(
+              'Invalid settings file: No preferences or WebUI settings found',
+            );
+          }
+
+          // Validate version compatibility
+          if (importData.version && importData.version !== '1.0') {
+            console.warn(
+              `Settings file version ${importData.version} may not be fully compatible`,
+            );
           }
 
           // Import WebUI settings if present
           if (importData.webUISettings) {
             const state = get();
-            state.updateWebUISettings(importData.webUISettings);
+
+            // Validate WebUI settings structure
+            const validWebUIKeys = Object.keys(defaultWebUISettings);
+            const filteredWebUISettings: Partial<WebUISettings> = {};
+
+            Object.entries(importData.webUISettings).forEach(([key, value]) => {
+              if (validWebUIKeys.includes(key)) {
+                (filteredWebUISettings as any)[key] = value;
+              }
+            });
+
+            state.updateWebUISettings(filteredWebUISettings);
           }
 
           // Import qBittorrent preferences if present
           if (importData.preferences) {
             const state = get();
+
+            // Validate preferences before importing
+            const validationErrors = state.validatePreferences(
+              importData.preferences,
+            );
+            if (validationErrors.length > 0) {
+              throw new Error(
+                `Invalid preferences: ${validationErrors.map((e) => e.message).join(', ')}`,
+              );
+            }
+
             await state.updatePreferences(importData.preferences);
           }
 
@@ -353,24 +386,61 @@ export const useSettingsStore = create<SettingsStore>()(
 
       // Reset functionality
       resetToDefaults: async () => {
+        const state = get();
+        await state.resetPreferences();
+        state.resetWebUISettings();
+      },
+
+      resetPreferences: async () => {
         set({ isLoading: true, error: null });
 
         try {
-          // Note: qBittorrent doesn't have a built-in reset to defaults API
-          // We would need to manually set default values for each preference
-          // For now, we'll just clear the current preferences and refetch
-          await get().fetchPreferences();
+          // Since qBittorrent doesn't have a built-in reset API,
+          // we'll need to set default values manually
+          const defaultPreferences: Partial<QBittorrentPreferences> = {
+            // Core defaults - these should match qBittorrent's defaults
+            save_path: '',
+            temp_path_enabled: false,
+            temp_path: '',
+            auto_tmm_enabled: false,
+            start_paused_enabled: false,
+            dl_limit: 0,
+            up_limit: 0,
+            max_connec: 200,
+            max_connec_per_torrent: 100,
+            max_uploads_per_torrent: 4,
+            max_uploads: 20,
+            listen_port: 8999,
+            upnp: true,
+            random_port: false,
+            dht: true,
+            pex: true,
+            lsd: true,
+            max_active_downloads: 3,
+            max_active_uploads: 3,
+            max_active_torrents: 5,
+            max_ratio_enabled: false,
+            max_ratio: -1,
+            max_seeding_time_enabled: false,
+            max_seeding_time: -1,
+            web_ui_port: 8080,
+            web_ui_address: '*',
+            web_ui_username: 'admin',
+            // Note: We don't reset password for security reasons
+          };
 
-          // Reset WebUI settings to defaults
+          await get().updatePreferences(defaultPreferences);
+
           set({
-            webUISettings: defaultWebUISettings,
             isLoading: false,
             pendingChanges: {},
             isDirty: false,
           });
         } catch (error) {
           const message =
-            error instanceof Error ? error.message : 'Failed to reset settings';
+            error instanceof Error
+              ? error.message
+              : 'Failed to reset preferences';
           set({
             isLoading: false,
             error: message,
@@ -437,6 +507,7 @@ export const useSettingsActions = () => {
     exportSettings,
     importSettings,
     resetToDefaults,
+    resetPreferences,
     clearError,
     refreshSettings,
   } = useSettingsStore();
@@ -454,6 +525,7 @@ export const useSettingsActions = () => {
     exportSettings,
     importSettings,
     resetToDefaults,
+    resetPreferences,
     clearError,
     refreshSettings,
   };
