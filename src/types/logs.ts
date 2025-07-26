@@ -11,6 +11,48 @@ export interface Log {
   type: LogType;
 }
 
+export interface PeerLog {
+  /** Log ID */
+  id: number;
+  /** IP address */
+  ip: string;
+  /** Timestamp */
+  timestamp: number;
+  /** Blocked status */
+  blocked: boolean;
+  /** Reason for blocking */
+  reason: string;
+}
+
+export interface SystemInfo {
+  /** qBittorrent version */
+  version: string;
+  /** Build information */
+  buildInfo: string;
+  /** Uptime in seconds */
+  uptime: number;
+  /** Total disk size */
+  totalSize: number;
+  /** Free disk space */
+  freeSpace: number;
+  /** Download speed */
+  dlInfoSpeed: number;
+  /** Downloaded data */
+  dlInfoData: number;
+  /** Upload speed */
+  upInfoSpeed: number;
+  /** Uploaded data */
+  upInfoData: number;
+  /** Download rate limit */
+  dlRateLimit: number;
+  /** Upload rate limit */
+  upRateLimit: number;
+  /** DHT nodes */
+  dhtNodes: number;
+  /** Connection status */
+  connectionStatus: string;
+}
+
 export interface LogFilter {
   /** Log levels to include */
   levels: Array<LogType>;

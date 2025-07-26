@@ -78,7 +78,6 @@ export const showToast = {
 export class ProgressToast {
   private toastId: string | number;
   private total: number;
-  private completed = 0;
   private action: string;
 
   constructor(action: string, total: number) {
@@ -90,7 +89,6 @@ export class ProgressToast {
   }
 
   update(completed: number, message?: string) {
-    this.completed = completed;
     const progress = Math.round((completed / this.total) * 100);
 
     toast.loading(message || `${this.action} in progress`, {

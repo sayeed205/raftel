@@ -69,7 +69,11 @@ class QBitProvider {
   }
 
   async getVersion(): Promise<string> {
-    const version = await this.request<string>('/app/version');
+    const version = await this.request<string>(
+      '/app/version',
+      {},
+      { responseType: 'text' },
+    );
     return version.includes('v') ? version.substring(1) : version;
   }
 
@@ -182,6 +186,16 @@ class QBitProvider {
 
     return this.request<Array<Log>>(
       `/log/main?${new URLSearchParams(params as any).toString()}`,
+    );
+  }
+
+  async getPeerLogs(afterId?: number): Promise<Array<any>> {
+    const params = {
+      last_known_id: afterId || -1,
+    };
+
+    return this.request<Array<any>>(
+      `/log/peers?${new URLSearchParams(params as any).toString()}`,
     );
   }
 
@@ -996,7 +1010,11 @@ class QBitProvider {
   }
 
   async getApiVersion(): Promise<string> {
-    return this.request<string>('/app/webapiVersion');
+    return this.request<string>(
+      '/app/webapiVersion',
+      {},
+      { responseType: 'text' },
+    );
   }
 
   async syncMainData(rid = 0): Promise<any> {

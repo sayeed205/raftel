@@ -14,9 +14,13 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated/search'
 import { Route as AuthenticatedRssRouteImport } from './routes/_authenticated/rss'
+import { Route as AuthenticatedLogsRouteImport } from './routes/_authenticated/logs'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedTorrentsIndexRouteImport } from './routes/_authenticated/torrents/index'
+import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
 import { Route as AuthenticatedTorrentsHashRouteImport } from './routes/_authenticated/torrents/$hash'
+import { Route as AuthenticatedSettingsNotificationsRouteImport } from './routes/_authenticated/settings/notifications'
+import { Route as AuthenticatedSettingsAccountRouteImport } from './routes/_authenticated/settings/account'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -42,6 +46,11 @@ const AuthenticatedRssRoute = AuthenticatedRssRouteImport.update({
   path: '/rss',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedLogsRoute = AuthenticatedLogsRouteImport.update({
+  id: '/logs',
+  path: '/logs',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -53,10 +62,28 @@ const AuthenticatedTorrentsIndexRoute =
     path: '/torrents/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedSettingsIndexRoute =
+  AuthenticatedSettingsIndexRouteImport.update({
+    id: '/settings/',
+    path: '/settings/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedTorrentsHashRoute =
   AuthenticatedTorrentsHashRouteImport.update({
     id: '/torrents/$hash',
     path: '/torrents/$hash',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSettingsNotificationsRoute =
+  AuthenticatedSettingsNotificationsRouteImport.update({
+    id: '/settings/notifications',
+    path: '/settings/notifications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSettingsAccountRoute =
+  AuthenticatedSettingsAccountRouteImport.update({
+    id: '/settings/account',
+    path: '/settings/account',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
@@ -64,18 +91,26 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/logs': typeof AuthenticatedLogsRoute
   '/rss': typeof AuthenticatedRssRoute
   '/search': typeof AuthenticatedSearchRoute
+  '/settings/account': typeof AuthenticatedSettingsAccountRoute
+  '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/torrents/$hash': typeof AuthenticatedTorrentsHashRoute
+  '/settings': typeof AuthenticatedSettingsIndexRoute
   '/torrents': typeof AuthenticatedTorrentsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/logs': typeof AuthenticatedLogsRoute
   '/rss': typeof AuthenticatedRssRoute
   '/search': typeof AuthenticatedSearchRoute
+  '/settings/account': typeof AuthenticatedSettingsAccountRoute
+  '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/torrents/$hash': typeof AuthenticatedTorrentsHashRoute
+  '/settings': typeof AuthenticatedSettingsIndexRoute
   '/torrents': typeof AuthenticatedTorrentsIndexRoute
 }
 export interface FileRoutesById {
@@ -84,9 +119,13 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/logs': typeof AuthenticatedLogsRoute
   '/_authenticated/rss': typeof AuthenticatedRssRoute
   '/_authenticated/search': typeof AuthenticatedSearchRoute
+  '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
+  '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/_authenticated/torrents/$hash': typeof AuthenticatedTorrentsHashRoute
+  '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/torrents/': typeof AuthenticatedTorrentsIndexRoute
 }
 export interface FileRouteTypes {
@@ -95,18 +134,26 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/dashboard'
+    | '/logs'
     | '/rss'
     | '/search'
+    | '/settings/account'
+    | '/settings/notifications'
     | '/torrents/$hash'
+    | '/settings'
     | '/torrents'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
     | '/dashboard'
+    | '/logs'
     | '/rss'
     | '/search'
+    | '/settings/account'
+    | '/settings/notifications'
     | '/torrents/$hash'
+    | '/settings'
     | '/torrents'
   id:
     | '__root__'
@@ -114,9 +161,13 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/login'
     | '/_authenticated/dashboard'
+    | '/_authenticated/logs'
     | '/_authenticated/rss'
     | '/_authenticated/search'
+    | '/_authenticated/settings/account'
+    | '/_authenticated/settings/notifications'
     | '/_authenticated/torrents/$hash'
+    | '/_authenticated/settings/'
     | '/_authenticated/torrents/'
   fileRoutesById: FileRoutesById
 }
@@ -163,6 +214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRssRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/logs': {
+      id: '/_authenticated/logs'
+      path: '/logs'
+      fullPath: '/logs'
+      preLoaderRoute: typeof AuthenticatedLogsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -177,6 +235,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTorrentsIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/settings/': {
+      id: '/_authenticated/settings/'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/torrents/$hash': {
       id: '/_authenticated/torrents/$hash'
       path: '/torrents/$hash'
@@ -184,22 +249,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTorrentsHashRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/settings/notifications': {
+      id: '/_authenticated/settings/notifications'
+      path: '/settings/notifications'
+      fullPath: '/settings/notifications'
+      preLoaderRoute: typeof AuthenticatedSettingsNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/settings/account': {
+      id: '/_authenticated/settings/account'
+      path: '/settings/account'
+      fullPath: '/settings/account'
+      preLoaderRoute: typeof AuthenticatedSettingsAccountRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedLogsRoute: typeof AuthenticatedLogsRoute
   AuthenticatedRssRoute: typeof AuthenticatedRssRoute
   AuthenticatedSearchRoute: typeof AuthenticatedSearchRoute
+  AuthenticatedSettingsAccountRoute: typeof AuthenticatedSettingsAccountRoute
+  AuthenticatedSettingsNotificationsRoute: typeof AuthenticatedSettingsNotificationsRoute
   AuthenticatedTorrentsHashRoute: typeof AuthenticatedTorrentsHashRoute
+  AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
   AuthenticatedTorrentsIndexRoute: typeof AuthenticatedTorrentsIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedLogsRoute: AuthenticatedLogsRoute,
   AuthenticatedRssRoute: AuthenticatedRssRoute,
   AuthenticatedSearchRoute: AuthenticatedSearchRoute,
+  AuthenticatedSettingsAccountRoute: AuthenticatedSettingsAccountRoute,
+  AuthenticatedSettingsNotificationsRoute:
+    AuthenticatedSettingsNotificationsRoute,
   AuthenticatedTorrentsHashRoute: AuthenticatedTorrentsHashRoute,
+  AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,
   AuthenticatedTorrentsIndexRoute: AuthenticatedTorrentsIndexRoute,
 }
 

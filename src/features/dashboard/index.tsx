@@ -111,11 +111,11 @@ export default function DashboardPage() {
   };
 
   const handleViewAllTorrents = () => {
-    navigate('/torrents');
+    navigate({ to: '/torrents' });
   };
 
   const handleViewStatistics = () => {
-    navigate('/statistics');
+    navigate({ to: '/dashboard' }); // Statistics not implemented yet
   };
 
   return (
@@ -513,7 +513,7 @@ export default function DashboardPage() {
                 </Button>
                 <Button
                   variant='outline'
-                  onClick={() => navigate('/settings')}
+                  onClick={() => navigate({ to: '/settings' })}
                   className='flex h-16 items-center justify-center text-center'
                   // asChild
                 >

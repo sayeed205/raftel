@@ -26,7 +26,7 @@ export function DataTableToolbar<TData>({
 
   const { categories, tags, fetchTorrents } = useTorrentStore();
   const statuses = data.reduce((acc, torrent) => {
-    const state = torrent.state;
+    const state = (torrent as any).state;
     if (!acc.includes(state)) {
       acc.push(state);
     }

@@ -1,6 +1,3 @@
-import { Download, FileText } from 'lucide-react';
-import { useCallback, useState } from 'react';
-import type { TorrentInfo } from '@/types/api';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -28,6 +25,9 @@ import {
   formatTime,
   getStateText,
 } from '@/lib/utils';
+import type { TorrentInfo } from '@/types/api';
+import { Download, FileText } from 'lucide-react';
+import { useCallback, useState } from 'react';
 
 interface TableExportProps {
   torrents: Array<TorrentInfo>;
@@ -99,7 +99,10 @@ const DEFAULT_EXPORT_FIELDS: Array<ExportField> = [
     key: 'eta',
     label: 'ETA',
     selected: false,
-    formatter: (value) => formatTime(value),
+    formatter: (value) => {
+      const formatted = formatTime(value);
+      return typeof formatted === 'string' ? formatted : 'N/A';
+    },
   },
   {
     key: 'num_seeds',

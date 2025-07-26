@@ -391,6 +391,15 @@ class QBittorrentApi {
     return this.provider.updateSearchPlugins();
   }
 
+  // Log methods
+  async getLogs(afterId?: number, logsToInclude?: any): Promise<Array<any>> {
+    return this.provider.getLogs(afterId, logsToInclude);
+  }
+
+  async getPeerLogs(afterId?: number): Promise<Array<any>> {
+    return this.provider.getPeerLogs(afterId);
+  }
+
   // Utility methods
   getAuthStatus(): boolean {
     return this.provider.getAuthStatus();
