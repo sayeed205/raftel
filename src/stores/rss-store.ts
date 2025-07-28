@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 
-import qbApi from '@/lib/api';
 import type {
   Feed,
   FeedArticle,
   FeedRule,
   RSSDownloadHistory,
 } from '@/types/qbit/rss';
+import qbit from '@/services/qbit';
 
 interface RSSState {
   // Data
@@ -122,7 +122,7 @@ export const useRSSStore = create<RSSStore>()(
       try {
         set({ isFeedsLoading: true, error: null });
 
-        const feeds = await qbApi.getFeeds(withData);
+        const feeds = await qbit.getFeeds(withData);
 
         // Extract articles from feeds if withData is true
         const allArticles: Array<FeedArticle> = [];
@@ -164,7 +164,7 @@ export const useRSSStore = create<RSSStore>()(
       try {
         set({ isLoading: true, error: null });
 
-        await qbApi.createFeed(name, url);
+        await qbit.createFeed({ name, url });
 
         // Refresh feeds after adding
         await get().fetchFeeds();
@@ -185,7 +185,7 @@ export const useRSSStore = create<RSSStore>()(
       try {
         set({ isLoading: true, error: null });
 
-        await qbApi.deleteFeed(name);
+        await qbit.deleteFeed(name);
 
         // Remove feed from local state
         const { feeds, articles } = get();
@@ -215,7 +215,7 @@ export const useRSSStore = create<RSSStore>()(
       try {
         set({ isLoading: true, error: null });
 
-        await qbApi.renameFeed(oldName, newName);
+        await qbit.renameFeed(oldName, newName);
 
         // Update local state
         const { feeds, articles } = get();
@@ -250,7 +250,7 @@ export const useRSSStore = create<RSSStore>()(
       try {
         set({ isLoading: true, error: null });
 
-        await qbApi.setFeedUrl(path, url);
+        await qbit.setFeedUrl(path, url);
 
         // Update local state
         const { feeds } = get();
@@ -288,7 +288,7 @@ export const useRSSStore = create<RSSStore>()(
           feedErrors: updatedErrors,
         });
 
-        await qbApi.refreshFeed(itemPath);
+        await qbit.refreshFeed(itemPath);
 
         // Refresh feeds data after refresh
         await get().fetchFeeds();
@@ -330,7 +330,7 @@ export const useRSSStore = create<RSSStore>()(
       try {
         set({ isRulesLoading: true, error: null });
 
-        const rules = await qbApi.getRules();
+        const rules = await qbit.getRules();
 
         set({
           rules,
@@ -352,7 +352,7 @@ export const useRSSStore = create<RSSStore>()(
       try {
         set({ isLoading: true, error: null });
 
-        await qbApi.createRule(ruleName, rule);
+        await qbit.setRule(ruleName, rule);
 
         // Add rule to local state
         const { rules } = get();
@@ -377,7 +377,7 @@ export const useRSSStore = create<RSSStore>()(
       try {
         set({ isLoading: true, error: null });
 
-        await qbApi.updateRule(ruleName, rule);
+        await qbit.setRule(ruleName, rule);
 
         // Update rule in local state
         const { rules } = get();
@@ -404,7 +404,7 @@ export const useRSSStore = create<RSSStore>()(
       try {
         set({ isLoading: true, error: null });
 
-        await qbApi.deleteRule(ruleName);
+        await qbit.deleteRule(ruleName);
 
         // Remove rule from local state
         const { rules } = get();
@@ -431,7 +431,7 @@ export const useRSSStore = create<RSSStore>()(
       try {
         set({ isLoading: true, error: null });
 
-        await qbApi.renameRule(oldName, newName);
+        await qbit.renameRule(oldName, newName);
 
         // Update rule in local state
         const { rules } = get();
@@ -479,7 +479,7 @@ export const useRSSStore = create<RSSStore>()(
 
     markAsRead: async (feedName: string, articleId?: string) => {
       try {
-        await qbApi.markAsRead(feedName, articleId);
+        await qbit.markAsRead(feedName, articleId);
 
         // Update local state
         const { articles } = get();
@@ -522,9 +522,7 @@ export const useRSSStore = create<RSSStore>()(
         }
 
         // Add torrent using the torrent URL
-        await qbApi.addTorrents({
-          urls: article.torrentURL,
-        });
+        await qbit.addTorrents([], article.torrentURL);
 
         // Mark article as read after downloading
         await get().markAsRead(feedName, articleId);
@@ -553,7 +551,7 @@ export const useRSSStore = create<RSSStore>()(
 
     getMatchingArticles: async (ruleName: string) => {
       try {
-        return await qbApi.getMatchingArticles(ruleName);
+        return await qbit.getMatchingArticles(ruleName);
       } catch (error) {
         const message =
           error instanceof Error
@@ -631,7 +629,7 @@ export const useRSSStore = create<RSSStore>()(
           const query = searchQuery.toLowerCase();
           const matchesTitle = article.title.toLowerCase().includes(query);
           const matchesDescription = article.description
-            .toLowerCase()
+            ?.toLowerCase()
             .includes(query);
 
           if (!matchesTitle && !matchesDescription) {
