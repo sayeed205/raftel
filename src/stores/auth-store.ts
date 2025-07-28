@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { LoginRequest } from '@/types/api';
-import qbApi from '@/lib/api';
+import qbit from '@/services/qbit';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -33,7 +33,7 @@ export const useAuthStore = create<AuthStore>()(
         set({ isLoading: true, error: null });
 
         try {
-          await qbApi.login(credentials);
+          await qbit.login(credentials);
 
           set({
             isAuthenticated: true,
@@ -58,7 +58,7 @@ export const useAuthStore = create<AuthStore>()(
         set({ isLoading: true });
 
         try {
-          await qbApi.logout();
+          await qbit.logout();
         } catch (error) {
           // Continue with logout even if API call fails
           console.warn('Logout API call failed:', error);
@@ -82,7 +82,7 @@ export const useAuthStore = create<AuthStore>()(
         set({ isLoading: true });
 
         try {
-          const isValid = await qbApi.checkAuth();
+          const isValid = await qbit.checkAuth();
 
           set({
             isAuthenticated: isValid,

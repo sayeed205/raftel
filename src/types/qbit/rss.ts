@@ -1,22 +1,24 @@
 import type { ContentLayout } from './constants';
 
 export interface FeedArticle {
-  /** Article date */
+  /** Article author */
+  author: string;
+  /** Article category */
+  category?: string;
+  /** Article publication date */
   date: string;
   /** Article description */
-  description: string;
-  /** Article GUID */
+  description?: string;
+  /** Article ID */
   id: string;
-  /** Whether article has been read */
-  isRead: boolean;
+  /** Whether the article has already been read */
+  isRead?: boolean;
   /** Article link */
   link: string;
   /** Article title */
   title: string;
-  /** Torrent URL */
-  torrentURL?: string;
-  /** Feed name (added for store compatibility) */
-  feedName?: string;
+  /** Torrent download URL */
+  torrentURL: string;
 }
 
 export interface Feed {
@@ -66,13 +68,17 @@ export interface AddTorrentParams {
 }
 
 export interface LegacyFeedRule {
-  /** Torrent save path (deprecated since v4.6.0) */
+  /** Torrent save path
+   * @deprecated since v4.6.0 */
   savePath?: string;
-  /** Torrent category (deprecated since v4.6.0) */
+  /** Torrent category
+   * @deprecated since v4.6.0 */
   assignedCategory?: string;
-  /** Torrent stopped state (deprecated since v4.6.0) */
+  /** Torrent stopped state
+   * @deprecated since v4.6.0 */
   addPaused?: boolean;
-  /** Torrent content layout (deprecated since v4.6.0) */
+  /** Torrent content layout
+   * @deprecated since v4.6.0 */
   torrentContentLayout?: ContentLayout;
 }
 
@@ -81,15 +87,57 @@ export interface FeedRule extends LegacyFeedRule {
   affectedFeeds: Array<string>;
   /** Whether the rule is enabled */
   enabled: boolean;
-  /** Episode filter for matching articles */
-  episodeFilter: string;
-  /** Ignore articles where its date is within n days */
+  /**
+   * Matches articles based on episode filter.
+   *
+   * Example: 1x2;8-15;5;30-; will match 2, 5, 8 through 15, 30 and onward episodes of season one
+   *
+   * Episode filter rules:
+   *
+   *  - Season number is a mandatory non-zero value
+   *  - Episode number is a mandatory positive value
+   *  - Filter must end with semicolon
+   *  - Three range types for episodes are supported:
+   *    - * Single number: 1x25; matches episode 25 of season one
+   *    - * Normal range: 1x25-40; matches episodes 25 through 40 of season one
+   *    - * Infinite range: 1x25-; matches episodes 25 and upward of season one, and all episodes of later seasons
+   */
+  /**
+   * Ignore articles where its date is within n days
+   * Values less than 1 will be ignored
+   */
   ignoreDays: number;
-  /** The rule last match time */
+  /**
+   * The rule last match time
+   * Must match RFC-2822 or ISO-8601 date format
+   * source: https://www.rfc-editor.org/rfc/rfc2822#page-14
+   */
   lastMatch: string;
-  /** Must contain filter */
+  /**
+   * Wildcard mode: you can use
+   *
+   *  - ? to match any single character
+   *  - \* to match zero or more of any characters
+   *  - Whitespaces count as AND operators (all words, any order)
+   *  - | is used as OR operator
+   *
+   * If word order is important use * instead of whitespace.
+   *
+   * An expression with an empty | clause (e.g. expr|) will match all articles.
+   */
   mustContain: string;
-  /** Must not contain filter */
+  /**
+   * Wildcard mode: you can use
+   *
+   *  - ? to match any single character
+   *  - \* to match zero or more of any characters
+   *  - Whitespaces count as AND operators (all words, any order)
+   *  - | is used as OR operator
+   *
+   * If word order is important use * instead of whitespace.
+   *
+   * An expression with an empty | clause (e.g. expr|) will exclude all articles.
+   */
   mustNotContain: string;
   /** The rule name */
   name: string;
@@ -97,7 +145,10 @@ export interface FeedRule extends LegacyFeedRule {
   previouslyMatchedEpisodes: Array<string>;
   /** The rule priority */
   priority: number;
-  /** Smart Episode Filter */
+  /**
+   * Smart Episode Filter will check the episode number to prevent downloading of duplicates.
+   * Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also support - as a separator)
+   */
   smartFilter: boolean;
   /** Parameters to apply to torrents added using that rule */
   torrentParams: AddTorrentParams;

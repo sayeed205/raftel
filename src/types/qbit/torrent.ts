@@ -1,4 +1,4 @@
-import type { TorrentState } from './constants';
+import type { TorrentState, TrackerStatus } from './constants';
 
 export interface RawTorrent {
   /** Time (Unix Epoch) when the torrent was added to the client */
@@ -207,7 +207,7 @@ export interface TorrentFile {
   /** File availability (percentage/100) */
   availability: number;
   /** File index */
-  index: number;
+  index?: number;
   /** True if file is seeded/complete */
   is_seed?: boolean;
   /** File name (including relative path) */
@@ -225,13 +225,17 @@ export interface TorrentFile {
 export interface TorrentTracker {
   /** Tracker message (there is no way of knowing what this message is - it's up to tracker admins) */
   msg: string;
+  /** Number of completed downlods for current torrent, as reported by the tracker */
+  num_downloaded: number;
+  /** Number of leeches for current torrent, as reported by the tracker */
+  num_leeches: number;
   /** Number of peers for current torrent, as reported by the tracker */
   num_peers: number;
   /** Number of seeds for current torrent, as reported by the tracker */
   num_seeds: number;
-  /** Tracker status */
-  status: number;
-  /** Tracker tier */
+  /** Tracker status. See the table below for possible values */
+  status: TrackerStatus;
+  /** Tracker priority tier. Lower tier trackers are tried before higher tiers. Tier numbers are valid when >= 0, < 0 is used as placeholder when tier does not exist for special entries (such as DHT). */
   tier: number;
   /** Tracker url */
   url: string;

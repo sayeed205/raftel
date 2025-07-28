@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 
 import type { ServerState, TorrentInfo, TorrentsInfoParams } from '@/types/api';
-import qbApi from '@/lib/api';
+import qbit from '@/services/qbit';
 
 interface TorrentState {
   torrents: Array<TorrentInfo>;
@@ -102,7 +102,7 @@ interface TorrentActions {
   ) => Promise<void>;
   setTorrentTags: (tags: string, hashes?: Array<string>) => Promise<void>;
   setTorrentPriority: (
-    priority: number,
+    priority: 'increasePrio' | 'decreasePrio' | 'topPrio' | 'bottomPrio',
     hashes?: Array<string>,
   ) => Promise<void>;
 
@@ -149,21 +149,20 @@ export const useTorrentStore = create<TorrentStore>()(
       try {
         set({ isLoading: true, error: null });
         const state = get();
-        console.log('Syncing maindata with rid:', state.syncId);
-        const data = await qbApi.syncMainData(state.syncId);
-        console.log('Received maindata:', data);
+        const data = await qbit.getMainData(state.syncId);
 
         // Capture current syncId before updating
         const currentSyncId = state.syncId;
 
         // Update sync ID
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (data.rid !== undefined) {
           set({ syncId: data.rid });
         }
 
         // Handle torrents data
         if (data.torrents) {
-          if (currentSyncId === 0 || data.full_update) {
+          if (currentSyncId === 0 || 'full_update' in data) {
             // Full update - replace all torrents
             const torrents = Object.entries(data.torrents).map(
               ([hash, torrentData]) => ({
@@ -224,7 +223,7 @@ export const useTorrentStore = create<TorrentStore>()(
         }
 
         // Handle removed torrents
-        if (data.torrents_removed) {
+        if ('torrents_removed' in data) {
           const currentTorrents = get().torrents;
           const filteredTorrents = currentTorrents.filter(
             (torrent) => !data.torrents_removed!.includes(torrent.hash),
@@ -498,8 +497,8 @@ export const useTorrentStore = create<TorrentStore>()(
       if (targetHashes.length === 0) return;
 
       try {
-        await qbApi.pauseTorrents(targetHashes.join('|'));
-        get().fetchTorrents();
+        await qbit.stopTorrents(targetHashes);
+        await get().fetchTorrents();
       } catch (error) {
         const message =
           error instanceof Error ? error.message : 'Failed to pause torrents';
@@ -513,8 +512,8 @@ export const useTorrentStore = create<TorrentStore>()(
       if (targetHashes.length === 0) return;
 
       try {
-        await qbApi.resumeTorrents(targetHashes.join('|'));
-        get().fetchTorrents();
+        await qbit.startTorrents(targetHashes);
+        await get().fetchTorrents();
       } catch (error) {
         const message =
           error instanceof Error ? error.message : 'Failed to resume torrents';
@@ -527,8 +526,8 @@ export const useTorrentStore = create<TorrentStore>()(
       if (hashes.length === 0) return;
 
       try {
-        await qbApi.deleteTorrents(hashes.join('|'), deleteFiles);
-        get().fetchTorrents();
+        await qbit.deleteTorrents(hashes, deleteFiles);
+        await get().fetchTorrents();
         get().clearSelection();
       } catch (error) {
         const message =
@@ -543,8 +542,8 @@ export const useTorrentStore = create<TorrentStore>()(
       if (targetHashes.length === 0) return;
 
       try {
-        await qbApi.recheckTorrents(targetHashes.join('|'));
-        get().fetchTorrents();
+        await qbit.recheckTorrents(targetHashes);
+        await get().fetchTorrents();
       } catch (error) {
         const message =
           error instanceof Error ? error.message : 'Failed to recheck torrents';
@@ -558,7 +557,7 @@ export const useTorrentStore = create<TorrentStore>()(
       if (targetHashes.length === 0) return;
 
       try {
-        await qbApi.reannounceTorrents(targetHashes.join('|'));
+        await qbit.reannounceTorrents(targetHashes);
       } catch (error) {
         const message =
           error instanceof Error
@@ -574,11 +573,8 @@ export const useTorrentStore = create<TorrentStore>()(
       if (targetHashes.length === 0) return;
 
       try {
-        await qbApi.setTorrentCategory({
-          hashes: targetHashes.join('|'),
-          category,
-        });
-        get().fetchTorrents();
+        await qbit.setCategory(targetHashes, category);
+        await get().fetchTorrents();
       } catch (error) {
         const message =
           error instanceof Error ? error.message : 'Failed to set category';
@@ -592,11 +588,8 @@ export const useTorrentStore = create<TorrentStore>()(
       if (targetHashes.length === 0) return;
 
       try {
-        await qbApi.setTorrentTags({
-          hashes: targetHashes.join('|'),
-          tags,
-        });
-        get().fetchTorrents();
+        await qbit.addTorrentTag(targetHashes, [tags]);
+        await get().fetchTorrents();
       } catch (error) {
         const message =
           error instanceof Error ? error.message : 'Failed to set tags';
@@ -610,11 +603,8 @@ export const useTorrentStore = create<TorrentStore>()(
       if (targetHashes.length === 0) return;
 
       try {
-        await qbApi.setTorrentPriority({
-          hashes: targetHashes.join('|'),
-          priority,
-        });
-        get().fetchTorrents();
+        await qbit.setTorrentPriority(targetHashes, priority);
+        await get().fetchTorrents();
       } catch (error) {
         const message =
           error instanceof Error ? error.message : 'Failed to set priority';

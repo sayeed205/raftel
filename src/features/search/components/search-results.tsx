@@ -48,18 +48,16 @@ export function SearchResults() {
     downloadFromResult,
     copyMagnetLink,
     getFilteredResults,
-    getSortedResults,
   } = useSearchStore();
 
   const [showFilters, setShowFilters] = useState(false);
 
   const filteredResults = getFilteredResults();
-  const sortedResults = getSortedResults(filteredResults);
 
   // Pagination
-  const totalPages = Math.ceil(sortedResults.length / resultsPerPage);
+  const totalPages = Math.ceil(filteredResults.length / resultsPerPage);
   const startIndex = (currentPage - 1) * resultsPerPage;
-  const paginatedResults = sortedResults.slice(
+  const paginatedResults = filteredResults.slice(
     startIndex,
     startIndex + resultsPerPage,
   );
@@ -170,13 +168,13 @@ export function SearchResults() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value='all'>All Engines</SelectItem>
-                  {Array.from(new Set(searchResults.map((r) => r.engine))).map(
-                    (engine) => (
-                      <SelectItem key={engine} value={engine}>
-                        {getEngineDisplayName(engine)}
-                      </SelectItem>
-                    ),
-                  )}
+                  {Array.from(
+                    new Set(searchResults.map((r) => r.engineName ?? '')),
+                  ).map((engine) => (
+                    <SelectItem key={engine} value={engine}>
+                      {getEngineDisplayName(engine)}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -237,32 +235,38 @@ export function SearchResults() {
             </TableHeader>
             <TableBody>
               {paginatedResults.map((result, index) => (
-                <TableRow key={`${result.name}-${index}`}>
+                <TableRow key={`${result.fileName}-${index}`}>
                   <TableCell className='font-medium'>
                     <div className='max-w-md'>
-                      <div className='truncate' title={result.name}>
-                        {result.name}
+                      <div className='truncate' title={result.fileName}>
+                        {result.fileName}
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>
-                    {result.size > 0 ? formatBytes(result.size) : 'N/A'}
+                    {result.fileSize > 0 ? formatBytes(result.fileSize) : 'N/A'}
                   </TableCell>
                   <TableCell>
-                    <Badge variant={result.seeds > 0 ? 'default' : 'secondary'}>
-                      {formatSeeds(result.seeds)}
+                    <Badge
+                      variant={result.nbSeeders > 0 ? 'default' : 'secondary'}
+                    >
+                      {formatSeeds(result.nbSeeders)}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge variant='outline'>{formatPeers(result.peers)}</Badge>
+                    <Badge variant='outline'>
+                      {formatPeers(result.nbLeechers)}
+                    </Badge>
                   </TableCell>
                   <TableCell>
-                    <div
-                      className='truncate text-sm'
-                      title={getEngineDisplayName(result.engine)}
-                    >
-                      {getEngineDisplayName(result.engine)}
-                    </div>
+                    {result.engineName && (
+                      <div
+                        className='truncate text-sm'
+                        title={getEngineDisplayName(result.engineName)}
+                      >
+                        {getEngineDisplayName(result.engineName)}
+                      </div>
+                    )}
                   </TableCell>
                   <TableCell>
                     <div className='flex items-center gap-1'>
@@ -274,16 +278,17 @@ export function SearchResults() {
                       >
                         <DownloadIcon className='h-4 w-4' />
                       </Button>
-                      {result.magnetLink && (
-                        <Button
-                          variant='ghost'
-                          size='sm'
-                          onClick={() => handleCopyMagnet(result)}
-                          title='Copy magnet link'
-                        >
-                          <CopyIcon className='h-4 w-4' />
-                        </Button>
-                      )}
+                      {result.fileUrl &&
+                        result.fileUrl.startsWith('magnet:') && (
+                          <Button
+                            variant='ghost'
+                            size='sm'
+                            onClick={() => handleCopyMagnet(result)}
+                            title='Copy magnet link'
+                          >
+                            <CopyIcon className='h-4 w-4' />
+                          </Button>
+                        )}
                       {result.descrLink && (
                         <Button
                           variant='ghost'
@@ -312,8 +317,8 @@ export function SearchResults() {
           <div className='mt-4 flex items-center justify-between'>
             <div className='text-muted-foreground text-sm'>
               Showing {startIndex + 1} to{' '}
-              {Math.min(startIndex + resultsPerPage, sortedResults.length)} of{' '}
-              {sortedResults.length} results
+              {Math.min(startIndex + resultsPerPage, filteredResults.length)} of{' '}
+              {filteredResults.length} results
             </div>
             <div className='flex items-center gap-2'>
               <Button

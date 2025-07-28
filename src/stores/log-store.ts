@@ -1,9 +1,10 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 
-import qbApi from '@/lib/api';
 import type { Log, LogFilter, PeerLog, SystemInfo } from '@/types/logs';
 import type { LogType } from '@/types/qbit/constants';
+import qbApi from '@/lib/api';
+import qbit from '@/services/qbit';
 
 interface LogState {
   // Main logs
@@ -109,12 +110,12 @@ export const useLogStore = create<LogStore>()(
         const state = get();
         const id = lastKnownId !== undefined ? lastKnownId : state.lastLogId;
 
-        const logs = await qbApi.getLogs(
+        const logs = await qbit.getLogs(
           id === -1 ? undefined : id,
           state.logLevel,
         );
 
-        if (logs && logs.length > 0) {
+        if (logs.length > 0) {
           const currentLogs = get().logs;
           const newLogs = [...currentLogs, ...logs];
 
@@ -159,9 +160,9 @@ export const useLogStore = create<LogStore>()(
         const id =
           lastKnownId !== undefined ? lastKnownId : state.lastPeerLogId;
 
-        const peerLogs = await qbApi.getPeerLogs(id === -1 ? undefined : id);
+        const peerLogs = await qbit.getPeerLogs(id === -1 ? undefined : id);
 
-        if (peerLogs && peerLogs.length > 0) {
+        if (peerLogs.length > 0) {
           const currentPeerLogs = get().peerLogs;
           const newPeerLogs = [...currentPeerLogs, ...peerLogs];
 
@@ -210,11 +211,11 @@ export const useLogStore = create<LogStore>()(
         // Get various system information from different API endpoints
         const [serverState, version] = await Promise.all([
           qbApi.getServerState(),
-          qbApi.getVersion(),
+          qbit.getVersion(),
         ]);
 
         const systemInfo: SystemInfo = {
-          version: version.version || 'Unknown',
+          version: version || 'Unknown',
           buildInfo: 'Build info not available',
           uptime: Date.now() / 1000, // Approximate uptime
           totalSize: serverState.free_space_on_disk || 0,
@@ -226,6 +227,7 @@ export const useLogStore = create<LogStore>()(
           dlRateLimit: serverState.dl_rate_limit || 0,
           upRateLimit: serverState.up_rate_limit || 0,
           dhtNodes: serverState.dht_nodes || 0,
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           connectionStatus: serverState.connection_status || 'unknown',
         };
 

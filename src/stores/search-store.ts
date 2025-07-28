@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 
-import qbitProvider from '@/lib/qbit-provider';
 import type {
   SearchEngine,
   SearchHistoryItem,
@@ -11,6 +10,7 @@ import type {
   SearchResult,
   SearchStatus,
 } from '@/types/search';
+import qbit from '@/services/qbit';
 
 interface SearchState {
   // Search engines/plugins
@@ -97,7 +97,6 @@ interface SearchActions {
   // Utility
   clearError: () => void;
   getFilteredResults: () => Array<SearchResult>;
-  getSortedResults: (results: Array<SearchResult>) => Array<SearchResult>;
 }
 
 type SearchStore = SearchState & SearchActions;
@@ -129,7 +128,7 @@ export const useSearchStore = create<SearchStore>()(
     fetchEngines: async () => {
       try {
         set({ isLoadingEngines: true, error: null });
-        const plugins = await qbitProvider.getSearchPlugins();
+        const plugins = await qbit.getSearchPlugins();
 
         // Convert SearchPlugin to SearchEngine format
         const engines: Array<SearchEngine> = plugins.map(
@@ -138,6 +137,7 @@ export const useSearchStore = create<SearchStore>()(
             name: plugin.name,
             url: plugin.url,
             enabled: plugin.enabled,
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
             categories: (plugin.supportedCategories || []).map((cat) =>
               typeof cat === 'string' ? cat : cat.id,
             ),
@@ -159,7 +159,7 @@ export const useSearchStore = create<SearchStore>()(
 
     enableEngine: async (engineName: string) => {
       try {
-        await qbitProvider.enableSearchPlugin([engineName], true);
+        await qbit.enableSearchPlugin([engineName], true);
         await get().fetchEngines();
       } catch (error) {
         const message =
@@ -173,7 +173,7 @@ export const useSearchStore = create<SearchStore>()(
 
     disableEngine: async (engineName: string) => {
       try {
-        await qbitProvider.enableSearchPlugin([engineName], false);
+        await qbit.enableSearchPlugin([engineName], false);
         await get().fetchEngines();
       } catch (error) {
         const message =
@@ -187,7 +187,7 @@ export const useSearchStore = create<SearchStore>()(
 
     installEngine: async (sources: Array<string>) => {
       try {
-        await qbitProvider.installSearchPlugin(sources);
+        await qbit.installSearchPlugin(sources);
         await get().fetchEngines();
       } catch (error) {
         const message =
@@ -201,7 +201,7 @@ export const useSearchStore = create<SearchStore>()(
 
     uninstallEngine: async (names: Array<string>) => {
       try {
-        await qbitProvider.uninstallSearchPlugin(names);
+        await qbit.uninstallSearchPlugin(names);
         await get().fetchEngines();
       } catch (error) {
         const message =
@@ -215,7 +215,7 @@ export const useSearchStore = create<SearchStore>()(
 
     updateEngines: async () => {
       try {
-        await qbitProvider.updateSearchPlugins();
+        await qbit.updateSearchPlugins();
         await get().fetchEngines();
       } catch (error) {
         const message =
@@ -245,7 +245,7 @@ export const useSearchStore = create<SearchStore>()(
             .map((e) => e.name);
         const category = query.category || 'all';
 
-        const searchJob = await qbitProvider.startSearch(
+        const searchJob = await qbit.startSearch(
           query.pattern,
           category,
           plugins,
@@ -259,7 +259,7 @@ export const useSearchStore = create<SearchStore>()(
         // Start polling for results
         const pollResults = async () => {
           try {
-            const status = await qbitProvider.getSearchStatus(searchJob.id);
+            const status = await qbit.getSearchStatus(searchJob.id);
             if (status.length > 0) {
               const currentStatus = status[0];
               set({ searchStatus: currentStatus });
@@ -279,9 +279,7 @@ export const useSearchStore = create<SearchStore>()(
               }
 
               // Continue polling if still running
-              if (currentStatus.status === 'Running') {
-                setTimeout(pollResults, 2000);
-              }
+              setTimeout(pollResults, 2000);
             }
           } catch (error) {
             console.error('Error polling search results:', error);
@@ -304,9 +302,10 @@ export const useSearchStore = create<SearchStore>()(
       if (!activeSearch) return;
 
       try {
-        await qbitProvider.stopSearch(activeSearch.id);
+        await qbit.stopSearch(activeSearch.id);
         set({
           isSearching: false,
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
           searchStatus: activeSearch
             ? { ...get().searchStatus!, status: 'Stopped' }
             : null,
@@ -321,7 +320,7 @@ export const useSearchStore = create<SearchStore>()(
 
     getSearchStatus: async (id?: number) => {
       try {
-        const statuses = await qbitProvider.getSearchStatus(id);
+        const statuses = await qbit.getSearchStatus(id);
         if (statuses.length > 0) {
           set({ searchStatus: statuses[0] });
         }
@@ -345,11 +344,12 @@ export const useSearchStore = create<SearchStore>()(
           return;
         }
 
-        const response = await qbitProvider.getSearchResults(id, offset, limit);
+        const response = await qbit.getSearchResults(id, offset, limit);
 
         // Convert API response to SearchResult format
         const results: Array<SearchResult> = response.results.map(
-          (result: any) => ({
+          (result: SearchResult) => ({
+            ...result,
             name: result.fileName,
             size: result.fileSize,
             seeds: result.nbSeeders,
@@ -385,7 +385,7 @@ export const useSearchStore = create<SearchStore>()(
 
     deleteSearch: async (id: number) => {
       try {
-        await qbitProvider.deleteSearchPlugin(id);
+        await qbit.deleteSearchPlugin(id);
         const { resultCache } = get();
         resultCache.delete(id);
         set({ resultCache });
@@ -450,20 +450,12 @@ export const useSearchStore = create<SearchStore>()(
     // Result actions
     downloadFromResult: async (result: SearchResult) => {
       try {
-        const url = result.magnetLink || result.downloadUrl;
+        const url = result.fileUrl;
         if (!url) {
           throw new Error('No download URL available');
         }
 
-        // Use the existing torrent add functionality
-        // This would typically integrate with the torrent store's add method
-        if (result.magnetLink) {
-          // Add magnet link
-          await qbitProvider.addTorrents([], result.magnetLink);
-        } else if (result.downloadUrl) {
-          // Download torrent file and add
-          await qbitProvider.addTorrents([], result.downloadUrl);
-        }
+        await qbit.addTorrents([], url);
       } catch (error) {
         const message =
           error instanceof Error ? error.message : 'Failed to download torrent';
@@ -472,10 +464,10 @@ export const useSearchStore = create<SearchStore>()(
       }
     },
 
-    copyMagnetLink: (result: SearchResult) => {
-      const magnetLink = result.magnetLink;
-      if (magnetLink && navigator.clipboard) {
-        navigator.clipboard.writeText(magnetLink);
+    copyMagnetLink: async (result: SearchResult) => {
+      const magnetLink = result.fileUrl;
+      if (magnetLink && magnetLink.startsWith('magnet:')) {
+        await navigator.clipboard.writeText(magnetLink);
       }
     },
 
@@ -535,37 +527,11 @@ export const useSearchStore = create<SearchStore>()(
     },
 
     getFilteredResults: () => {
-      const { searchResults, filterEngine, filterCategory, minSeeds, maxSize } =
-        get();
+      const { searchResults, filterEngine } = get();
 
-      return searchResults.filter((result) => {
-        if (filterEngine && result.engine !== filterEngine) return false;
-        if (filterCategory && result.category !== filterCategory) return false;
-        if (result.seeds < minSeeds) return false;
-        if (maxSize && result.size > maxSize) return false;
-        return true;
-      });
-    },
-
-    getSortedResults: (results: Array<SearchResult>) => {
-      const { sortBy, sortOrder } = get();
-
-      return [...results].sort((a, b) => {
-        let aVal: any = a[sortBy];
-        let bVal: any = b[sortBy];
-
-        // Handle string sorting
-        if (typeof aVal === 'string') {
-          aVal = aVal.toLowerCase();
-          bVal = bVal.toLowerCase();
-        }
-
-        let comparison = 0;
-        if (aVal < bVal) comparison = -1;
-        if (aVal > bVal) comparison = 1;
-
-        return sortOrder === 'desc' ? -comparison : comparison;
-      });
+      return searchResults.filter(
+        (result) => !(filterEngine && result.engineName !== filterEngine),
+      );
     },
   })),
 );
@@ -651,7 +617,6 @@ export const useSearchFilters = () => {
     setPage,
     setResultsPerPage,
     getFilteredResults,
-    getSortedResults,
   } = useSearchStore();
 
   return {
@@ -672,6 +637,5 @@ export const useSearchFilters = () => {
     setPage,
     setResultsPerPage,
     getFilteredResults,
-    getSortedResults,
   };
 };

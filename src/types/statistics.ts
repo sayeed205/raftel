@@ -1,3 +1,5 @@
+import type { TorrentCreatorTaskStatus, TorrentFormat } from './api';
+
 export interface TransferInfo {
   /** Global download info */
   dl_info_data: number;
@@ -154,17 +156,6 @@ export interface StatisticsData {
   queueInfo: QueueInfo;
 }
 
-export interface Log {
-  /** Log ID */
-  id: number;
-  /** Log message */
-  message: string;
-  /** Log timestamp */
-  timestamp: number;
-  /** Log type */
-  type: number;
-}
-
 export interface BuildInfo {
   /** qBittorrent version */
   qt: string;
@@ -181,52 +172,154 @@ export interface BuildInfo {
 }
 
 export interface Cookie {
-  /** Cookie name */
-  name: string;
-  /** Cookie value */
-  value: string;
   /** Cookie domain */
   domain: string;
   /** Cookie path */
   path: string;
-  /** Cookie expiration date */
-  expirationDate?: number;
-  /** Whether cookie is HTTP only */
-  httpOnly?: boolean;
-  /** Whether cookie is secure */
-  secure?: boolean;
+  /** Cookie name */
+  name: string;
+  /** Cookie value */
+  value: string;
+  /**
+   * Cookie expiration date
+   * In seconds since Epoch (local server time)
+   */
+  expirationDate: number;
 }
 
 export interface TorrentCreatorParams {
-  /** Source path */
-  sourcePath: string;
-  /** Torrent save path */
-  savePath: string;
-  /** Comment */
+  /** Torrent comment */
   comment?: string;
-  /** Source */
-  source?: string;
-  /** Trackers */
-  trackers?: string;
-  /** URL seeds */
-  urlSeeds?: string;
-  /** Piece size */
+  /**
+   * Torrent format
+   * @version libtorrent2
+   * @default HYBRID
+   */
+  format?: TorrentFormat;
+  /**
+   * Should optimize piece alignment
+   * @version libtorrent1
+   * @default true
+   */
+  optimizeAlignment?: boolean;
+  /**
+   * Padded file size limit
+   * @version libtorrent1
+   * @default -1
+   */
+  paddedFileSizeLimit?: number;
+  /**
+   * Torrent piece size
+   * @default 0 (auto)
+   */
   pieceSize?: number;
-  /** Private torrent */
+  /**
+   * Whether created torrent should be private
+   * @default false
+   */
   private?: boolean;
-  /** Start seeding */
+  /**
+   * Source metadata field
+   * used for cross-seeding by some private trackers
+   * @since 5.1.0
+   */
+  source?: string;
+  /**
+   * Source path containing files to include in torrent
+   */
+  sourcePath: string;
+  /**
+   * Whether to start seeding after torrent creation
+   * @default if torrentFilePath is empty
+   */
   startSeeding?: boolean;
-  /** Ignore share limits */
-  ignoreShareLimits?: boolean;
+  /**
+   * Output torrent path
+   */
+  torrentFilePath?: string;
+  /**
+   * Tracker URLs to add to the torrent
+   * separated by a pipe (|)
+   */
+  trackers?: string;
+  /**
+   * Web seed URLs to add to the torrent
+   * separated by a pipe (|)
+   */
+  urlSeeds?: string;
 }
 
 export interface TorrentCreatorTask {
-  /** Task ID */
-  id: string;
-  /** Task status */
-  status: 'Running' | 'Finished' | 'Aborted';
-  /** Progress percentage */
-  progress: number;
+  /**
+   * Torrent comment
+   */
+  comment?: string;
+  /** Task error message if failed */
+  errorMessage?: string;
+  /**
+   * Torrent format
+   * Needs libtorrent2
+   * @default HYBRID
+   */
+  format?: TorrentFormat;
+  /**
+   * Should optimize alignment
+   * Needs libtorrent1
+   * @default true
+   */
+  optimizeAlignment?: boolean;
+  /**
+   * Torrent piece size
+   * @default 0
+   */
+  pieceSize?: number;
+  /**
+   * Whether created torrent should be private
+   * @default false
+   */
+  private?: boolean;
+  /**
+   * Task progress
+   * only if status === RUNNING
+   * Between 0 and 100, as integer
+   */
+  progress?: number;
+  /**
+   * Source path containing files to include in torrent
+   */
+  sourcePath: string;
+  /**
+   * Task status
+   */
+  status: TorrentCreatorTaskStatus;
+  taskID: string;
+  /**
+   * Source metadata field
+   * used for cross-seeding by some private trackers
+   * @since 5.1.0
+   */
+  source?: string;
+  timeAdded: string;
+  /**
+   * @example Wed May 20 03:40:13 1998
+   */
+  timeFinished: string;
+  /**
+   * @example Wed May 20 03:40:13 1998
+   */
+  timeStarted: string;
+  /**
+   * Output torrent path
+   */
+  torrentFilePath?: string;
+  /**
+   * Trackers list
+   */
+  trackers?: Array<string>;
+  /**
+   * URL seeds list
+   */
+  urlSeeds?: Array<string>;
 }
 
 export interface SSLParameters {

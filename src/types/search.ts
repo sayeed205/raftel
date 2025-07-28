@@ -18,49 +18,43 @@ export interface SearchEngine {
 }
 
 export interface SearchResult {
-  /** Result name/title */
-  name: string;
-  /** File size in bytes */
-  size: number;
-  /** Number of seeds */
-  seeds: number;
-  /** Number of leechers/peers */
-  peers: number;
-  /** Search engine that provided this result */
-  engine: string;
-  /** Magnet link */
-  magnetLink?: string;
-  /** Direct download URL */
-  downloadUrl?: string;
-  /** Result description URL */
-  descrLink?: string;
-  /** Result category */
-  category?: string;
-  /** Publication date */
-  pubDate?: string;
+  /** URL of the torrent's description page */
+  descrLink: string;
+  /** Name of the file */
+  fileName: string;
+  /** Size of the file in Bytes */
+  fileSize: number;
+  /** Torrent download link (usually either .torrent file or magnet link) */
+  fileUrl: string;
+  /** Number of leechers */
+  nbLeechers: number;
+  /** Number of seeders */
+  nbSeeders: number;
+  /** URL of the torrent site */
+  siteUrl: string;
+  /**
+   * Engine name
+   * @since 5.X
+   */
+  engineName?: string;
+  /**
+   * Publication date, in seconds since epoch
+   * @since 5.X
+   */
+  pubDate?: number;
 }
 
 export interface SearchJob {
   /** Search job ID */
   id: number;
-  /** Search pattern */
-  pattern: string;
-  /** Search category */
-  category: string;
-  /** Search engines used */
-  plugins: Array<string>;
-  /** Job status */
-  status: 'Running' | 'Stopped';
-  /** Total results found */
-  total: number;
 }
 
 export interface SearchStatus {
   /** Search job ID */
   id: number;
-  /** Search status */
+  /** Current status of the search job (either Running or Stopped) */
   status: 'Running' | 'Stopped';
-  /** Total results */
+  /** Total number of results. If the status is Running this number may continue to increase */
   total: number;
 }
 
@@ -105,13 +99,4 @@ export interface SearchHistoryItem {
   resultsCount: number;
   /** Search duration in milliseconds */
   duration?: number;
-}
-
-export interface SearchResultsResponse {
-  /** Search results */
-  results: Array<SearchResult>;
-  /** Search status */
-  status: 'Running' | 'Stopped';
-  /** Total results */
-  total: number;
 }

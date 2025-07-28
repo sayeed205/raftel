@@ -108,28 +108,6 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface TorrentFile {
-  index?: number;
-  name: string;
-  size: number;
-  progress: number;
-  priority: number;
-  is_seed: boolean;
-  piece_range: [number, number];
-  availability: number;
-}
-
-export interface TorrentTracker {
-  url: string;
-  status: number;
-  tier: number;
-  num_peers: number;
-  num_seeds: number;
-  num_leeches: number;
-  num_downloaded: number;
-  msg: string;
-}
-
 export interface TorrentPeer {
   client: string;
   connection: string;
@@ -146,48 +124,6 @@ export interface TorrentPeer {
   relevance: number;
   up_speed: number;
   uploaded: number;
-}
-
-export interface TorrentProperties {
-  addition_date: number;
-  comment: string;
-  completion_date: number;
-  created_by: string;
-  creation_date: number;
-  dl_limit: number;
-  dl_speed: number;
-  dl_speed_avg: number;
-  eta: number;
-  hash: string;
-  infohash_v1: string;
-  infohash_v2: string;
-  is_private: boolean;
-  last_seen: number;
-  nb_connections: number;
-  nb_connections_limit: number;
-  peers: number;
-  peers_total: number;
-  piece_size: number;
-  pieces_have: number;
-  pieces_num: number;
-  reannounce: number;
-  save_path: string;
-  seeding_time: number;
-  seeds: number;
-  seeds_total: number;
-  share_ratio: number;
-  time_elapsed: number;
-  total_downloaded: number;
-  total_downloaded_session: number;
-  total_size: number;
-  total_uploaded: number;
-  total_uploaded_session: number;
-  total_wasted: number;
-  tracker: string;
-  trackers_count: number;
-  up_limit: number;
-  up_speed: number;
-  up_speed_avg: number;
 }
 
 export interface Category {

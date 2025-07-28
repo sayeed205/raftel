@@ -25,6 +25,7 @@ export type TorrentState = (typeof TorrentState)[keyof typeof TorrentState];
 
 // File Priority
 export const FilePriority = {
+  MIXED: -1,
   DO_NOT_DOWNLOAD: 0,
   NORMAL: 1,
   HIGH: 6,
@@ -97,10 +98,9 @@ export type ShareLimitAction =
 
 // Stop Condition
 export const StopCondition = {
-  NONE: 0,
-  PAUSE_TORRENT: 1,
-  REMOVE_TORRENT: 2,
-  REMOVE_TORRENT_AND_FILES: 3,
+  NONE: 'None',
+  METADATA_RECEIVED: 'MetadataReceived',
+  FILES_CHECKED: 'FilesChecked',
 } as const;
 
 export type StopCondition = (typeof StopCondition)[keyof typeof StopCondition];
@@ -192,8 +192,8 @@ export type ResumeDataStorageType =
 
 // Torrent Content Remove Option
 export const TorrentContentRemoveOption = {
-  PRESERVE_FILES: 0,
-  DELETE_FILES: 1,
+  DELETE: 'Delete',
+  MOVE_TO_TRASH: 'MoveToTrash',
 } as const;
 
 export type TorrentContentRemoveOption =
@@ -223,18 +223,19 @@ export type DynDnsService = (typeof DynDnsService)[keyof typeof DynDnsService];
 
 // Log Types
 export const LogType = {
-  NORMAL: 1,
-  INFO: 2,
-  WARNING: 4,
-  CRITICAL: 8,
-  ALL: 15, // 1 + 2 + 4 + 8
+  NONE: 0,
+  NORMAL: 1 << 0,
+  INFO: 1 << 1,
+  WARNING: 1 << 2,
+  CRITICAL: 1 << 3,
+  ALL: (1 << 0) | (1 << 1) | (1 << 2) | (1 << 3),
 } as const;
 
 export type LogType = (typeof LogType)[keyof typeof LogType];
 
 // Piece States
 export const PieceState = {
-  NOT_DOWNLOADED: 0,
+  MISSING: 0,
   DOWNLOADING: 1,
   DOWNLOADED: 2,
 } as const;
@@ -245,6 +246,7 @@ export type PieceState = (typeof PieceState)[keyof typeof PieceState];
 export const DirectoryContentMode = {
   FILES: 0,
   FOLDERS: 1,
+  ALL: 2,
 } as const;
 
 export type DirectoryContentMode =
@@ -252,10 +254,51 @@ export type DirectoryContentMode =
 
 // Torrent Creator Task Status
 export const TorrentCreatorTaskStatus = {
+  FAILED: 'Failed',
+  QUEUED: 'Queued',
   RUNNING: 'Running',
   FINISHED: 'Finished',
-  ABORTED: 'Aborted',
 } as const;
 
 export type TorrentCreatorTaskStatus =
   (typeof TorrentCreatorTaskStatus)[keyof typeof TorrentCreatorTaskStatus];
+
+// Torrent Format
+export const TorrentFormat = {
+  V1: 'v1',
+  V2: 'v2',
+  HYBRID: 'hybrid',
+} as const;
+export type TorrentFormat = (typeof TorrentFormat)[keyof typeof TorrentFormat];
+
+// Torrent Filter State
+export const FilterState = {
+  ALL: 'all',
+  DOWNLOADING: 'downloading',
+  SEEDING: 'seeding',
+  COMPLETED: 'completed',
+  /** @deprecated since 5.X, use stopped instead */
+  PAUSED: 'paused',
+  STOPPED: 'stopped',
+  /** @deprecated since 5.X, use running instead */
+  RESUMED: 'resumed',
+  RUNNING: 'running',
+  ACTIVE: 'active',
+  INACTIVE: 'inactive',
+  STALLED: 'stalled',
+  STALLED_UPLOADING: 'stalled_uploading',
+  STALLED_DOWNLOADING: 'stalled_downloading',
+  CHECKING: 'checking',
+  MOVING: 'moving',
+  ERRORED: 'errored',
+} as const;
+
+export type FilterState = (typeof FilterState)[keyof typeof FilterState];
+
+// Torrent Operating Mode
+export const TorrentOperatingMode = {
+  AUTO_MANAGED: 'AutoManaged',
+  FORCED: 'Forced',
+};
+export type TorrentOperatingMode =
+  (typeof TorrentOperatingMode)[keyof typeof TorrentOperatingMode];
