@@ -1,7 +1,7 @@
 import { Search, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
-import type { TorrentPeer } from '@/types/api';
+import type { TorrentPeer } from '@/types/qbit/torrent.ts';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';

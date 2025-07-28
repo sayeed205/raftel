@@ -6,17 +6,18 @@ import {
   Settings,
   Share2,
 } from 'lucide-react';
-import type { SettingsCategory } from '../types/settings-types';
 
-// Import components (these will be created in the next subtasks)
-import { AdvancedSettings } from '../components/advanced-settings';
-import { BitTorrentSettings } from '../components/bittorrent-settings';
-import { ConnectionSettings } from '../components/connection-settings';
-import { DownloadSettings } from '../components/download-settings';
-import { SpeedSettings } from '../components/speed-settings';
-import { WebUISettings } from '../components/webui-settings';
+import type { SettingsCategory } from '@/features/settings';
+import {
+  AdvancedSettings,
+  BitTorrentSettings,
+  ConnectionSettings,
+  DownloadSettings,
+  SpeedSettings,
+  WebUISettings,
+} from '@/features/settings';
 
-export const settingsCategories: SettingsCategory[] = [
+export const settingsCategories: Array<SettingsCategory> = [
   {
     id: 'core',
     title: 'Core Settings',

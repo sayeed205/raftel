@@ -1,3 +1,5 @@
+import { useRef, useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -7,9 +9,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import qbApi from '@/lib/api';
-import { useRef, useState } from 'react';
-import { toast } from 'sonner';
+import qbit from '@/services/qbit';
 
 export function AddTorrentModal({
   open,
@@ -30,7 +30,7 @@ export function AddTorrentModal({
     if (!files || files.length === 0) return;
     setAdding(true);
     try {
-      await qbApi.addTorrents({ torrents: Array.from(files) });
+      await qbit.addTorrents(Array.from(files), '');
       onAdded();
       onOpenChange(false);
     } catch (err: any) {
@@ -46,10 +46,10 @@ export function AddTorrentModal({
     e.preventDefault();
     setDragActive(false);
     const files = e.dataTransfer.files;
-    if (!files || files.length === 0) return;
+    if (files.length === 0) return;
     setAdding(true);
     try {
-      await qbApi.addTorrents({ torrents: Array.from(files) });
+      await qbit.addTorrents(Array.from(files), '');
       onAdded();
       onOpenChange(false);
     } catch (err) {
@@ -63,7 +63,7 @@ export function AddTorrentModal({
     if (!magnet.trim()) return;
     setAdding(true);
     try {
-      await qbApi.addTorrents({ urls: magnet.trim() });
+      await qbit.addTorrents([], magnet.trim());
       setMagnet('');
       onAdded();
       onOpenChange(false);

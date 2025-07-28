@@ -74,54 +74,6 @@ export const showToast = {
   },
 };
 
-// Progress tracking for long-running operations
-export class ProgressToast {
-  private toastId: string | number;
-  private total: number;
-  private action: string;
-
-  constructor(action: string, total: number) {
-    this.action = action;
-    this.total = total;
-    this.toastId = showToast.loading(`${action} starting...`, {
-      description: `0/${total} completed (0%)`,
-    });
-  }
-
-  update(completed: number, message?: string) {
-    const progress = Math.round((completed / this.total) * 100);
-
-    toast.loading(message || `${this.action} in progress`, {
-      id: this.toastId,
-      description: `${completed}/${this.total} completed (${progress}%)`,
-    });
-  }
-
-  success(message?: string) {
-    toast.success(message || `${this.action} completed`, {
-      id: this.toastId,
-      description: `Successfully processed ${this.total} items`,
-    });
-  }
-
-  error(error: string, retry?: () => void) {
-    toast.error(`${this.action} failed`, {
-      id: this.toastId,
-      description: error,
-      action: retry
-        ? {
-            label: 'Retry',
-            onClick: retry,
-          }
-        : undefined,
-    });
-  }
-
-  dismiss() {
-    toast.dismiss(this.toastId);
-  }
-}
-
 // Specialized toast functions for common torrent actions
 export const torrentToast = {
   actionSuccess: (action: string, count: number = 1) => {

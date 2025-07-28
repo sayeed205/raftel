@@ -2,7 +2,8 @@ import { Edit, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
 import { toast } from 'sonner';
-import type { TorrentInfo, TorrentTracker } from '@/types/api';
+import type { TorrentInfo } from '@/types/api';
+import type { TorrentTracker } from '@/types/qbit/torrent.ts';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,8 +25,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
-
-import qbApi from '@/lib/api';
+import qbit from '@/services/qbit';
 
 interface TorrentTrackersTabProps {
   torrent: TorrentInfo;
@@ -151,7 +151,7 @@ export function TorrentTrackersTab({
   const handleReannounce = async () => {
     try {
       setIsLoading(true);
-      await qbApi.reannounceTorrents(torrent.hash);
+      await qbit.reannounceTorrents([torrent.hash]);
       toast.success('Reannounce sent to all trackers');
       onRefresh();
     } catch (error) {

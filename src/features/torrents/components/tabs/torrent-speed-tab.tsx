@@ -2,16 +2,16 @@ import { Save, Settings, TrendingDown, TrendingUp } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
 import { toast } from 'sonner';
-import type { TorrentInfo, TorrentProperties } from '@/types/api';
+import type { TorrentInfo } from '@/types/api';
+import type { TorrentProperties } from '@/types/qbit/torrent.ts';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
-
-import qbApi from '@/lib/api';
 import { formatBytes, formatSpeed } from '@/lib/utils';
+import qbit from '@/services/qbit';
 
 interface TorrentSpeedTabProps {
   torrent: TorrentInfo;
@@ -86,14 +86,8 @@ export function TorrentSpeedTab({
         : Math.max(0, parseInt(uploadLimit) * 1024);
 
       await Promise.all([
-        qbApi.setTorrentDownloadLimit({
-          hashes: torrent.hash,
-          limit: dlLimitBytes,
-        }),
-        qbApi.setTorrentUploadLimit({
-          hashes: torrent.hash,
-          limit: upLimitBytes,
-        }),
+        qbit.setDownloadLimit([torrent.hash], dlLimitBytes),
+        qbit.setUploadLimit([torrent.hash], upLimitBytes),
       ]);
 
       toast.success('Speed limits updated successfully');

@@ -1,23 +1,6 @@
 import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import qbApi from '@/lib/api';
-import {
-  formatBytes,
-  formatProgress,
-  getStateColor,
-  getStateText,
-} from '@/lib/utils';
-import type {
-  TorrentFile,
-  TorrentInfo,
-  TorrentPeer,
-  TorrentProperties,
-  TorrentTracker,
-} from '@/types/api';
 import { Link, useNavigate } from '@tanstack/react-router';
 import {
   TorrentContentTab,
@@ -26,6 +9,22 @@ import {
   TorrentSpeedTab,
   TorrentTrackersTab,
 } from './components/tabs';
+import type { TorrentInfo } from '@/types/api.ts';
+import type {
+  TorrentFile,
+  TorrentPeer,
+  TorrentProperties,
+  TorrentTracker,
+} from '@/types/qbit/torrent.ts';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  formatBytes,
+  formatProgress,
+  getStateColor,
+  getStateText,
+} from '@/lib/utils';
 
 import { Header } from '@/components/layout/header.tsx';
 import { Main } from '@/components/layout/main.tsx';
@@ -38,6 +37,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { Route as TorrentDetailsRoute } from '@/routes/_authenticated/torrents/$hash';
+import qbit from '@/services/qbit';
 
 interface TorrentDetailsData {
   torrent: TorrentInfo | null;
@@ -80,7 +80,7 @@ export default function TorrentDetailsPage() {
       console.log('Fetching torrent data for hash:', hash);
 
       // First try to get the specific torrent
-      const torrents = await qbApi.getTorrents({ hashes: hash });
+      const torrents = await qbit.getTorrents({ hashes: hash });
       console.log('Torrents response:', torrents);
 
       const torrent = torrents.find((t) => t.hash === hash) || null;
@@ -88,7 +88,7 @@ export default function TorrentDetailsPage() {
 
       if (!torrent) {
         // If not found with specific hash, try getting all torrents to see if hash format is different
-        const allTorrents = await qbApi.getTorrents();
+        const allTorrents = await qbit.getTorrents();
         console.log(
           'All torrents:',
           allTorrents.map((t) => ({ name: t.name, hash: t.hash })),
@@ -114,10 +114,10 @@ export default function TorrentDetailsPage() {
           // Fetch data with correct hash
           const [properties, files, trackers, peersResponse] =
             await Promise.all([
-              qbApi.getTorrentProperties(foundTorrent.hash),
-              qbApi.getTorrentFiles(foundTorrent.hash),
-              qbApi.getTorrentTrackers(foundTorrent.hash),
-              qbApi.getTorrentPeers(foundTorrent.hash),
+              qbit.getTorrentProperties(foundTorrent.hash),
+              qbit.getTorrentFiles(foundTorrent.hash),
+              qbit.getTorrentTrackers(foundTorrent.hash),
+              qbit.syncTorrentPeers(foundTorrent.hash),
             ]);
 
           setData({
@@ -136,10 +136,10 @@ export default function TorrentDetailsPage() {
 
       // Fetch additional data in parallel
       const [properties, files, trackers, peersResponse] = await Promise.all([
-        qbApi.getTorrentProperties(hash),
-        qbApi.getTorrentFiles(hash),
-        qbApi.getTorrentTrackers(hash),
-        qbApi.getTorrentPeers(hash),
+        qbit.getTorrentProperties(hash),
+        qbit.getTorrentFiles(hash),
+        qbit.getTorrentTrackers(hash),
+        qbit.syncTorrentPeers(hash),
       ]);
 
       setData({
@@ -269,6 +269,7 @@ export default function TorrentDetailsPage() {
                 {getStateText(data.torrent.state)}
               </Badge>
               <span className='text-muted-foreground text-sm'>
+                {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
                 {data.torrent ? (
                   <>
                     {formatBytes(data.torrent.size)} •{' '}
@@ -280,6 +281,7 @@ export default function TorrentDetailsPage() {
               </span>
             </div>
             <h1 className='mt-2 truncate text-xl font-bold'>
+              {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
               {data.torrent.name ?? (
                 <div className='bg-muted h-6 w-3/4 animate-pulse rounded' />
               )}
