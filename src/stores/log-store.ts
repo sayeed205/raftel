@@ -1,9 +1,8 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 
-import type { Log, LogFilter, PeerLog, SystemInfo } from '@/types/logs';
+import type { Log, LogFilter, PeerLog } from '@/types/logs';
 import type { LogType } from '@/types/qbit/constants';
-import qbApi from '@/lib/api';
 import qbit from '@/services/qbit';
 
 interface LogState {
@@ -14,9 +13,6 @@ interface LogState {
   // Peer logs
   peerLogs: Array<PeerLog>;
   lastPeerLogId: number;
-
-  // System information
-  systemInfo: SystemInfo | null;
 
   // Settings and filters
   logLevel: LogType;
@@ -30,7 +26,7 @@ interface LogState {
   // UI state
   isLoading: boolean;
   isLoadingPeerLogs: boolean;
-  isLoadingSystemInfo: boolean;
+
   error: string | null;
   lastUpdate: number;
 
@@ -46,9 +42,6 @@ interface LogActions {
   // Peer log operations
   fetchPeerLogs: (lastKnownId?: number) => Promise<void>;
   clearPeerLogs: () => void;
-
-  // System info operations
-  fetchSystemInfo: () => Promise<void>;
 
   // Settings
   setLogLevel: (level: LogType) => void;
@@ -90,7 +83,7 @@ export const useLogStore = create<LogStore>()(
     lastLogId: -1,
     peerLogs: [],
     lastPeerLogId: -1,
-    systemInfo: null,
+
     logLevel: 15, // LogType.ALL
     autoRefresh: false,
     refreshInterval: 5000, // 5 seconds
@@ -98,7 +91,6 @@ export const useLogStore = create<LogStore>()(
     filter: defaultFilter,
     isLoading: false,
     isLoadingPeerLogs: false,
-    isLoadingSystemInfo: false,
     error: null,
     lastUpdate: 0,
     refreshTimer: null,
@@ -201,52 +193,6 @@ export const useLogStore = create<LogStore>()(
         peerLogs: [],
         lastPeerLogId: -1,
       });
-    },
-
-    // System info operations
-    fetchSystemInfo: async () => {
-      try {
-        set({ isLoadingSystemInfo: true, error: null });
-
-        // Get various system information from different API endpoints
-        const [serverState, version] = await Promise.all([
-          qbApi.getServerState(),
-          qbit.getVersion(),
-        ]);
-
-        const systemInfo: SystemInfo = {
-          version: version || 'Unknown',
-          buildInfo: 'Build info not available',
-          uptime: Date.now() / 1000, // Approximate uptime
-          totalSize: serverState.free_space_on_disk || 0,
-          freeSpace: serverState.free_space_on_disk || 0,
-          dlInfoSpeed: serverState.dl_info_speed || 0,
-          dlInfoData: serverState.dl_info_data || 0,
-          upInfoSpeed: serverState.up_info_speed || 0,
-          upInfoData: serverState.up_info_data || 0,
-          dlRateLimit: serverState.dl_rate_limit || 0,
-          upRateLimit: serverState.up_rate_limit || 0,
-          dhtNodes: serverState.dht_nodes || 0,
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-          connectionStatus: serverState.connection_status || 'unknown',
-        };
-
-        set({
-          systemInfo,
-          isLoadingSystemInfo: false,
-          lastUpdate: Date.now(),
-        });
-      } catch (error) {
-        console.error('Failed to fetch system info:', error);
-        const message =
-          error instanceof Error
-            ? error.message
-            : 'Failed to fetch system info';
-        set({
-          error: message,
-          isLoadingSystemInfo: false,
-        });
-      }
     },
 
     // Settings
@@ -367,7 +313,6 @@ export const useLogStore = create<LogStore>()(
       const timer = setInterval(() => {
         get().fetchLogs();
         get().fetchPeerLogs();
-        get().fetchSystemInfo();
       }, refreshInterval);
 
       set({ refreshTimer: timer });
@@ -389,7 +334,7 @@ export const useLogStore = create<LogStore>()(
         case 'json':
           return JSON.stringify(logs, null, 2);
 
-        case 'csv':
+        case 'csv': {
           const csvHeader = 'ID,Timestamp,Type,Message\n';
           const csvRows = logs
             .map(
@@ -398,6 +343,7 @@ export const useLogStore = create<LogStore>()(
             )
             .join('\n');
           return csvHeader + csvRows;
+        }
 
         case 'txt':
           return logs
@@ -419,7 +365,7 @@ export const useLogStore = create<LogStore>()(
         case 'json':
           return JSON.stringify(peerLogs, null, 2);
 
-        case 'csv':
+        case 'csv': {
           const csvHeader = 'ID,Timestamp,IP,Blocked,Reason\n';
           const csvRows = peerLogs
             .map(
@@ -428,6 +374,7 @@ export const useLogStore = create<LogStore>()(
             )
             .join('\n');
           return csvHeader + csvRows;
+        }
 
         case 'txt':
           return peerLogs
@@ -480,17 +427,6 @@ export const usePeerLogs = () => {
   };
 };
 
-export const useSystemInfo = () => {
-  const { systemInfo, isLoadingSystemInfo, error, fetchSystemInfo } =
-    useLogStore();
-  return {
-    systemInfo,
-    isLoading: isLoadingSystemInfo,
-    error,
-    fetchSystemInfo,
-  };
-};
-
 export const useLogSettings = () => {
   const {
     logLevel,
@@ -524,7 +460,6 @@ export const useLogActions = () => {
   const {
     fetchLogs,
     fetchPeerLogs,
-    fetchSystemInfo,
     clearLogs,
     clearPeerLogs,
     exportLogs,
@@ -536,7 +471,6 @@ export const useLogActions = () => {
   return {
     fetchLogs,
     fetchPeerLogs,
-    fetchSystemInfo,
     clearLogs,
     clearPeerLogs,
     exportLogs,
