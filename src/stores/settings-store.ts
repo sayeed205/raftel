@@ -1,7 +1,7 @@
-import qbApi from '@/lib/api';
-import type { QBittorrentPreferences } from '@/types/api';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { QBittorrentPreferences } from '@/types/api';
+import qbit from '@/services/qbit';
 
 // WebUI specific settings that are stored locally
 export interface WebUISettings {
@@ -10,7 +10,7 @@ export interface WebUISettings {
   compactMode: boolean;
   showAdvancedSettings: boolean;
   autoRefreshInterval: number;
-  torrentTableColumns: string[];
+  torrentTableColumns: Array<string>;
   torrentTableSortBy: string;
   torrentTableSortOrder: 'asc' | 'desc';
   confirmDeletion: boolean;
@@ -53,7 +53,7 @@ interface SettingsState {
   isSaving: boolean;
   isDirty: boolean;
   error: string | null;
-  validationErrors: SettingsValidationError[];
+  validationErrors: Array<SettingsValidationError>;
 
   // Change tracking
   pendingChanges: Partial<QBittorrentPreferences>;
@@ -75,7 +75,7 @@ interface SettingsActions {
   // Validation
   validatePreferences: (
     prefs: Partial<QBittorrentPreferences>,
-  ) => SettingsValidationError[];
+  ) => Array<SettingsValidationError>;
   clearValidationErrors: () => void;
 
   // Import/Export
@@ -115,7 +115,7 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ isLoading: true, error: null });
 
         try {
-          const preferences = await qbApi.getPreferences();
+          const preferences = await qbit.getPreferences();
           set({
             preferences,
             isLoading: false,
@@ -148,7 +148,7 @@ export const useSettingsStore = create<SettingsStore>()(
             throw new Error('Validation failed');
           }
 
-          await qbApi.setPreferences(prefs);
+          await qbit.setPreferences(prefs);
 
           // Refresh preferences to get the updated values
           await state.fetchPreferences();
@@ -213,8 +213,8 @@ export const useSettingsStore = create<SettingsStore>()(
       // Validation
       validatePreferences: (
         prefs: Partial<QBittorrentPreferences>,
-      ): SettingsValidationError[] => {
-        const errors: SettingsValidationError[] = [];
+      ): Array<SettingsValidationError> => {
+        const errors: Array<SettingsValidationError> = [];
 
         // Port validation
         if (prefs.listen_port !== undefined) {
