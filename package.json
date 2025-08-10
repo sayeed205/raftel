@@ -41,6 +41,7 @@
     "@tanstack/react-router-devtools": "^1.121.2",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/router-plugin": "^1.121.2",
+    "@vercel/analytics": "^1.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
