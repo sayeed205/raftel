@@ -1,4 +1,4 @@
-import { AdvancedSettings, SettingsLayout } from '@/features/settings';
+
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_authenticated/settings/advanced')({
@@ -7,8 +7,8 @@ export const Route = createFileRoute('/_authenticated/settings/advanced')({
 
 function AdvancedSettingsPage() {
   return (
-    <SettingsLayout currentSection='advanced'>
-      <AdvancedSettings />
-    </SettingsLayout>
+    <h2>
+      AdvancedSettings 
+    </h2>
   );
 }

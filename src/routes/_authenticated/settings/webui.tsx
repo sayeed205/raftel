@@ -1,4 +1,3 @@
-import { SettingsLayout, WebUISettings } from '@/features/settings';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_authenticated/settings/webui')({
@@ -7,8 +6,8 @@ export const Route = createFileRoute('/_authenticated/settings/webui')({
 
 function WebUISettingsPage() {
   return (
-    <SettingsLayout currentSection='webui'>
-      <WebUISettings />
-    </SettingsLayout>
+    <h2 >
+      Web UI settings
+    </h2>
   );
 }
