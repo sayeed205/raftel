@@ -1,14 +1,7 @@
-import { SettingsLayout, SpeedSettings } from '@/features/settings';
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/_authenticated/settings/speed')({
-  component: SpeedSettingsPage,
-});
+import SettingsSpeed from '@/features/settings/speed';
 
-function SpeedSettingsPage() {
-  return (
-    <SettingsLayout currentSection='speed'>
-      <SpeedSettings />
-    </SettingsLayout>
-  );
-}
+export const Route = createFileRoute('/_authenticated/settings/speed')({
+  component: SettingsSpeed,
+});
