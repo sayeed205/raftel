@@ -57,12 +57,10 @@ export type ConnectionStatus =
 
 // Proxy Types
 export const ProxyType = {
-  NONE: 0,
-  HTTP: 1,
-  SOCKS4: 2,
-  SOCKS5: 3,
-  SOCKS5_PW: 4,
-  HTTP_PW: 5,
+  NONE: 'None',
+  SOCKS4: 'SOCKS4',
+  SOCKS5: 'SOCKS5',
+  HTTP: 'HTTP',
 } as const;
 
 export type ProxyType = (typeof ProxyType)[keyof typeof ProxyType];

@@ -1,14 +1,7 @@
-import { ConnectionSettings, SettingsLayout } from '@/features/settings';
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/_authenticated/settings/connection')({
-  component: ConnectionSettingsPage,
-});
+import SettingsConnection from '@/features/settings/connection';
 
-function ConnectionSettingsPage() {
-  return (
-    <SettingsLayout currentSection='connection'>
-      <ConnectionSettings />
-    </SettingsLayout>
-  );
-}
+export const Route = createFileRoute('/_authenticated/settings/connection')({
+  component: SettingsConnection,
+});
