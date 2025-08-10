@@ -9,6 +9,9 @@ import tanstackRouter from '@tanstack/router-plugin/vite';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
 
+  const qBittorrentTarget =
+    env.VITE_QBITTORRENT_API_URL ?? 'http://localhost:8080';
+
   return {
     plugins: [
       tanstackRouter({ target: 'react', autoCodeSplitting: true }),
@@ -19,15 +22,31 @@ export default defineConfig(({ mode }) => {
       port: 3000,
       proxy: {
         '/api': {
-          target: env.VITE_QBITTORRENT_API_URL || 'http://localhost:8080',
+          secure: false,
           changeOrigin: true,
           xfwd: true,
+          target: qBittorrentTarget,
+        },
+        '/backend': {
+          secure: false,
+          changeOrigin: true,
+          target: qBittorrentTarget,
         },
       },
     },
+    build: {
+      outDir: mode === 'demo' ? './raftel-demo' : './raftel/public',
+    },
+    publicDir: './public',
     test: {
       globals: true,
       environment: 'jsdom',
+    },
+    define: {
+      'import.meta.env.VITE_PACKAGE_VERSION': JSON.stringify(
+        process.env.npm_package_version,
+      ),
+      'process.env': {},
     },
     resolve: {
       alias: {
