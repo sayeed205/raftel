@@ -93,6 +93,7 @@ export default function Login() {
             <AlertDescription>
               This is a demo version using mock data. It shows how the interface
               will look, but is not connected to a real qBittorrent instance.
+              <p>Use anything for credentials to login</p>
             </AlertDescription>
           </Alert>
         )}
