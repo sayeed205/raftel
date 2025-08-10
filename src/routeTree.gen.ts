@@ -25,7 +25,7 @@ import { Route as AuthenticatedSettingsSpeedRouteImport } from './routes/_authen
 import { Route as AuthenticatedSettingsNotificationsRouteImport } from './routes/_authenticated/settings/notifications'
 import { Route as AuthenticatedSettingsDownloadsRouteImport } from './routes/_authenticated/settings/downloads'
 import { Route as AuthenticatedSettingsConnectionRouteImport } from './routes/_authenticated/settings/connection'
-import { Route as AuthenticatedSettingsBittorrentRouteImport } from './routes/_authenticated/settings/bittorrent'
+import { Route as AuthenticatedSettingsBitTorrentRouteImport } from './routes/_authenticated/settings/bit-torrent'
 import { Route as AuthenticatedSettingsAdvancedRouteImport } from './routes/_authenticated/settings/advanced'
 import { Route as AuthenticatedSettingsAccountRouteImport } from './routes/_authenticated/settings/account'
 
@@ -117,10 +117,10 @@ const AuthenticatedSettingsConnectionRoute =
     path: '/connection',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
-const AuthenticatedSettingsBittorrentRoute =
-  AuthenticatedSettingsBittorrentRouteImport.update({
-    id: '/bittorrent',
-    path: '/bittorrent',
+const AuthenticatedSettingsBitTorrentRoute =
+  AuthenticatedSettingsBitTorrentRouteImport.update({
+    id: '/bit-torrent',
+    path: '/bit-torrent',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 const AuthenticatedSettingsAdvancedRoute =
@@ -146,7 +146,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof AuthenticatedSearchRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/advanced': typeof AuthenticatedSettingsAdvancedRoute
-  '/settings/bittorrent': typeof AuthenticatedSettingsBittorrentRoute
+  '/settings/bit-torrent': typeof AuthenticatedSettingsBitTorrentRoute
   '/settings/connection': typeof AuthenticatedSettingsConnectionRoute
   '/settings/downloads': typeof AuthenticatedSettingsDownloadsRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
@@ -165,7 +165,7 @@ export interface FileRoutesByTo {
   '/search': typeof AuthenticatedSearchRoute
   '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/advanced': typeof AuthenticatedSettingsAdvancedRoute
-  '/settings/bittorrent': typeof AuthenticatedSettingsBittorrentRoute
+  '/settings/bit-torrent': typeof AuthenticatedSettingsBitTorrentRoute
   '/settings/connection': typeof AuthenticatedSettingsConnectionRoute
   '/settings/downloads': typeof AuthenticatedSettingsDownloadsRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
@@ -187,7 +187,7 @@ export interface FileRoutesById {
   '/_authenticated/search': typeof AuthenticatedSearchRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/_authenticated/settings/advanced': typeof AuthenticatedSettingsAdvancedRoute
-  '/_authenticated/settings/bittorrent': typeof AuthenticatedSettingsBittorrentRoute
+  '/_authenticated/settings/bit-torrent': typeof AuthenticatedSettingsBitTorrentRoute
   '/_authenticated/settings/connection': typeof AuthenticatedSettingsConnectionRoute
   '/_authenticated/settings/downloads': typeof AuthenticatedSettingsDownloadsRoute
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
@@ -209,7 +209,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/settings/account'
     | '/settings/advanced'
-    | '/settings/bittorrent'
+    | '/settings/bit-torrent'
     | '/settings/connection'
     | '/settings/downloads'
     | '/settings/notifications'
@@ -228,7 +228,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/settings/account'
     | '/settings/advanced'
-    | '/settings/bittorrent'
+    | '/settings/bit-torrent'
     | '/settings/connection'
     | '/settings/downloads'
     | '/settings/notifications'
@@ -249,7 +249,7 @@ export interface FileRouteTypes {
     | '/_authenticated/search'
     | '/_authenticated/settings/account'
     | '/_authenticated/settings/advanced'
-    | '/_authenticated/settings/bittorrent'
+    | '/_authenticated/settings/bit-torrent'
     | '/_authenticated/settings/connection'
     | '/_authenticated/settings/downloads'
     | '/_authenticated/settings/notifications'
@@ -380,11 +380,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsConnectionRouteImport
       parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
-    '/_authenticated/settings/bittorrent': {
-      id: '/_authenticated/settings/bittorrent'
-      path: '/bittorrent'
-      fullPath: '/settings/bittorrent'
-      preLoaderRoute: typeof AuthenticatedSettingsBittorrentRouteImport
+    '/_authenticated/settings/bit-torrent': {
+      id: '/_authenticated/settings/bit-torrent'
+      path: '/bit-torrent'
+      fullPath: '/settings/bit-torrent'
+      preLoaderRoute: typeof AuthenticatedSettingsBitTorrentRouteImport
       parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
     '/_authenticated/settings/advanced': {
@@ -407,7 +407,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedSettingsRouteRouteChildren {
   AuthenticatedSettingsAccountRoute: typeof AuthenticatedSettingsAccountRoute
   AuthenticatedSettingsAdvancedRoute: typeof AuthenticatedSettingsAdvancedRoute
-  AuthenticatedSettingsBittorrentRoute: typeof AuthenticatedSettingsBittorrentRoute
+  AuthenticatedSettingsBitTorrentRoute: typeof AuthenticatedSettingsBitTorrentRoute
   AuthenticatedSettingsConnectionRoute: typeof AuthenticatedSettingsConnectionRoute
   AuthenticatedSettingsDownloadsRoute: typeof AuthenticatedSettingsDownloadsRoute
   AuthenticatedSettingsNotificationsRoute: typeof AuthenticatedSettingsNotificationsRoute
@@ -420,7 +420,7 @@ const AuthenticatedSettingsRouteRouteChildren: AuthenticatedSettingsRouteRouteCh
   {
     AuthenticatedSettingsAccountRoute: AuthenticatedSettingsAccountRoute,
     AuthenticatedSettingsAdvancedRoute: AuthenticatedSettingsAdvancedRoute,
-    AuthenticatedSettingsBittorrentRoute: AuthenticatedSettingsBittorrentRoute,
+    AuthenticatedSettingsBitTorrentRoute: AuthenticatedSettingsBitTorrentRoute,
     AuthenticatedSettingsConnectionRoute: AuthenticatedSettingsConnectionRoute,
     AuthenticatedSettingsDownloadsRoute: AuthenticatedSettingsDownloadsRoute,
     AuthenticatedSettingsNotificationsRoute:

@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Outlet } from '@tanstack/react-router';
 import {
   AppWindowIcon,
@@ -6,17 +5,17 @@ import {
   CableIcon,
   CircleGaugeIcon,
   DownloadIcon,
-  EarthIcon,
   GlobeIcon,
-  PickaxeIcon,
   RssIcon,
   SlidersHorizontalIcon,
 } from 'lucide-react';
+import { useEffect } from 'react';
 
 import SidebarNav from './components/sidebar-nav';
-import { Separator } from '@/components/ui/separator';
+
 import { Header } from '@/components/layout/header';
 import { Main } from '@/components/layout/main';
+import { Separator } from '@/components/ui/separator';
 import SearchSettings from '@/features/settings/components/search.tsx';
 import { useSettings, useSettingsActions } from '@/stores/settings-store';
 
@@ -78,7 +77,7 @@ const sidebarNavItems = [
   {
     title: 'Speed',
     icon: <CircleGaugeIcon size={18} />,
-    href: '/settings/Speed',
+    href: '/settings/speed',
   },
   {
     title: 'BitTorrent',
