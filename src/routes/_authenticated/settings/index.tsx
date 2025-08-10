@@ -1,10 +1,7 @@
-import { SettingsLayout } from '@/features/settings';
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/_authenticated/settings/')({
-  component: SettingsIndexPage,
-});
+import SettingsRaftel from '@/features/settings/raftel';
 
-function SettingsIndexPage() {
-  return <SettingsLayout />;
-}
+export const Route = createFileRoute('/_authenticated/settings/')({
+  component: SettingsRaftel,
+});

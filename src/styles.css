@@ -185,48 +185,6 @@
     }
   }
 
-  /* Mobile-specific optimizations */
-  @media (max-width: 768px) {
-    /* Touch-friendly tap targets */
-    button,
-    [role='button'],
-    input[type='checkbox'],
-    input[type='radio'] {
-      min-height: 44px;
-      min-width: 44px;
-    }
-
-    /* Improved touch scrolling */
-    * {
-      -webkit-overflow-scrolling: touch;
-    }
-
-    /* Mobile table optimizations */
-    .mobile-table {
-      font-size: 14px;
-    }
-
-    .mobile-table th,
-    .mobile-table td {
-      padding: 8px 4px;
-    }
-
-    /* Mobile modal optimizations */
-    .mobile-modal {
-      margin: 0;
-      max-height: 100vh;
-      border-radius: 0;
-    }
-
-    /* Mobile form optimizations */
-    .mobile-form input,
-    .mobile-form select,
-    .mobile-form textarea {
-      padding: 12px;
-      font-size: 16px;
-    }
-  }
-
   /* Tablet-specific optimizations */
   @media (min-width: 768px) and (max-width: 1024px) {
     /* Tablet-specific styles */

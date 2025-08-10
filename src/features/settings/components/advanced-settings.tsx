@@ -448,9 +448,11 @@ export function AdvancedSettings() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='0'>None</SelectItem>
-                <SelectItem value='1'>Metadata received</SelectItem>
-                <SelectItem value='2'>Files checked</SelectItem>
+                <SelectItem value='None'>None</SelectItem>
+                <SelectItem value='MetadataReceived'>
+                  Metadata received
+                </SelectItem>
+                <SelectItem value='FilesChecked'>Files checked</SelectItem>
               </SelectContent>
             </Select>
             <p className='text-muted-foreground text-sm'>

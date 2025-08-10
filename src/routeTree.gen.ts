@@ -16,6 +16,7 @@ import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedRssRouteImport } from './routes/_authenticated/rss'
 import { Route as AuthenticatedLogsRouteImport } from './routes/_authenticated/logs'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authenticated/settings/route'
 import { Route as AuthenticatedTorrentsIndexRouteImport } from './routes/_authenticated/torrents/index'
 import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
 import { Route as AuthenticatedTorrentsHashRouteImport } from './routes/_authenticated/torrents/$hash'
@@ -62,6 +63,12 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSettingsRouteRoute =
+  AuthenticatedSettingsRouteRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedTorrentsIndexRoute =
   AuthenticatedTorrentsIndexRouteImport.update({
     id: '/torrents/',
@@ -70,9 +77,9 @@ const AuthenticatedTorrentsIndexRoute =
   } as any)
 const AuthenticatedSettingsIndexRoute =
   AuthenticatedSettingsIndexRouteImport.update({
-    id: '/settings/',
-    path: '/settings/',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 const AuthenticatedTorrentsHashRoute =
   AuthenticatedTorrentsHashRouteImport.update({
@@ -82,56 +89,57 @@ const AuthenticatedTorrentsHashRoute =
   } as any)
 const AuthenticatedSettingsWebuiRoute =
   AuthenticatedSettingsWebuiRouteImport.update({
-    id: '/settings/webui',
-    path: '/settings/webui',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/webui',
+    path: '/webui',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 const AuthenticatedSettingsSpeedRoute =
   AuthenticatedSettingsSpeedRouteImport.update({
-    id: '/settings/speed',
-    path: '/settings/speed',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/speed',
+    path: '/speed',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 const AuthenticatedSettingsNotificationsRoute =
   AuthenticatedSettingsNotificationsRouteImport.update({
-    id: '/settings/notifications',
-    path: '/settings/notifications',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 const AuthenticatedSettingsDownloadsRoute =
   AuthenticatedSettingsDownloadsRouteImport.update({
-    id: '/settings/downloads',
-    path: '/settings/downloads',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/downloads',
+    path: '/downloads',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 const AuthenticatedSettingsConnectionRoute =
   AuthenticatedSettingsConnectionRouteImport.update({
-    id: '/settings/connection',
-    path: '/settings/connection',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/connection',
+    path: '/connection',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 const AuthenticatedSettingsBittorrentRoute =
   AuthenticatedSettingsBittorrentRouteImport.update({
-    id: '/settings/bittorrent',
-    path: '/settings/bittorrent',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/bittorrent',
+    path: '/bittorrent',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 const AuthenticatedSettingsAdvancedRoute =
   AuthenticatedSettingsAdvancedRouteImport.update({
-    id: '/settings/advanced',
-    path: '/settings/advanced',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/advanced',
+    path: '/advanced',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 const AuthenticatedSettingsAccountRoute =
   AuthenticatedSettingsAccountRouteImport.update({
-    id: '/settings/account',
-    path: '/settings/account',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/account',
+    path: '/account',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/logs': typeof AuthenticatedLogsRoute
   '/rss': typeof AuthenticatedRssRoute
@@ -145,7 +153,7 @@ export interface FileRoutesByFullPath {
   '/settings/speed': typeof AuthenticatedSettingsSpeedRoute
   '/settings/webui': typeof AuthenticatedSettingsWebuiRoute
   '/torrents/$hash': typeof AuthenticatedTorrentsHashRoute
-  '/settings': typeof AuthenticatedSettingsIndexRoute
+  '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/torrents': typeof AuthenticatedTorrentsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/login': typeof LoginRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRouteRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/logs': typeof AuthenticatedLogsRoute
   '/_authenticated/rss': typeof AuthenticatedRssRoute
@@ -193,6 +202,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/settings'
     | '/dashboard'
     | '/logs'
     | '/rss'
@@ -206,7 +216,7 @@ export interface FileRouteTypes {
     | '/settings/speed'
     | '/settings/webui'
     | '/torrents/$hash'
-    | '/settings'
+    | '/settings/'
     | '/torrents'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -232,6 +242,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/login'
+    | '/_authenticated/settings'
     | '/_authenticated/dashboard'
     | '/_authenticated/logs'
     | '/_authenticated/rss'
@@ -306,6 +317,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/torrents/': {
       id: '/_authenticated/torrents/'
       path: '/torrents'
@@ -315,10 +333,10 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/settings/': {
       id: '/_authenticated/settings/'
-      path: '/settings'
-      fullPath: '/settings'
+      path: '/'
+      fullPath: '/settings/'
       preLoaderRoute: typeof AuthenticatedSettingsIndexRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
     '/_authenticated/torrents/$hash': {
       id: '/_authenticated/torrents/$hash'
@@ -329,68 +347,64 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/settings/webui': {
       id: '/_authenticated/settings/webui'
-      path: '/settings/webui'
+      path: '/webui'
       fullPath: '/settings/webui'
       preLoaderRoute: typeof AuthenticatedSettingsWebuiRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
     '/_authenticated/settings/speed': {
       id: '/_authenticated/settings/speed'
-      path: '/settings/speed'
+      path: '/speed'
       fullPath: '/settings/speed'
       preLoaderRoute: typeof AuthenticatedSettingsSpeedRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
     '/_authenticated/settings/notifications': {
       id: '/_authenticated/settings/notifications'
-      path: '/settings/notifications'
+      path: '/notifications'
       fullPath: '/settings/notifications'
       preLoaderRoute: typeof AuthenticatedSettingsNotificationsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
     '/_authenticated/settings/downloads': {
       id: '/_authenticated/settings/downloads'
-      path: '/settings/downloads'
+      path: '/downloads'
       fullPath: '/settings/downloads'
       preLoaderRoute: typeof AuthenticatedSettingsDownloadsRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
     '/_authenticated/settings/connection': {
       id: '/_authenticated/settings/connection'
-      path: '/settings/connection'
+      path: '/connection'
       fullPath: '/settings/connection'
       preLoaderRoute: typeof AuthenticatedSettingsConnectionRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
     '/_authenticated/settings/bittorrent': {
       id: '/_authenticated/settings/bittorrent'
-      path: '/settings/bittorrent'
+      path: '/bittorrent'
       fullPath: '/settings/bittorrent'
       preLoaderRoute: typeof AuthenticatedSettingsBittorrentRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
     '/_authenticated/settings/advanced': {
       id: '/_authenticated/settings/advanced'
-      path: '/settings/advanced'
+      path: '/advanced'
       fullPath: '/settings/advanced'
       preLoaderRoute: typeof AuthenticatedSettingsAdvancedRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
     '/_authenticated/settings/account': {
       id: '/_authenticated/settings/account'
-      path: '/settings/account'
+      path: '/account'
       fullPath: '/settings/account'
       preLoaderRoute: typeof AuthenticatedSettingsAccountRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
   }
 }
 
-interface AuthenticatedRouteRouteChildren {
-  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  AuthenticatedLogsRoute: typeof AuthenticatedLogsRoute
-  AuthenticatedRssRoute: typeof AuthenticatedRssRoute
-  AuthenticatedSearchRoute: typeof AuthenticatedSearchRoute
+interface AuthenticatedSettingsRouteRouteChildren {
   AuthenticatedSettingsAccountRoute: typeof AuthenticatedSettingsAccountRoute
   AuthenticatedSettingsAdvancedRoute: typeof AuthenticatedSettingsAdvancedRoute
   AuthenticatedSettingsBittorrentRoute: typeof AuthenticatedSettingsBittorrentRoute
@@ -399,27 +413,45 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsNotificationsRoute: typeof AuthenticatedSettingsNotificationsRoute
   AuthenticatedSettingsSpeedRoute: typeof AuthenticatedSettingsSpeedRoute
   AuthenticatedSettingsWebuiRoute: typeof AuthenticatedSettingsWebuiRoute
-  AuthenticatedTorrentsHashRoute: typeof AuthenticatedTorrentsHashRoute
   AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
+}
+
+const AuthenticatedSettingsRouteRouteChildren: AuthenticatedSettingsRouteRouteChildren =
+  {
+    AuthenticatedSettingsAccountRoute: AuthenticatedSettingsAccountRoute,
+    AuthenticatedSettingsAdvancedRoute: AuthenticatedSettingsAdvancedRoute,
+    AuthenticatedSettingsBittorrentRoute: AuthenticatedSettingsBittorrentRoute,
+    AuthenticatedSettingsConnectionRoute: AuthenticatedSettingsConnectionRoute,
+    AuthenticatedSettingsDownloadsRoute: AuthenticatedSettingsDownloadsRoute,
+    AuthenticatedSettingsNotificationsRoute:
+      AuthenticatedSettingsNotificationsRoute,
+    AuthenticatedSettingsSpeedRoute: AuthenticatedSettingsSpeedRoute,
+    AuthenticatedSettingsWebuiRoute: AuthenticatedSettingsWebuiRoute,
+    AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,
+  }
+
+const AuthenticatedSettingsRouteRouteWithChildren =
+  AuthenticatedSettingsRouteRoute._addFileChildren(
+    AuthenticatedSettingsRouteRouteChildren,
+  )
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedLogsRoute: typeof AuthenticatedLogsRoute
+  AuthenticatedRssRoute: typeof AuthenticatedRssRoute
+  AuthenticatedSearchRoute: typeof AuthenticatedSearchRoute
+  AuthenticatedTorrentsHashRoute: typeof AuthenticatedTorrentsHashRoute
   AuthenticatedTorrentsIndexRoute: typeof AuthenticatedTorrentsIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedLogsRoute: AuthenticatedLogsRoute,
   AuthenticatedRssRoute: AuthenticatedRssRoute,
   AuthenticatedSearchRoute: AuthenticatedSearchRoute,
-  AuthenticatedSettingsAccountRoute: AuthenticatedSettingsAccountRoute,
-  AuthenticatedSettingsAdvancedRoute: AuthenticatedSettingsAdvancedRoute,
-  AuthenticatedSettingsBittorrentRoute: AuthenticatedSettingsBittorrentRoute,
-  AuthenticatedSettingsConnectionRoute: AuthenticatedSettingsConnectionRoute,
-  AuthenticatedSettingsDownloadsRoute: AuthenticatedSettingsDownloadsRoute,
-  AuthenticatedSettingsNotificationsRoute:
-    AuthenticatedSettingsNotificationsRoute,
-  AuthenticatedSettingsSpeedRoute: AuthenticatedSettingsSpeedRoute,
-  AuthenticatedSettingsWebuiRoute: AuthenticatedSettingsWebuiRoute,
   AuthenticatedTorrentsHashRoute: AuthenticatedTorrentsHashRoute,
-  AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,
   AuthenticatedTorrentsIndexRoute: AuthenticatedTorrentsIndexRoute,
 }
 

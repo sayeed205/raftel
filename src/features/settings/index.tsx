@@ -1,29 +1,39 @@
-import { Outlet } from '@tanstack/react-router'
+import { useEffect } from 'react';
+import { Outlet } from '@tanstack/react-router';
 import {
-  IconBrowserCheck,
-  IconNotification,
-  IconPalette,
-  IconTool,
-  IconUser,
-} from '@tabler/icons-react'
-import { Separator } from '@/components/ui/separator'
-import { Header } from '@/components/layout/header'
-import { Main } from '@/components/layout/main'
-import { ProfileDropdown } from '@/components/profile-dropdown'
-import { Search } from '@/components/search'
-import { ThemeSwitch } from '@/components/theme-switch'
-import SidebarNav from './components/sidebar-nav'
+  AppWindowIcon,
+  BoltIcon,
+  CableIcon,
+  CircleGaugeIcon,
+  DownloadIcon,
+  EarthIcon,
+  GlobeIcon,
+  PickaxeIcon,
+  RssIcon,
+  SlidersHorizontalIcon,
+} from 'lucide-react';
+
+import SidebarNav from './components/sidebar-nav';
+import { Separator } from '@/components/ui/separator';
+import { Header } from '@/components/layout/header';
+import { Main } from '@/components/layout/main';
+import SearchSettings from '@/features/settings/components/search.tsx';
+import { useSettings, useSettingsActions } from '@/stores/settings-store';
 
 export default function Settings() {
+  const { preferences, isLoading } = useSettings();
+
+  const { fetchPreferences } = useSettingsActions();
+  useEffect(() => {
+    if (!preferences && !isLoading) {
+      fetchPreferences().catch(console.error);
+    }
+  }, [preferences, isLoading, fetchPreferences]);
   return (
     <>
       {/* ===== Top Heading ===== */}
       <Header>
-        <Search />
-        <div className='ml-auto flex items-center space-x-4'>
-          <ThemeSwitch />
-          <ProfileDropdown />
-        </div>
+        <SearchSettings />
       </Header>
 
       <Main fixed>
@@ -32,47 +42,62 @@ export default function Settings() {
             Settings
           </h1>
           <p className='text-muted-foreground'>
-            Manage your account settings and set e-mail preferences.
+            Manage your qBittorrent settings and preferences.
           </p>
         </div>
-        <Separator className='my-4 lg:my-6' />
-        <div className='flex flex-1 flex-col space-y-2 overflow-hidden md:space-y-2 lg:flex-row lg:space-y-0 lg:space-x-12'>
+        <Separator className='my-4' />
+        <div className='flex flex-1 flex-col space-y-2 overflow-hidden md:space-y-2 lg:flex-row lg:space-y-0 lg:space-x-4'>
           <aside className='top-0 lg:sticky lg:w-1/5'>
             <SidebarNav items={sidebarNavItems} />
           </aside>
-          <div className='flex w-full overflow-y-hidden p-1'>
+          <div className='flex w-full overflow-y-hidden'>
             <Outlet />
           </div>
         </div>
       </Main>
     </>
-  )
+  );
 }
 
 const sidebarNavItems = [
   {
-    title: 'Profile',
-    icon: <IconUser size={18} />,
+    title: 'Raftel',
+    icon: <SlidersHorizontalIcon size={18} />,
     href: '/settings',
   },
   {
-    title: 'Account',
-    icon: <IconTool size={18} />,
-    href: '/settings/account',
+    title: 'Downloads',
+    icon: <DownloadIcon size={18} />,
+    href: '/settings/downloads',
   },
   {
-    title: 'Appearance',
-    icon: <IconPalette size={18} />,
-    href: '/settings/appearance',
+    title: 'Connection',
+    icon: <CableIcon size={18} />,
+    href: '/settings/connection',
   },
   {
-    title: 'Notifications',
-    icon: <IconNotification size={18} />,
-    href: '/settings/notifications',
+    title: 'Speed',
+    icon: <CircleGaugeIcon size={18} />,
+    href: '/settings/Speed',
   },
   {
-    title: 'Display',
-    icon: <IconBrowserCheck size={18} />,
-    href: '/settings/display',
+    title: 'BitTorrent',
+    icon: <AppWindowIcon size={18} />,
+    href: '/settings/bit-torrent',
   },
-]
+  {
+    title: 'RSS',
+    icon: <RssIcon size={18} />,
+    href: '/settings/rss',
+  },
+  {
+    title: 'WebUI',
+    icon: <GlobeIcon size={18} />,
+    href: '/settings/web-ui',
+  },
+  {
+    title: 'Advanced',
+    icon: <BoltIcon size={18} />,
+    href: '/settings/advanced',
+  },
+];
