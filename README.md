@@ -37,8 +37,8 @@ WIP
 ## 🧭 Getting Started
 
 ```bash
-git clone https://github.com/sayeed/raftel
+git clone https://github.com/sayeed205/raftel
 cd raftel
-bun isntall
+bun i
 bun dev
 ```
