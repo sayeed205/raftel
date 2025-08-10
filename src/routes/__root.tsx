@@ -1,5 +1,6 @@
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+
 import AuthGuard from '@/components/layout/auth-guard.tsx';
 import { NavigationProgress } from '@/components/navigation-progress';
 import { ThemeProvider } from '@/components/theme-provider';
