@@ -88,9 +88,14 @@ export default function SettingsSpeed() {
                   id='dl_limit'
                   type='number'
                   min='0'
-                  value={formatSpeedLimit((getValue('dl_limit') as number) || 0)}
+                  value={formatSpeedLimit(
+                    (getValue('dl_limit') as number) || 0,
+                  )}
                   onChange={(e) =>
-                    setPendingChange('dl_limit', parseSpeedLimit(e.target.value))
+                    setPendingChange(
+                      'dl_limit',
+                      parseSpeedLimit(e.target.value),
+                    )
                   }
                   placeholder='Unlimited'
                   className={
@@ -113,9 +118,14 @@ export default function SettingsSpeed() {
                   id='up_limit'
                   type='number'
                   min='0'
-                  value={formatSpeedLimit((getValue('up_limit') as number) || 0)}
+                  value={formatSpeedLimit(
+                    (getValue('up_limit') as number) || 0,
+                  )}
                   onChange={(e) =>
-                    setPendingChange('up_limit', parseSpeedLimit(e.target.value))
+                    setPendingChange(
+                      'up_limit',
+                      parseSpeedLimit(e.target.value),
+                    )
                   }
                   placeholder='Unlimited'
                   className={
@@ -151,7 +161,10 @@ export default function SettingsSpeed() {
           <CardContent className='space-y-4'>
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
               <div className='space-y-2'>
-                <Label htmlFor='alt_dl_limit' className='flex items-center gap-2'>
+                <Label
+                  htmlFor='alt_dl_limit'
+                  className='flex items-center gap-2'
+                >
                   <Download className='h-4 w-4' />
                   Alternative Download Limit (KiB/s)
                 </Label>
@@ -173,7 +186,10 @@ export default function SettingsSpeed() {
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='alt_up_limit' className='flex items-center gap-2'>
+                <Label
+                  htmlFor='alt_up_limit'
+                  className='flex items-center gap-2'
+                >
                   <Upload className='h-4 w-4' />
                   Alternative Upload Limit (KiB/s)
                 </Label>
@@ -224,7 +240,10 @@ export default function SettingsSpeed() {
                           )?.toString() || '0'
                         }
                         onValueChange={(value) =>
-                          setPendingChange('schedule_from_hour', parseInt(value))
+                          setPendingChange(
+                            'schedule_from_hour',
+                            parseInt(value),
+                          )
                         }
                       >
                         <SelectTrigger>
@@ -244,8 +263,9 @@ export default function SettingsSpeed() {
                       <Label htmlFor='schedule_from_min'>From Minute</Label>
                       <Select
                         value={
-                          (getValue('schedule_from_min') as number)?.toString() ||
-                          '0'
+                          (
+                            getValue('schedule_from_min') as number
+                          )?.toString() || '0'
                         }
                         onValueChange={(value) =>
                           setPendingChange('schedule_from_min', parseInt(value))
@@ -268,8 +288,9 @@ export default function SettingsSpeed() {
                       <Label htmlFor='schedule_to_hour'>To Hour</Label>
                       <Select
                         value={
-                          (getValue('schedule_to_hour') as number)?.toString() ||
-                          '0'
+                          (
+                            getValue('schedule_to_hour') as number
+                          )?.toString() || '0'
                         }
                         onValueChange={(value) =>
                           setPendingChange('schedule_to_hour', parseInt(value))
@@ -320,7 +341,8 @@ export default function SettingsSpeed() {
                     </Label>
                     <Select
                       value={
-                        (getValue('scheduler_days') as number)?.toString() || '0'
+                        (getValue('scheduler_days') as number)?.toString() ||
+                        '0'
                       }
                       onValueChange={(value) =>
                         setPendingChange('scheduler_days', parseInt(value))
@@ -359,7 +381,8 @@ export default function SettingsSpeed() {
           <CardHeader>
             <CardTitle>Rate Limits Settings</CardTitle>
             <CardDescription>
-              Configure how rate limits are applied to different types of connections.
+              Configure how rate limits are applied to different types of
+              connections.
             </CardDescription>
           </CardHeader>
           <CardContent className='space-y-4'>

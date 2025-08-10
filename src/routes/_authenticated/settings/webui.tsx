@@ -5,9 +5,5 @@ export const Route = createFileRoute('/_authenticated/settings/webui')({
 });
 
 function WebUISettingsPage() {
-  return (
-    <h2 >
-      Web UI settings
-    </h2>
-  );
+  return <h2>Web UI settings</h2>;
 }

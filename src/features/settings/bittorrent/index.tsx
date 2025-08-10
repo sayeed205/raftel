@@ -68,7 +68,9 @@ export default function SettingsBitTorrent() {
                 <Checkbox
                   id='dht'
                   checked={(getValue('dht') as boolean) || false}
-                  onCheckedChange={(checked) => setPendingChange('dht', checked)}
+                  onCheckedChange={(checked) =>
+                    setPendingChange('dht', checked)
+                  }
                 />
                 <Label htmlFor='dht'>
                   Enable DHT (decentralized network) to find more peers
@@ -79,7 +81,9 @@ export default function SettingsBitTorrent() {
                 <Checkbox
                   id='pex'
                   checked={(getValue('pex') as boolean) || false}
-                  onCheckedChange={(checked) => setPendingChange('pex', checked)}
+                  onCheckedChange={(checked) =>
+                    setPendingChange('pex', checked)
+                  }
                 />
                 <Label htmlFor='pex'>
                   Enable Peer Exchange (PeX) to find more peers
@@ -90,7 +94,9 @@ export default function SettingsBitTorrent() {
                 <Checkbox
                   id='lsd'
                   checked={(getValue('lsd') as boolean) || false}
-                  onCheckedChange={(checked) => setPendingChange('lsd', checked)}
+                  onCheckedChange={(checked) =>
+                    setPendingChange('lsd', checked)
+                  }
                 />
                 <Label htmlFor='lsd'>
                   Enable Local Peer Discovery to find more peers
@@ -140,7 +146,6 @@ export default function SettingsBitTorrent() {
           </CardContent>
         </Card>
 
-
         {/* Torrent Queueing */}
         <Card>
           <CardHeader>
@@ -170,7 +175,9 @@ export default function SettingsBitTorrent() {
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='max_active_uploads'>Maximum active uploads</Label>
+                <Label htmlFor='max_active_uploads'>
+                  Maximum active uploads
+                </Label>
                 <Input
                   id='max_active_uploads'
                   type='number'
@@ -211,7 +218,9 @@ export default function SettingsBitTorrent() {
                   id='max_active_checking_torrents'
                   type='number'
                   min='0'
-                  value={(getValue('max_active_checking_torrents') as number) || 1}
+                  value={
+                    (getValue('max_active_checking_torrents') as number) || 1
+                  }
                   onChange={(e) =>
                     setPendingChange(
                       'max_active_checking_torrents',
@@ -301,7 +310,9 @@ export default function SettingsBitTorrent() {
                           type='number'
                           min='0'
                           value={
-                            (getValue('slow_torrent_inactive_timer') as number) || 60
+                            (getValue(
+                              'slow_torrent_inactive_timer',
+                            ) as number) || 60
                           }
                           onChange={(e) =>
                             setPendingChange(
@@ -461,7 +472,9 @@ export default function SettingsBitTorrent() {
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='add_trackers_enabled'
-                  checked={(getValue('add_trackers_enabled') as boolean) || false}
+                  checked={
+                    (getValue('add_trackers_enabled') as boolean) || false
+                  }
                   onCheckedChange={(checked) =>
                     setPendingChange('add_trackers_enabled', checked)
                   }
@@ -480,7 +493,7 @@ export default function SettingsBitTorrent() {
                       setPendingChange('add_trackers', e.target.value)
                     }
                     placeholder='Enter one tracker URL per line'
-                    className='w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50'
                     rows={4}
                   />
                   <p className='text-muted-foreground text-sm'>
@@ -533,7 +546,6 @@ export default function SettingsBitTorrent() {
             </div>
           </CardContent>
         </Card>
-
       </div>
     </ContentSection>
   );
