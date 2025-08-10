@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -84,6 +84,18 @@ export default function Login() {
             Sign in to access the web interface
           </p>
         </div>
+
+        {(import.meta.env.MODE === 'demo' ||
+          (import.meta.env.DEV &&
+            import.meta.env.VITE_USE_MOCK_PROVIDER === 'true')) && (
+          <Alert variant='destructive'>
+            <AlertTitle>Demo Mode</AlertTitle>
+            <AlertDescription>
+              This is a demo version using mock data. It shows how the interface
+              will look, but is not connected to a real qBittorrent instance.
+            </AlertDescription>
+          </Alert>
+        )}
 
         <Card>
           <CardHeader>
