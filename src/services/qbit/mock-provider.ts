@@ -2,33 +2,6 @@ import { faker } from '@faker-js/faker/locale/en';
 
 import type IProvider from '@/services/qbit/i-provider';
 import type {
-  RawTorrent,
-  Torrent,
-  TorrentFile,
-  TorrentProperties,
-  TorrentTracker,
-} from '@/types/qbit/torrent';
-import type {
-  BuildInfo,
-  Cookie,
-  SSLParameters,
-  TorrentCreatorParams,
-  TorrentCreatorTask,
-} from '@/types/statistics';
-import type {
-  AddTorrentPayload,
-  AppPreferencesPayload,
-  CreateFeedPayload,
-  GetTorrentPayload,
-  LoginPayload,
-} from '@/types/qbit/payloads.ts';
-import type { Log, PeerLog } from '@/types/logs.ts';
-import type {
-  MainDataResponse,
-  SearchResultsResponse,
-  TorrentPeersResponse,
-} from '@/types/qbit/responses.ts';
-import type {
   Category,
   DirectoryContentMode,
   Feed,
@@ -54,33 +27,116 @@ import {
   TorrentFormat,
   TorrentOperatingMode,
 } from '@/types/api';
-import { QBIT_MAX_ETA } from '@/lib/helpers';
+import type { Log, PeerLog } from '@/types/logs.ts';
 import { TorrentState } from '@/types/qbit/constants';
+import { QBIT_MAX_ETA } from '@/lib/helpers';
+import type {
+  AddTorrentPayload,
+  AppPreferencesPayload,
+  CreateFeedPayload,
+  GetTorrentPayload,
+  LoginPayload,
+} from '@/types/qbit/payloads.ts';
+import type {
+  MainDataResponse,
+  SearchResultsResponse,
+  TorrentPeersResponse,
+} from '@/types/qbit/responses.ts';
+import type {
+  RawTorrent,
+  Torrent,
+  TorrentFile,
+  TorrentProperties,
+  TorrentTracker,
+} from '@/types/qbit/torrent';
+import type {
+  BuildInfo,
+  Cookie,
+  SSLParameters,
+  TorrentCreatorParams,
+  TorrentCreatorTask,
+} from '@/types/statistics';
 
 export default class MockProvider implements IProvider {
   private static instance: MockProvider;
   private static hashes: Array<string> = Array.from({
-    length: Number.parseInt(import.meta.env.VITE_FAKE_TORRENTS_COUNT ?? 15),
+    length: Number.parseInt(import.meta.env.VITE_FAKE_TORRENTS_COUNT ?? 50),
   })
     .fill('')
     .map((_, i) => (i + 1).toString(16).padStart(40, '0'));
   private readonly categories: Record<string, Category> = {
-    Movie: { name: 'Movie', savePath: faker.system.directoryPath() },
-    TV: { name: 'TV', savePath: faker.system.directoryPath() },
-    Other: { name: 'Other', savePath: faker.system.directoryPath() },
-    ISO: { name: 'ISO', savePath: faker.system.directoryPath() },
-    Music: { name: 'Music', savePath: faker.system.directoryPath() },
+    Movie: { name: 'Movie', savePath: '/downloads/movies' },
+    TV: { name: 'TV', savePath: '/downloads/tv' },
+    Other: { name: 'Other', savePath: '/downloads/other' },
+    ISO: { name: 'ISO', savePath: '/downloads/iso' },
+    Music: { name: 'Music', savePath: '/downloads/music' },
   };
   private readonly tags: Array<string> = ['pending', 'sorted', 'pending_sort'];
-  private readonly trackers: Record<string, Array<string>> = faker.helpers
-    .multiple(() => faker.internet.url(), { count: 5 })
-    .reduce(
-      (obj, url) => {
-        obj[url] = faker.helpers.arrayElements(MockProvider.hashes);
-        return obj;
-      },
-      {} as Record<string, Array<string>>,
-    );
+  private readonly trackers: Record<string, Array<string>> = {
+    'http://tracker1.example.com/announce': MockProvider.hashes,
+    'http://tracker2.example.com/announce': MockProvider.hashes,
+    'http://tracker3.example.com/announce': MockProvider.hashes,
+    'http://tracker4.example.com/announce': MockProvider.hashes,
+    'http://tracker5.example.com/announce': MockProvider.hashes,
+  };
+  private readonly staticTorrentTemplate: Omit<RawTorrent, 'hash'> = {
+    added_on: 1672531200, // 2023-01-01
+    amount_left: 1073741824, // 1GB
+    auto_tmm: true,
+    availability: 2.5,
+    category: 'Movie',
+    comment: 'Static torrent for testing',
+    completed: 4294967296, // 4GB
+    completion_on: 1672617600, // 2023-01-02
+    content_path: '/downloads/movie.mp4',
+    dl_limit: 0,
+    dlspeed: 0,
+    download_path: '/downloads',
+    downloaded: 4294967296, // 4GB
+    downloaded_session: 0,
+    eta: QBIT_MAX_ETA,
+    f_l_piece_prio: false,
+    force_start: false,
+    has_metadata: true,
+    inactive_seeding_time_limit: -2,
+    infohash_v1: '',
+    infohash_v2: '',
+    last_activity: 1672704000, // 2023-01-03
+    magnet_uri: 'magnet:?xt=urn:btih:0000000000000000000000000000000000000000',
+    max_inactive_seeding_time: -1,
+    max_ratio: -1,
+    max_seeding_time: -1,
+    name: 'Static Test Torrent',
+    num_complete: 150,
+    num_incomplete: 25,
+    num_leechs: 5,
+    num_seeds: 30,
+    popularity: -1,
+    priority: 1,
+    private: false,
+    progress: 0.8,
+    ratio: 0.5,
+    ratio_limit: -2,
+    reannounce: 3600,
+    root_path: '/downloads/movie.mp4',
+    save_path: '/downloads',
+    seeding_time: 3600,
+    seeding_time_limit: -2,
+    seen_complete: 1672617600, // 2023-01-02
+    seq_dl: false,
+    size: 5368709120, // 5GB
+    state: TorrentState.DOWNLOADING,
+    super_seeding: false,
+    tags: 'pending',
+    time_active: 7200,
+    total_size: 5368709120, // 5GB
+    tracker: 'http://tracker1.example.com/announce',
+    trackers_count: 5,
+    up_limit: 0,
+    uploaded: 2147483648, // 2GB
+    uploaded_session: 0,
+    upspeed: 0,
+  };
 
   private constructor() {}
 
@@ -1684,7 +1740,7 @@ export default class MockProvider implements IProvider {
         dl_speed: 0,
         dl_speed_avg: 0,
         download_path: '',
-        eta: 8640000,
+        eta: QBIT_MAX_ETA,
         hash,
         has_metadata: true,
         infohash_v1: '9ecd4676fd0f0474151a4b74a5958f42639cebdf',
@@ -1928,90 +1984,40 @@ export default class MockProvider implements IProvider {
   }
 
   private generateMockedTorrent(hash: string): RawTorrent {
-    const added_on = faker.date.past();
-    const last_activity = faker.date.between({
-      from: added_on,
-      to: Date.now(),
-    });
-    const name = faker.system.fileName();
-    const num_complete = faker.number.int({ min: 0, max: 250 });
-    const num_incomplete = faker.number.int({ min: 0, max: 250 });
-    const total_size = faker.number.int({
-      min: 1_000_000,
-      max: 1_000_000_000_000,
-    }); // [1 Mo; 1 To]
-    const completed = faker.number.int({ min: 0, max: total_size });
-    const tracker =
-      Math.random() > 0.5
-        ? faker.helpers.arrayElement(Object.keys(this.trackers))
-        : '';
+    // Create a copy of the static template
+    const torrent = { ...this.staticTorrentTemplate };
 
-    return {
-      added_on: added_on.getTime() / 1000,
-      amount_left: faker.number.int({ min: 0, max: total_size }),
-      auto_tmm: faker.datatype.boolean(),
-      availability: faker.number.float({ min: 0, max: 100, multipleOf: 0.01 }),
-      category: faker.helpers.arrayElement([
-        '',
-        ...Object.keys(this.categories),
-      ]),
-      comment: '',
-      completed,
-      completion_on:
-        faker.date.between({ from: added_on, to: Date.now() }).getTime() / 1000,
-      content_path: faker.system.filePath(),
-      dl_limit: faker.number.float({ min: 0, max: 1, multipleOf: 0.01 }),
-      dlspeed: faker.number.int({ min: 0, max: 5_000_000 }),
-      download_path: faker.system.directoryPath(),
-      downloaded: completed,
-      downloaded_session: completed,
-      eta: faker.number.int({ min: 0, max: QBIT_MAX_ETA }),
-      f_l_piece_prio: faker.datatype.boolean(), // [0; 5 Mo/s]
-      force_start: faker.datatype.boolean(),
-      has_metadata: true,
-      inactive_seeding_time_limit: -2,
-      infohash_v1: hash,
-      infohash_v2: '',
-      last_activity: last_activity.getTime() / 1000,
-      magnet_uri: `magnet:?xt=urn:btih:${hash}&dn=${name}&tr=${tracker}`,
-      max_inactive_seeding_time: -1,
-      max_ratio: -1,
-      max_seeding_time: -1,
-      name,
-      num_complete,
-      num_incomplete,
-      num_leechs: faker.number.int({ min: 0, max: num_incomplete }),
-      num_seeds: faker.number.int({ min: 0, max: num_complete }),
-      popularity: -1,
-      priority: 1,
-      private: false,
-      progress: completed / total_size,
-      ratio: 0,
-      ratio_limit: -2,
-      reannounce: 3600,
-      root_path: faker.system.filePath(),
-      save_path: faker.system.directoryPath(),
-      seeding_time: 0,
-      seeding_time_limit: -2,
-      seen_complete:
-        faker.date.between({ from: added_on, to: last_activity }).getTime() /
-        1000,
-      seq_dl: faker.datatype.boolean(),
-      size: total_size,
-      state: faker.helpers.objectValue(TorrentState),
-      super_seeding: faker.datatype.boolean(),
-      tags: faker.helpers
-        .arrayElements(this.tags, { min: 0, max: this.tags.length })
-        .join(', '),
-      time_active: 0,
-      total_size,
-      tracker,
-      trackers_count: 1,
-      up_limit: 0,
-      uploaded: 0,
-      uploaded_session: 0,
-      upspeed: 0,
-    };
+    // Set the hash
+    torrent.infohash_v1 = hash;
+
+    // Update dynamic properties that should change on each poll (speeds, etc.)
+    torrent.dlspeed = Math.floor(Math.random() * 5000000); // 0-5 MB/s
+    torrent.upspeed = Math.floor(Math.random() * 1000000); // 0-1 MB/s
+    torrent.downloaded =
+      torrent.completed + Math.floor(Math.random() * 100000000); // Add some variance
+    torrent.uploaded = Math.floor(Math.random() * 3000000000); // 0-3 GB
+
+    // Randomly change state occasionally to simulate real torrent behavior
+    const states = [
+      TorrentState.DOWNLOADING,
+      TorrentState.UPLOADING,
+      TorrentState.PAUSED_DL,
+      TorrentState.PAUSED_UP,
+      TorrentState.QUEUED_DL,
+      TorrentState.QUEUED_UP,
+    ];
+    torrent.state = states[Math.floor(Math.random() * states.length)];
+
+    // Update progress slightly to show activity
+    torrent.progress = 0.7 + Math.random() * 0.25; // 70-95%
+    torrent.amount_left = Math.floor(
+      torrent.total_size * (1 - torrent.progress),
+    );
+
+    // Update magnet URI with the current hash
+    torrent.magnet_uri = `magnet:?xt=urn:btih:${hash}&dn=${encodeURIComponent(torrent.name)}&tr=${encodeURIComponent(torrent.tracker)}`;
+
+    return torrent as RawTorrent;
   }
 
   /**
