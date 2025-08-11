@@ -10,6 +10,7 @@ import { SettingsNavigation } from './settings-navigation';
 import { SettingsResetDialog } from './settings-reset-dialog';
 import { SettingsSearch } from './settings-search';
 import { SettingsValidationDisplay } from './settings-validation-display';
+import { FloatingSaveWidget } from './floating-save-widget';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -145,7 +146,7 @@ export function SettingsLayout({ children, currentSection }: SettingsLayoutProps
   // Get current section info
   const getCurrentSection = () => {
     for (const category of settingsCategories) {
-      const section = category.sections.find((s) => s.id === currentSection);
+      const section = category.sections.find((s: any) => s.id === currentSection);
       if (section) {
         return { section, category };
       }
@@ -325,7 +326,7 @@ export function SettingsLayout({ children, currentSection }: SettingsLayoutProps
                             </CardHeader>
                             <CardContent>
                               <div className='space-y-1'>
-                                {category.sections.map((section) => (
+                                {category.sections.map((section: any) => (
                                   <Button
                                     key={section.id}
                                     variant='ghost'
@@ -387,6 +388,8 @@ export function SettingsLayout({ children, currentSection }: SettingsLayoutProps
         preferences={preferences}
         webUISettings={webUISettings}
       />
+      
+      <FloatingSaveWidget />
     </>
   );
 }

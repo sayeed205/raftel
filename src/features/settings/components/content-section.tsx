@@ -1,3 +1,5 @@
+import { FloatingSaveWidget } from './floating-save-widget';
+
 interface ContentSectionProps {
   title: string;
   desc: string;
@@ -17,6 +19,7 @@ export default function ContentSection({ title, desc, children }: ContentSection
           <div className='mb-10' />
         </div>
       </div>
+      <FloatingSaveWidget />
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import { Download, Gauge, Globe, Monitor, Settings, Share2 } from 'lucide-react';
 
-import type { SettingsCategory } from '@/features/settings';
 import {
   BitTorrentSettings,
   ConnectionSettings,
@@ -9,6 +8,22 @@ import {
 } from '@/features/settings';
 import SettingsWebUI from '@/features/settings/webui';
 import SettingsAdvanced from '@/features/settings/advanced';
+
+interface SettingsSection {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  component: React.ComponentType;
+  keywords: string[];
+}
+
+interface SettingsCategory {
+  id: string;
+  title: string;
+  description: string;
+  sections: SettingsSection[];
+}
 
 export const settingsCategories: Array<SettingsCategory> = [
   {
@@ -288,16 +303,32 @@ export const settingsCategories: Array<SettingsCategory> = [
   },
 ];
 
+interface SettingsSection {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  component: React.ComponentType;
+  keywords: string[];
+}
+
+interface SettingsCategory {
+  id: string;
+  title: string;
+  description: string;
+  sections: SettingsSection[];
+}
+
 // Utility function to search settings
 export function searchSettings(query: string): Array<{
-  section: any;
-  category: any;
+  section: SettingsSection;
+  category: SettingsCategory;
   matchType: 'title' | 'description' | 'keyword';
   matchText: string;
 }> {
   const results: Array<{
-    section: any;
-    category: any;
+    section: SettingsSection;
+    category: SettingsCategory;
     matchType: 'title' | 'description' | 'keyword';
     matchText: string;
   }> = [];
@@ -305,8 +336,8 @@ export function searchSettings(query: string): Array<{
   const searchTerm = query.toLowerCase().trim();
   if (!searchTerm) return results;
 
-  settingsCategories.forEach((category) => {
-    category.sections.forEach((section) => {
+  settingsCategories.forEach((category: SettingsCategory) => {
+    category.sections.forEach((section: SettingsSection) => {
       // Check title match
       if (section.title.toLowerCase().includes(searchTerm)) {
         results.push({
@@ -329,7 +360,7 @@ export function searchSettings(query: string): Array<{
 
       // Check keyword match
       else {
-        const matchingKeyword = section.keywords.find((keyword) =>
+        const matchingKeyword = section.keywords.find((keyword: string) =>
           keyword.toLowerCase().includes(searchTerm),
         );
         if (matchingKeyword) {
