@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { useInterfaceShortcuts } from './use-interface-shortcuts';
-import type { KeyboardShortcut } from './use-keyboard-shortcuts';
 import { useTorrentActions } from './use-torrent-actions';
 import { useTorrentNavigation } from './use-torrent-navigation';
 import { useTorrentSelection } from './use-torrent-selection';
+import type { KeyboardShortcut } from './use-keyboard-shortcuts';
 
 interface UseTorrentKeyboardShortcutsOptions {
   enabled?: boolean;
@@ -28,7 +28,7 @@ export function useTorrentKeyboardShortcuts(
   const interfaceShortcuts = useInterfaceShortcuts({ enabled, onFocusSearch });
 
   // Combine all shortcuts for help dialog
-  const allShortcuts: KeyboardShortcut[] = useMemo(() => {
+  const allShortcuts: Array<KeyboardShortcut> = useMemo(() => {
     return [
       ...navigation.shortcuts,
       ...actions.shortcuts,

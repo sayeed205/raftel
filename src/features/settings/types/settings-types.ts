@@ -6,14 +6,14 @@ export interface SettingsSection {
   description: string;
   icon: LucideIcon;
   component: React.ComponentType;
-  keywords: string[];
+  keywords: Array<string>;
 }
 
 export interface SettingsCategory {
   id: string;
   title: string;
   description: string;
-  sections: SettingsSection[];
+  sections: Array<SettingsSection>;
 }
 
 export interface SettingsSearchResult {

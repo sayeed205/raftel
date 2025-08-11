@@ -44,11 +44,10 @@ import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import {
   useLogActions,
-  useLogs,
   useLogSettings,
+  useLogs,
   usePeerLogs,
 } from '@/stores/log-store';
-import type { LogType } from '@/types/qbit/constants';
 import { LogType as LogTypeEnum } from '@/types/qbit/constants';
 
 interface LogControlsProps {
@@ -277,7 +276,7 @@ export function LogControls({ showPeerControls = true }: LogControlsProps) {
           <Label className='text-sm font-medium'>Log Level Filter</Label>
           <Select
             value={logLevel.toString()}
-            onValueChange={(value) => setLogLevel(parseInt(value) as LogType)}
+            onValueChange={(value) => setLogLevel(parseInt(value))}
           >
             <SelectTrigger>
               <SelectValue>

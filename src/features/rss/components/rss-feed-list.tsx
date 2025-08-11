@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
+import { RSSFeedDialog } from './rss-feed-dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -27,7 +28,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useConfirmationDialog } from '@/hooks/use-confirmation-dialog';
 import { useRSSStore } from '@/stores/rss-store';
 
-import { RSSFeedDialog } from './rss-feed-dialog';
 
 export function RSSFeedList() {
   const {

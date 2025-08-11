@@ -1,11 +1,12 @@
-import { useSidebar } from '@/components/ui/sidebar';
 import { useNavigate } from '@tanstack/react-router';
 import { useCallback, useMemo } from 'react';
 import {
+  
   createPlatformShortcut,
-  useKeyboardShortcuts,
-  type KeyboardShortcut,
+  useKeyboardShortcuts
 } from './use-keyboard-shortcuts';
+import type {KeyboardShortcut} from './use-keyboard-shortcuts';
+import { useSidebar } from '@/components/ui/sidebar';
 
 interface UseInterfaceShortcutsOptions {
   enabled?: boolean;
@@ -50,7 +51,7 @@ export function useInterfaceShortcuts(
   }, [onFocusSearch]);
 
   // Define interface shortcuts
-  const interfaceShortcuts: KeyboardShortcut[] = useMemo(
+  const interfaceShortcuts: Array<KeyboardShortcut> = useMemo(
     () => [
       createPlatformShortcut(
         'b',

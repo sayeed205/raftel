@@ -1,6 +1,15 @@
 import { Link, useLocation } from '@tanstack/react-router';
 import { ChevronRight } from 'lucide-react';
-import { Badge } from '../ui/badge';
+import type { ReactNode } from 'react';
+
+
+import type { NavCollapsible, NavGroup, NavItem, NavLink } from './types';
+import { Badge } from '@/components/ui/badge';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,9 +17,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
-import type { NavCollapsible, NavGroup, NavItem, NavLink } from './types';
-import type { ReactNode } from 'react';
+} from '@/components/ui/dropdown-menu';
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -22,11 +29,6 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
 
 export function NavGroup({ title, items }: NavGroup) {
   const { state, isMobile } = useSidebar();
@@ -176,6 +178,6 @@ function checkIsActive(href: string, item: NavItem, mainNav = false) {
     (mainNav &&
       href.split('/')[1] !== '' &&
       href.split('/')[1] === item.url?.split('/')[1]) ||
-    href.includes(item.url!)
+    href.split('/')[1] === item.url?.split('/')[1]
   );
 }

@@ -1,20 +1,20 @@
 'use client';
 
+import { Plus, X } from 'lucide-react';
+import { useState } from 'react';
+import { AddTorrentModal } from '../add-torrent-modal';
+import { DataTableFacetedFilter } from './data-table-faceted-filter';
+import { DataTableViewOptions } from './data-table-view-options';
 import type { Table } from '@tanstack/react-table';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { getStateText } from '@/lib/utils';
 import { useTorrentStore } from '@/stores/torrent-store';
-import { Plus, X } from 'lucide-react';
-import { useState } from 'react';
-import { AddTorrentModal } from '../add-torrent-modal';
-import { DataTableFacetedFilter } from './data-table-faceted-filter';
-import { DataTableViewOptions } from './data-table-view-options';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
-  data: TData[];
+  data: Array<TData>;
 }
 
 export function DataTableToolbar<TData>({
@@ -31,7 +31,7 @@ export function DataTableToolbar<TData>({
       acc.push(state);
     }
     return acc;
-  }, [] as string[]);
+  }, [] as Array<string>);
 
   const formattedStatuses = statuses.map((status) => ({
     id: status,

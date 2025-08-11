@@ -13,23 +13,7 @@ import type {
   SearchPlugin,
   SearchStatus,
 } from '@/types/api';
-import {
-  ConnectionStatus,
-  ContentLayout,
-  FilePriority,
-  LogType,
-  PieceState,
-  ProxyType,
-  ResumeDataStorageType,
-  StopCondition,
-  TorrentContentRemoveOption,
-  TorrentCreatorTaskStatus,
-  TorrentFormat,
-  TorrentOperatingMode,
-} from '@/types/api';
 import type { Log, PeerLog } from '@/types/logs.ts';
-import { TorrentState } from '@/types/qbit/constants';
-import { QBIT_MAX_ETA } from '@/lib/helpers';
 import type {
   AddTorrentPayload,
   AppPreferencesPayload,
@@ -56,6 +40,22 @@ import type {
   TorrentCreatorParams,
   TorrentCreatorTask,
 } from '@/types/statistics';
+import { QBIT_MAX_ETA } from '@/lib/helpers';
+import { TorrentState } from '@/types/qbit/constants';
+import {
+  ConnectionStatus,
+  ContentLayout,
+  FilePriority,
+  LogType,
+  PieceState,
+  ProxyType,
+  ResumeDataStorageType,
+  StopCondition,
+  TorrentContentRemoveOption,
+  TorrentCreatorTaskStatus,
+  TorrentFormat,
+  TorrentOperatingMode,
+} from '@/types/api';
 
 export default class MockProvider implements IProvider {
   private static instance: MockProvider;

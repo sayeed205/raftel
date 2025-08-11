@@ -108,7 +108,7 @@ export function RSSArticleList() {
       async () => {
         try {
           // Group articles by feed
-          const articlesByFeed = new Map<string, string[]>();
+          const articlesByFeed = new Map<string, Array<string>>();
 
           selectedArticles.forEach((articleId) => {
             const article = articles.find((a) => a.id === articleId);

@@ -1,10 +1,11 @@
-import { useTorrentStore } from '@/stores/torrent-store';
 import { useCallback, useMemo } from 'react';
 import {
+  
   createPlatformShortcut,
-  useKeyboardShortcuts,
-  type KeyboardShortcut,
+  useKeyboardShortcuts
 } from './use-keyboard-shortcuts';
+import type {KeyboardShortcut} from './use-keyboard-shortcuts';
+import { useTorrentStore } from '@/stores/torrent-store';
 
 interface UseTorrentSelectionOptions {
   enabled?: boolean;
@@ -149,7 +150,7 @@ export function useTorrentSelection(options: UseTorrentSelectionOptions = {}) {
   }, []);
 
   // Define selection and bulk action shortcuts
-  const selectionShortcuts: KeyboardShortcut[] = useMemo(
+  const selectionShortcuts: Array<KeyboardShortcut> = useMemo(
     () => [
       // Basic Actions
       createPlatformShortcut(

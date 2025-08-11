@@ -1,7 +1,7 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { LogControls } from './components/log-controls';
 import { LogViewer } from './components/log-viewer';
 import { PeerLogViewer } from './components/peer-log-viewer';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export function LogsPage() {
   return (

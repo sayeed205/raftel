@@ -22,6 +22,7 @@ import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authen
 import { Route as AuthenticatedTorrentsHashRouteImport } from './routes/_authenticated/torrents/$hash'
 import { Route as AuthenticatedSettingsWebuiRouteImport } from './routes/_authenticated/settings/webui'
 import { Route as AuthenticatedSettingsSpeedRouteImport } from './routes/_authenticated/settings/speed'
+import { Route as AuthenticatedSettingsRssRouteImport } from './routes/_authenticated/settings/rss'
 import { Route as AuthenticatedSettingsNotificationsRouteImport } from './routes/_authenticated/settings/notifications'
 import { Route as AuthenticatedSettingsDownloadsRouteImport } from './routes/_authenticated/settings/downloads'
 import { Route as AuthenticatedSettingsConnectionRouteImport } from './routes/_authenticated/settings/connection'
@@ -99,6 +100,12 @@ const AuthenticatedSettingsSpeedRoute =
     path: '/speed',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
+const AuthenticatedSettingsRssRoute =
+  AuthenticatedSettingsRssRouteImport.update({
+    id: '/rss',
+    path: '/rss',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
+  } as any)
 const AuthenticatedSettingsNotificationsRoute =
   AuthenticatedSettingsNotificationsRouteImport.update({
     id: '/notifications',
@@ -150,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/settings/connection': typeof AuthenticatedSettingsConnectionRoute
   '/settings/downloads': typeof AuthenticatedSettingsDownloadsRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
+  '/settings/rss': typeof AuthenticatedSettingsRssRoute
   '/settings/speed': typeof AuthenticatedSettingsSpeedRoute
   '/settings/webui': typeof AuthenticatedSettingsWebuiRoute
   '/torrents/$hash': typeof AuthenticatedTorrentsHashRoute
@@ -169,6 +177,7 @@ export interface FileRoutesByTo {
   '/settings/connection': typeof AuthenticatedSettingsConnectionRoute
   '/settings/downloads': typeof AuthenticatedSettingsDownloadsRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
+  '/settings/rss': typeof AuthenticatedSettingsRssRoute
   '/settings/speed': typeof AuthenticatedSettingsSpeedRoute
   '/settings/webui': typeof AuthenticatedSettingsWebuiRoute
   '/torrents/$hash': typeof AuthenticatedTorrentsHashRoute
@@ -191,6 +200,7 @@ export interface FileRoutesById {
   '/_authenticated/settings/connection': typeof AuthenticatedSettingsConnectionRoute
   '/_authenticated/settings/downloads': typeof AuthenticatedSettingsDownloadsRoute
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
+  '/_authenticated/settings/rss': typeof AuthenticatedSettingsRssRoute
   '/_authenticated/settings/speed': typeof AuthenticatedSettingsSpeedRoute
   '/_authenticated/settings/webui': typeof AuthenticatedSettingsWebuiRoute
   '/_authenticated/torrents/$hash': typeof AuthenticatedTorrentsHashRoute
@@ -213,6 +223,7 @@ export interface FileRouteTypes {
     | '/settings/connection'
     | '/settings/downloads'
     | '/settings/notifications'
+    | '/settings/rss'
     | '/settings/speed'
     | '/settings/webui'
     | '/torrents/$hash'
@@ -232,6 +243,7 @@ export interface FileRouteTypes {
     | '/settings/connection'
     | '/settings/downloads'
     | '/settings/notifications'
+    | '/settings/rss'
     | '/settings/speed'
     | '/settings/webui'
     | '/torrents/$hash'
@@ -253,6 +265,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/connection'
     | '/_authenticated/settings/downloads'
     | '/_authenticated/settings/notifications'
+    | '/_authenticated/settings/rss'
     | '/_authenticated/settings/speed'
     | '/_authenticated/settings/webui'
     | '/_authenticated/torrents/$hash'
@@ -359,6 +372,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsSpeedRouteImport
       parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
+    '/_authenticated/settings/rss': {
+      id: '/_authenticated/settings/rss'
+      path: '/rss'
+      fullPath: '/settings/rss'
+      preLoaderRoute: typeof AuthenticatedSettingsRssRouteImport
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
+    }
     '/_authenticated/settings/notifications': {
       id: '/_authenticated/settings/notifications'
       path: '/notifications'
@@ -411,6 +431,7 @@ interface AuthenticatedSettingsRouteRouteChildren {
   AuthenticatedSettingsConnectionRoute: typeof AuthenticatedSettingsConnectionRoute
   AuthenticatedSettingsDownloadsRoute: typeof AuthenticatedSettingsDownloadsRoute
   AuthenticatedSettingsNotificationsRoute: typeof AuthenticatedSettingsNotificationsRoute
+  AuthenticatedSettingsRssRoute: typeof AuthenticatedSettingsRssRoute
   AuthenticatedSettingsSpeedRoute: typeof AuthenticatedSettingsSpeedRoute
   AuthenticatedSettingsWebuiRoute: typeof AuthenticatedSettingsWebuiRoute
   AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
@@ -425,6 +446,7 @@ const AuthenticatedSettingsRouteRouteChildren: AuthenticatedSettingsRouteRouteCh
     AuthenticatedSettingsDownloadsRoute: AuthenticatedSettingsDownloadsRoute,
     AuthenticatedSettingsNotificationsRoute:
       AuthenticatedSettingsNotificationsRoute,
+    AuthenticatedSettingsRssRoute: AuthenticatedSettingsRssRoute,
     AuthenticatedSettingsSpeedRoute: AuthenticatedSettingsSpeedRoute,
     AuthenticatedSettingsWebuiRoute: AuthenticatedSettingsWebuiRoute,
     AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,

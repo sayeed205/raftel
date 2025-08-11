@@ -1,4 +1,3 @@
-import type { SidebarData } from '@/components/layout/types';
 import {
   Download,
   FileText,
@@ -7,6 +6,7 @@ import {
   Search,
   Settings,
 } from 'lucide-react';
+import type { SidebarData } from '@/components/layout/types';
 
 export const sidebarData: SidebarData = {
   user: {

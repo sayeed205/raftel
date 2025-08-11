@@ -1,6 +1,8 @@
 import { AlertCircle, CheckCircle, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 
+import type { WebUISettings } from '@/stores/settings-store';
+import type { QBittorrentPreferences } from '@/types/api';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -18,8 +20,6 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 
-import type { WebUISettings } from '@/stores/settings-store';
-import type { QBittorrentPreferences } from '@/types/api';
 
 interface ImportData {
   preferences?: Partial<QBittorrentPreferences>;
@@ -48,7 +48,7 @@ interface ImportOptions {
   importPreferences: boolean;
   importWebUISettings: boolean;
   overwriteConflicts: boolean;
-  selectedConflicts: string[];
+  selectedConflicts: Array<string>;
 }
 
 export function SettingsImportDialog({
@@ -60,7 +60,7 @@ export function SettingsImportDialog({
 }: SettingsImportDialogProps) {
   const [file, setFile] = useState<File | null>(null);
   const [importData, setImportData] = useState<ImportData | null>(null);
-  const [conflicts, setConflicts] = useState<ConflictItem[]>([]);
+  const [conflicts, setConflicts] = useState<Array<ConflictItem>>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState<'select' | 'review' | 'conflicts'>('select');
@@ -135,8 +135,8 @@ export function SettingsImportDialog({
   };
 
   // Detect conflicts between current and import data
-  const detectConflicts = (data: ImportData): ConflictItem[] => {
-    const conflicts: ConflictItem[] = [];
+  const detectConflicts = (data: ImportData): Array<ConflictItem> => {
+    const conflicts: Array<ConflictItem> = [];
 
     // Check preferences conflicts
     if (data.preferences && currentPreferences) {

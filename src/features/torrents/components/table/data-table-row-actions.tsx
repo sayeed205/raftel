@@ -1,8 +1,12 @@
 'use client';
 
-import { type Row } from '@tanstack/react-table';
 import * as React from 'react';
+import { useNavigate } from '@tanstack/react-router';
+import { Copy, Eye, MoreHorizontal, Trash2 } from 'lucide-react';
+import DeleteDialog from './delete-modal';
+import type {Row} from '@tanstack/react-table';
 
+import type { TorrentInfo } from '@/types/api';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -14,10 +18,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
-import type { TorrentInfo } from '@/types/api';
-import { useNavigate } from '@tanstack/react-router';
-import { Copy, Eye, MoreHorizontal, Trash2 } from 'lucide-react';
-import DeleteDialog from './delete-modal';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;

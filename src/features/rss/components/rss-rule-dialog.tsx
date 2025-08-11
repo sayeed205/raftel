@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import type { FeedRule } from '@/types/qbit/rss';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -33,7 +34,6 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useRSSStore } from '@/stores/rss-store';
-import type { FeedRule } from '@/types/qbit/rss';
 
 const ruleSchema = z.object({
   name: z
@@ -46,7 +46,6 @@ const ruleSchema = z.object({
     .min(1, 'At least one feed must be selected'),
   mustContain: z.string().optional(),
   mustNotContain: z.string().optional(),
-  episodeFilter: z.string().optional(),
   useRegex: z.boolean(),
   smartFilter: z.boolean(),
   ignoreDays: z.number().min(0).max(365),
@@ -99,7 +98,6 @@ export function RSSRuleDialog({
       affectedFeeds: [],
       mustContain: '',
       mustNotContain: '',
-      episodeFilter: '',
       useRegex: false,
       smartFilter: false,
       ignoreDays: 0,
@@ -129,7 +127,6 @@ export function RSSRuleDialog({
           setValue('affectedFeeds', rule.affectedFeeds);
           setValue('mustContain', rule.mustContain || '');
           setValue('mustNotContain', rule.mustNotContain || '');
-          setValue('episodeFilter', rule.episodeFilter || '');
           setValue('useRegex', rule.useRegex);
           setValue('smartFilter', rule.smartFilter);
           setValue('ignoreDays', rule.ignoreDays);
@@ -183,7 +180,6 @@ export function RSSRuleDialog({
         affectedFeeds: data.affectedFeeds,
         mustContain: data.mustContain || '',
         mustNotContain: data.mustNotContain || '',
-        episodeFilter: data.episodeFilter || '',
         useRegex: data.useRegex,
         smartFilter: data.smartFilter,
         ignoreDays: data.ignoreDays,
@@ -380,16 +376,6 @@ export function RSSRuleDialog({
                       placeholder='Keywords that must not be present'
                       disabled={isSubmitting}
                       {...register('mustNotContain')}
-                    />
-                  </div>
-
-                  <div className='space-y-2'>
-                    <Label htmlFor='episodeFilter'>Episode Filter</Label>
-                    <Input
-                      id='episodeFilter'
-                      placeholder='e.g., 1x01-1x10'
-                      disabled={isSubmitting}
-                      {...register('episodeFilter')}
                     />
                   </div>
 

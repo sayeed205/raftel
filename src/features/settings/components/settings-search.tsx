@@ -24,7 +24,7 @@ interface SearchResult {
 
 interface SettingsSearchProps {
   query: string;
-  results: SearchResult[];
+  results: Array<SearchResult>;
   onSelect: (sectionId: string) => void;
   onClose: () => void;
 }

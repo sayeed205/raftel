@@ -1,22 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-  CommandShortcut,
-} from '@/components/ui/command';
-import {
-  formatShortcutKey,
-  getPlatform,
-  groupShortcutsByCategory,
-  type KeyboardShortcut,
-} from '@/hooks/use-keyboard-shortcuts';
 import {
   Command as CommandIcon,
   HelpCircle,
@@ -29,13 +12,31 @@ import {
   Settings,
 } from 'lucide-react';
 import * as React from 'react';
+import type {KeyboardShortcut} from '@/hooks/use-keyboard-shortcuts';
+import { Button } from '@/components/ui/button';
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from '@/components/ui/command';
+import {
+  
+  formatShortcutKey,
+  getPlatform,
+  groupShortcutsByCategory
+} from '@/hooks/use-keyboard-shortcuts';
 
 interface KeyboardShortcutsHelpProps {
-  shortcuts?: KeyboardShortcut[];
+  shortcuts?: Array<KeyboardShortcut>;
   trigger?: React.ReactNode;
 }
 
-const DEFAULT_SHORTCUTS: KeyboardShortcut[] = [
+const DEFAULT_SHORTCUTS: Array<KeyboardShortcut> = [
   // Basic Actions
   {
     key: 'a',
@@ -389,7 +390,7 @@ export function KeyboardShortcutsHeaderButton({
 export function KeyboardShortcutsCommandPalette({
   shortcuts = DEFAULT_SHORTCUTS,
 }: {
-  shortcuts?: KeyboardShortcut[];
+  shortcuts?: Array<KeyboardShortcut>;
 }) {
   const [open, setOpen] = React.useState(false);
 

@@ -1,10 +1,10 @@
-import { useConfirmationDialog } from '@/hooks/use-confirmation-dialog';
 import * as React from 'react';
 import {
   BulkActionConfirmationDialog,
   ConfirmationDialog,
   DeleteConfirmationDialog,
 } from './confirmation-dialog';
+import { useConfirmationDialog } from '@/hooks/use-confirmation-dialog';
 
 interface ConfirmationDialogProviderProps {
   children: React.ReactNode;

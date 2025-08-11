@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import type { TorrentInfo } from '@/types/api';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -10,8 +12,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useTorrentStore } from '@/stores/torrent-store';
-import type { TorrentInfo } from '@/types/api';
-import { useState } from 'react';
 
 type DeleteProps = {
   torrent: TorrentInfo;

@@ -1,12 +1,13 @@
-import { torrentToast } from '@/lib/utils/toast';
-import { useTorrentStore } from '@/stores/torrent-store';
 import { useNavigate } from '@tanstack/react-router';
 import { useCallback, useMemo } from 'react';
 import {
+  
   createPlatformShortcut,
-  type KeyboardShortcut,
-  useKeyboardShortcuts,
+  useKeyboardShortcuts
 } from './use-keyboard-shortcuts';
+import type {KeyboardShortcut} from './use-keyboard-shortcuts';
+import { useTorrentStore } from '@/stores/torrent-store';
+import { torrentToast } from '@/lib/utils/toast';
 
 interface UseTorrentActionsOptions {
   enabled?: boolean;
@@ -133,7 +134,7 @@ export function useTorrentActions(options: UseTorrentActionsOptions = {}) {
   }, [navigate]);
 
   // Define action shortcuts
-  const actionShortcuts: KeyboardShortcut[] = useMemo(
+  const actionShortcuts: Array<KeyboardShortcut> = useMemo(
     () => [
       // Basic Actions
       createPlatformShortcut(

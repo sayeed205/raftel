@@ -1,5 +1,5 @@
-import { useTorrentKeyboardShortcuts } from '@/hooks/use-torrent-keyboard-shortcuts';
 import { useCallback, useRef } from 'react';
+import { useTorrentKeyboardShortcuts } from '@/hooks/use-torrent-keyboard-shortcuts';
 
 interface UseTorrentsPageShortcutsOptions {
   onRefresh?: () => void;

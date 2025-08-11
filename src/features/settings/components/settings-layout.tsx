@@ -9,6 +9,16 @@ import {
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
+import {
+  searchSettings,
+  settingsCategories,
+} from '../utils/settings-categories';
+import { SettingsExportDialog } from './settings-export-dialog';
+import { SettingsImportDialog } from './settings-import-dialog';
+import { SettingsNavigation } from './settings-navigation';
+import { SettingsResetDialog } from './settings-reset-dialog';
+import { SettingsSearch } from './settings-search';
+import { SettingsValidationDisplay } from './settings-validation-display';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -24,16 +34,6 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { useSettings, useSettingsActions } from '@/stores/settings-store';
-import {
-  searchSettings,
-  settingsCategories,
-} from '../utils/settings-categories';
-import { SettingsExportDialog } from './settings-export-dialog';
-import { SettingsImportDialog } from './settings-import-dialog';
-import { SettingsNavigation } from './settings-navigation';
-import { SettingsResetDialog } from './settings-reset-dialog';
-import { SettingsSearch } from './settings-search';
-import { SettingsValidationDisplay } from './settings-validation-display';
 
 interface SettingsLayoutProps {
   children?: React.ReactNode;

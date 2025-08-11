@@ -1,4 +1,4 @@
-import { Activity, Globe, Lock, Settings, Share } from 'lucide-react';
+import { Share } from 'lucide-react';
 import ContentSection from '../components/content-section';
 
 import {
@@ -18,7 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
 
 import { useSettings, useSettingsActions } from '@/stores/settings-store';
 
@@ -106,7 +105,7 @@ export default function SettingsBitTorrent() {
               <div className='space-y-2'>
                 <Label htmlFor='encryption'>Encryption mode:</Label>
                 <Select
-                  value={(getValue('encryption') as number)?.toString() || '0'}
+                  value={(getValue('encryption') as number).toString() || '0'}
                   onValueChange={(value) =>
                     setPendingChange('encryption', parseInt(value))
                   }

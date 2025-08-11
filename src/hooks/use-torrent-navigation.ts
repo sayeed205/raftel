@@ -1,10 +1,11 @@
-import { useTorrentStore } from '@/stores/torrent-store';
 import { useLocation, useNavigate } from '@tanstack/react-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  useKeyboardShortcuts,
-  type KeyboardShortcut,
+  
+  useKeyboardShortcuts
 } from './use-keyboard-shortcuts';
+import type {KeyboardShortcut} from './use-keyboard-shortcuts';
+import { useTorrentStore } from '@/stores/torrent-store';
 
 interface UseTorrentNavigationOptions {
   enabled?: boolean;
@@ -120,7 +121,7 @@ export function useTorrentNavigation(
   }, [getFilteredTorrents, focusedTorrentIndex, selectedTorrents.length]);
 
   // Define navigation shortcuts
-  const navigationShortcuts: KeyboardShortcut[] = useMemo(
+  const navigationShortcuts: Array<KeyboardShortcut> = useMemo(
     () => [
       {
         key: 'ArrowDown',

@@ -2,6 +2,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { ChevronRight } from 'lucide-react';
 import React from 'react';
 
+import { settingsCategories } from '../utils/settings-categories';
 import { Button } from '@/components/ui/button';
 import {
   Collapsible,
@@ -10,7 +11,6 @@ import {
 } from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
 
-import { settingsCategories } from '../utils/settings-categories';
 
 interface SettingsNavigationProps {
   currentSection?: string;

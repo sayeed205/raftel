@@ -100,7 +100,7 @@ export function SearchHistoryPanel() {
   };
 
   const formatSearchQuery = (query: any) => {
-    let parts = [query.pattern];
+    const parts = [query.pattern];
     if (query.category && query.category !== 'all') {
       parts.push(`Category: ${query.category}`);
     }

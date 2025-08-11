@@ -1,5 +1,5 @@
-import { type Column } from '@tanstack/react-table';
 import { CheckIcon, PlusCircle } from 'lucide-react';
+import type {Column} from '@tanstack/react-table';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -23,7 +23,7 @@ import { cn } from '@/lib/utils';
 interface DataTableFacetedFilter<TData, TValue> {
   column?: Column<TData, TValue>;
   title?: string;
-  filters?: { id: string; label: string }[];
+  filters?: Array<{ id: string; label: string }>;
 }
 
 export function DataTableFacetedFilter<TData, TValue>({
@@ -32,7 +32,7 @@ export function DataTableFacetedFilter<TData, TValue>({
   filters,
 }: DataTableFacetedFilter<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
-  const selectedValues = new Set(column?.getFilterValue() as string[]);
+  const selectedValues = new Set(column?.getFilterValue() as Array<string>);
 
   return (
     <Popover>

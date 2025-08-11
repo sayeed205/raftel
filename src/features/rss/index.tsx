@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 
+import { RSSArticleList } from './components/rss-article-list';
+import { RSSFeedList } from './components/rss-feed-list';
+import { RSSRuleList } from './components/rss-rule-list';
 import { Header } from '@/components/layout/header';
 import { Main } from '@/components/layout/main';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useRSSStore } from '@/stores/rss-store';
 
-import { RSSArticleList } from './components/rss-article-list';
-import { RSSFeedList } from './components/rss-feed-list';
-import { RSSRuleList } from './components/rss-rule-list';
 
 export default function RSSPage() {
   const { fetchFeeds, fetchRules, autoRefresh, refreshInterval } =

@@ -34,11 +34,11 @@ const DEFAULT_OPTIONS: UseKeyboardShortcutsOptions = {
  * Prevents conflicts with input fields and provides proper cleanup
  */
 export function useKeyboardShortcuts(
-  shortcuts: KeyboardShortcut[],
+  shortcuts: Array<KeyboardShortcut>,
   options: UseKeyboardShortcutsOptions = {},
 ) {
   const opts = { ...DEFAULT_OPTIONS, ...options };
-  const shortcutsRef = useRef<KeyboardShortcut[]>([]);
+  const shortcutsRef = useRef<Array<KeyboardShortcut>>([]);
   const enabledRef = useRef(opts.enabled);
 
   // Update refs when props change
@@ -217,7 +217,7 @@ export function isMac(): boolean {
  * Utility function to format shortcut key combination for display with platform awareness
  */
 export function formatShortcutKey(shortcut: KeyboardShortcut): string {
-  const parts: string[] = [];
+  const parts: Array<string> = [];
   const platform = getPlatform();
 
   // Add modifier keys in the correct order for each platform
@@ -316,8 +316,8 @@ export function createPlatformShortcut(
  * Utility function to group shortcuts by category
  */
 export function groupShortcutsByCategory(
-  shortcuts: KeyboardShortcut[],
-): Record<string, KeyboardShortcut[]> {
+  shortcuts: Array<KeyboardShortcut>,
+): Record<string, Array<KeyboardShortcut>> {
   return shortcuts.reduce(
     (groups, shortcut) => {
       const category = shortcut.category || 'General';
@@ -327,6 +327,6 @@ export function groupShortcutsByCategory(
       groups[category].push(shortcut);
       return groups;
     },
-    {} as Record<string, KeyboardShortcut[]>,
+    {} as Record<string, Array<KeyboardShortcut>>,
   );
 }

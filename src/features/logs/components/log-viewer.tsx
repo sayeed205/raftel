@@ -12,6 +12,8 @@ import {
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FixedSizeList as List } from 'react-window';
 
+import type { Log } from '@/types/logs';
+import type { LogType } from '@/types/qbit/constants';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -25,8 +27,6 @@ import {
 } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { useLogActions, useLogFilter, useLogs } from '@/stores/log-store';
-import type { Log } from '@/types/logs';
-import type { LogType } from '@/types/qbit/constants';
 import { LogType as LogTypeEnum } from '@/types/qbit/constants';
 
 interface LogViewerProps {

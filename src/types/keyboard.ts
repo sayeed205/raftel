@@ -13,16 +13,16 @@ export interface KeyboardShortcut {
 
 export interface KeyboardShortcutGroup {
   category: string;
-  shortcuts: KeyboardShortcut[];
+  shortcuts: Array<KeyboardShortcut>;
 }
 
 export interface KeyboardShortcutConfig {
-  navigation: KeyboardShortcut[];
-  actions: KeyboardShortcut[];
-  selection: KeyboardShortcut[];
-  search: KeyboardShortcut[];
-  general: KeyboardShortcut[];
-  bulkActions: KeyboardShortcut[];
+  navigation: Array<KeyboardShortcut>;
+  actions: Array<KeyboardShortcut>;
+  selection: Array<KeyboardShortcut>;
+  search: Array<KeyboardShortcut>;
+  general: Array<KeyboardShortcut>;
+  bulkActions: Array<KeyboardShortcut>;
 }
 
 export type ShortcutCategory =

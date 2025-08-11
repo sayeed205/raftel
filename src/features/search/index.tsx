@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
 
+import { SearchEngineList } from './components/search-engine-list';
+import { SearchForm } from './components/search-form';
+import { SearchHistoryPanel } from './components/search-history-panel';
+import { SearchResults } from './components/search-results';
 import { Header } from '@/components/layout/header';
 import { Main } from '@/components/layout/main';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSearchStore } from '@/stores/search-store';
 
-import { SearchEngineList } from './components/search-engine-list';
-import { SearchForm } from './components/search-form';
-import { SearchHistoryPanel } from './components/search-history-panel';
-import { SearchResults } from './components/search-results';
 
 export default function SearchPage() {
   const { fetchEngines, engines, activeSearch, searchResults } =

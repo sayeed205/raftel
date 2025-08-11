@@ -1,6 +1,8 @@
 import {
-  type ColumnDef,
-  type ColumnFiltersState,
+  
+  
+  
+  
   flexRender,
   getCoreRowModel,
   getFacetedRowModel,
@@ -8,12 +10,14 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  type SortingState,
-  useReactTable,
-  type VisibilityState,
+  useReactTable
 } from '@tanstack/react-table';
 import * as React from 'react';
 
+
+import { DataTablePagination } from './data-table-pagination';
+import { DataTableToolbar } from './data-table-toolbar';
+import type {ColumnDef, ColumnFiltersState, SortingState, VisibilityState} from '@tanstack/react-table';
 import {
   Table,
   TableBody,
@@ -23,12 +27,9 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import { DataTablePagination } from './data-table-pagination';
-import { DataTableToolbar } from './data-table-toolbar';
-
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  columns: Array<ColumnDef<TData, TValue>>;
+  data: Array<TData>;
 }
 
 export function DataTable<TData, TValue>({

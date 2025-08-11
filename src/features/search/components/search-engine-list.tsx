@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
+import { SearchEngineDialog } from './search-engine-dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -29,7 +30,6 @@ import { Switch } from '@/components/ui/switch';
 import { useConfirmationDialog } from '@/hooks/use-confirmation-dialog';
 import { useSearchStore } from '@/stores/search-store';
 
-import { SearchEngineDialog } from './search-engine-dialog';
 
 export function SearchEngineList() {
   const {

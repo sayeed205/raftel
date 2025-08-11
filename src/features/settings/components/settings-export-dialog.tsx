@@ -1,6 +1,8 @@
 import { Download, FileText, Settings } from 'lucide-react';
 import React, { useState } from 'react';
 
+import type { WebUISettings } from '@/stores/settings-store';
+import type { QBittorrentPreferences } from '@/types/api';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -17,8 +19,6 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 
-import type { WebUISettings } from '@/stores/settings-store';
-import type { QBittorrentPreferences } from '@/types/api';
 
 interface SettingsExportDialogProps {
   open: boolean;

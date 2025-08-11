@@ -1,6 +1,7 @@
 import { AlertTriangle, X } from 'lucide-react';
 import React from 'react';
 
+import type { SettingsValidationError } from '@/stores/settings-store';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,11 +11,10 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 
-import type { SettingsValidationError } from '@/stores/settings-store';
 import { useSettingsActions } from '@/stores/settings-store';
 
 interface SettingsValidationDisplayProps {
-  errors: SettingsValidationError[];
+  errors: Array<SettingsValidationError>;
 }
 
 export function SettingsValidationDisplay({
@@ -36,7 +36,7 @@ export function SettingsValidationDisplay({
       acc[error.field].push(error);
       return acc;
     },
-    {} as Record<string, SettingsValidationError[]>,
+    {} as Record<string, Array<SettingsValidationError>>,
   );
 
   const fieldCount = Object.keys(errorsByField).length;
