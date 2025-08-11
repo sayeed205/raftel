@@ -16,7 +16,7 @@ import SidebarNav from './components/sidebar-nav';
 import { Header } from '@/components/layout/header';
 import { Main } from '@/components/layout/main';
 import { Separator } from '@/components/ui/separator';
-import SearchSettings from '@/features/settings/components/search.tsx';
+import { SettingsSearchDialog } from '@/features/settings/components/settings-search-dialog';
 import { useSettings, useSettingsActions } from '@/stores/settings-store';
 
 
@@ -33,7 +33,7 @@ export default function Settings() {
     <>
       {/* ===== Top Heading ===== */}
       <Header>
-        <SearchSettings />
+        <SettingsSearchDialog />
       </Header>
 
       <Main fixed>

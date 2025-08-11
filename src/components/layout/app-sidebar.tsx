@@ -2,17 +2,15 @@ import * as React from 'react';
 
 import { Magnet } from 'lucide-react';
 
-import { sidebarData } from './data/sidebar-data';
 import { NavGroup } from '@/components/layout/nav-group';
-import { NavUser } from '@/components/layout/nav-user';
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarRail,
-  useSidebar,
+    Sidebar,
+    SidebarContent,
+    SidebarHeader,
+    SidebarRail,
+    useSidebar
 } from '@/components/ui/sidebar';
+import { sidebarData } from './data/sidebar-data';
 
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -61,9 +59,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <NavGroup key={p.title} {...p} />
         ))}
       </SidebarContent>
-      <SidebarFooter>
+      {/* <SidebarFooter>
         <NavUser />
-      </SidebarFooter>
+      </SidebarFooter> */}
       <SidebarRail />
     </Sidebar>
   );
