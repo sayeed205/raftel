@@ -150,6 +150,7 @@ export const DiskIOType = {
   DEFAULT: 0,
   MEMORY_MAPPED_FILES: 1,
   POSIX_COMPLIANT: 2,
+  SIMPLE_PREAD_PWRITE: 3,
 } as const;
 
 export type DiskIOType = (typeof DiskIOType)[keyof typeof DiskIOType];
@@ -174,8 +175,8 @@ export type FileLogAgeType = (typeof FileLogAgeType)[keyof typeof FileLogAgeType
 
 // Resume Data Storage Type
 export const ResumeDataStorageType = {
-  LEGACY: 0,
-  SQLITE: 1,
+  LEGACY: 'Legacy',
+  SQLITE: 'SQLite',
 } as const;
 
 export type ResumeDataStorageType =

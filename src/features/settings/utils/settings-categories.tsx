@@ -2,13 +2,13 @@ import { Download, Gauge, Globe, Monitor, Settings, Share2 } from 'lucide-react'
 
 import type { SettingsCategory } from '@/features/settings';
 import {
-  AdvancedSettings,
   BitTorrentSettings,
   ConnectionSettings,
   DownloadSettings,
   SpeedSettings,
 } from '@/features/settings';
 import SettingsWebUI from '@/features/settings/webui';
+import SettingsAdvanced from '@/features/settings/advanced';
 
 export const settingsCategories: Array<SettingsCategory> = [
   {
@@ -197,7 +197,7 @@ export const settingsCategories: Array<SettingsCategory> = [
         title: 'Advanced',
         description: 'Advanced qBittorrent configuration for experts',
         icon: Settings,
-        component: AdvancedSettings,
+        component: SettingsAdvanced,
         keywords: [
           'advanced',
           'expert',
