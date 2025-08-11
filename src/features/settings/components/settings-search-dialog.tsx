@@ -128,7 +128,7 @@ export function SettingsSearchDialog() {
           className="top-[20vh] max-w-2xl translate-y-0 p-0 sm:rounded-lg"
         >
           <div className="p-4">
-            <div className="relative">
+            <div className="relative mt-5 mx-5">
               <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
               <Input
                 ref={inputRef}
