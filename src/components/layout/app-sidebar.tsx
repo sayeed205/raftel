@@ -1,24 +1,25 @@
 import * as React from 'react';
-
 import { Magnet } from 'lucide-react';
 
-import { NavGroup } from '@/components/layout/nav-group';
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarHeader,
-    SidebarRail,
-    useSidebar
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarRail,
+  useSidebar,
 } from '@/components/ui/sidebar';
-import { sidebarData } from './data/sidebar-data';
+import { NavGroup } from '@/components/layout/nav-group';
+import { SpeedIndicator } from '@/components/layout/speed-indicator';
 
+import { sidebarData } from './data/sidebar-data';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
 
   return (
-    <Sidebar collapsible='icon' variant='floating' {...props}>
+    <Sidebar collapsible="icon" variant="floating" {...props}>
       <SidebarHeader>
         {isCollapsed ? (
           <div
@@ -59,9 +60,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <NavGroup key={p.title} {...p} />
         ))}
       </SidebarContent>
-      {/* <SidebarFooter>
-        <NavUser />
-      </SidebarFooter> */}
+      <SidebarFooter>
+        <SpeedIndicator collapsed={isCollapsed} />
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );
