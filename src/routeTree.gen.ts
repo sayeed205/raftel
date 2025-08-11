@@ -20,7 +20,7 @@ import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authen
 import { Route as AuthenticatedTorrentsIndexRouteImport } from './routes/_authenticated/torrents/index'
 import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
 import { Route as AuthenticatedTorrentsHashRouteImport } from './routes/_authenticated/torrents/$hash'
-import { Route as AuthenticatedSettingsWebuiRouteImport } from './routes/_authenticated/settings/webui'
+import { Route as AuthenticatedSettingsWebUiRouteImport } from './routes/_authenticated/settings/web-ui'
 import { Route as AuthenticatedSettingsSpeedRouteImport } from './routes/_authenticated/settings/speed'
 import { Route as AuthenticatedSettingsRssRouteImport } from './routes/_authenticated/settings/rss'
 import { Route as AuthenticatedSettingsNotificationsRouteImport } from './routes/_authenticated/settings/notifications'
@@ -88,10 +88,10 @@ const AuthenticatedTorrentsHashRoute =
     path: '/torrents/$hash',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedSettingsWebuiRoute =
-  AuthenticatedSettingsWebuiRouteImport.update({
-    id: '/webui',
-    path: '/webui',
+const AuthenticatedSettingsWebUiRoute =
+  AuthenticatedSettingsWebUiRouteImport.update({
+    id: '/web-ui',
+    path: '/web-ui',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
 const AuthenticatedSettingsSpeedRoute =
@@ -159,7 +159,7 @@ export interface FileRoutesByFullPath {
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/settings/rss': typeof AuthenticatedSettingsRssRoute
   '/settings/speed': typeof AuthenticatedSettingsSpeedRoute
-  '/settings/webui': typeof AuthenticatedSettingsWebuiRoute
+  '/settings/web-ui': typeof AuthenticatedSettingsWebUiRoute
   '/torrents/$hash': typeof AuthenticatedTorrentsHashRoute
   '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/torrents': typeof AuthenticatedTorrentsIndexRoute
@@ -179,7 +179,7 @@ export interface FileRoutesByTo {
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/settings/rss': typeof AuthenticatedSettingsRssRoute
   '/settings/speed': typeof AuthenticatedSettingsSpeedRoute
-  '/settings/webui': typeof AuthenticatedSettingsWebuiRoute
+  '/settings/web-ui': typeof AuthenticatedSettingsWebUiRoute
   '/torrents/$hash': typeof AuthenticatedTorrentsHashRoute
   '/settings': typeof AuthenticatedSettingsIndexRoute
   '/torrents': typeof AuthenticatedTorrentsIndexRoute
@@ -202,7 +202,7 @@ export interface FileRoutesById {
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/_authenticated/settings/rss': typeof AuthenticatedSettingsRssRoute
   '/_authenticated/settings/speed': typeof AuthenticatedSettingsSpeedRoute
-  '/_authenticated/settings/webui': typeof AuthenticatedSettingsWebuiRoute
+  '/_authenticated/settings/web-ui': typeof AuthenticatedSettingsWebUiRoute
   '/_authenticated/torrents/$hash': typeof AuthenticatedTorrentsHashRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/torrents/': typeof AuthenticatedTorrentsIndexRoute
@@ -225,7 +225,7 @@ export interface FileRouteTypes {
     | '/settings/notifications'
     | '/settings/rss'
     | '/settings/speed'
-    | '/settings/webui'
+    | '/settings/web-ui'
     | '/torrents/$hash'
     | '/settings/'
     | '/torrents'
@@ -245,7 +245,7 @@ export interface FileRouteTypes {
     | '/settings/notifications'
     | '/settings/rss'
     | '/settings/speed'
-    | '/settings/webui'
+    | '/settings/web-ui'
     | '/torrents/$hash'
     | '/settings'
     | '/torrents'
@@ -267,7 +267,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/notifications'
     | '/_authenticated/settings/rss'
     | '/_authenticated/settings/speed'
-    | '/_authenticated/settings/webui'
+    | '/_authenticated/settings/web-ui'
     | '/_authenticated/torrents/$hash'
     | '/_authenticated/settings/'
     | '/_authenticated/torrents/'
@@ -358,11 +358,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTorrentsHashRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/settings/webui': {
-      id: '/_authenticated/settings/webui'
-      path: '/webui'
-      fullPath: '/settings/webui'
-      preLoaderRoute: typeof AuthenticatedSettingsWebuiRouteImport
+    '/_authenticated/settings/web-ui': {
+      id: '/_authenticated/settings/web-ui'
+      path: '/web-ui'
+      fullPath: '/settings/web-ui'
+      preLoaderRoute: typeof AuthenticatedSettingsWebUiRouteImport
       parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
     '/_authenticated/settings/speed': {
@@ -433,7 +433,7 @@ interface AuthenticatedSettingsRouteRouteChildren {
   AuthenticatedSettingsNotificationsRoute: typeof AuthenticatedSettingsNotificationsRoute
   AuthenticatedSettingsRssRoute: typeof AuthenticatedSettingsRssRoute
   AuthenticatedSettingsSpeedRoute: typeof AuthenticatedSettingsSpeedRoute
-  AuthenticatedSettingsWebuiRoute: typeof AuthenticatedSettingsWebuiRoute
+  AuthenticatedSettingsWebUiRoute: typeof AuthenticatedSettingsWebUiRoute
   AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
 }
 
@@ -448,7 +448,7 @@ const AuthenticatedSettingsRouteRouteChildren: AuthenticatedSettingsRouteRouteCh
       AuthenticatedSettingsNotificationsRoute,
     AuthenticatedSettingsRssRoute: AuthenticatedSettingsRssRoute,
     AuthenticatedSettingsSpeedRoute: AuthenticatedSettingsSpeedRoute,
-    AuthenticatedSettingsWebuiRoute: AuthenticatedSettingsWebuiRoute,
+    AuthenticatedSettingsWebUiRoute: AuthenticatedSettingsWebUiRoute,
     AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,
   }
 

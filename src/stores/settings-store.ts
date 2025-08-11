@@ -229,6 +229,52 @@ export const useSettingsStore = create<SettingsStore>()(
           }
         }
 
+        // Session timeout validation
+        if (prefs.web_ui_session_timeout !== undefined && prefs.web_ui_session_timeout < 1) {
+          errors.push({
+            field: 'web_ui_session_timeout',
+            message: 'Session timeout must be at least 1 second',
+          });
+        }
+
+        // Auth failure count validation
+        if (prefs.web_ui_max_auth_fail_count !== undefined && prefs.web_ui_max_auth_fail_count < 1) {
+          errors.push({
+            field: 'web_ui_max_auth_fail_count',
+            message: 'Max authentication failures must be at least 1',
+          });
+        }
+
+        // Ban duration validation
+        if (prefs.web_ui_ban_duration !== undefined && prefs.web_ui_ban_duration < 1) {
+          errors.push({
+            field: 'web_ui_ban_duration',
+            message: 'Ban duration must be at least 1 second',
+          });
+        }
+
+        // DynDNS validation
+        if (prefs.dyndns_enabled) {
+          if (!prefs.dyndns_domain || prefs.dyndns_domain.trim() === '') {
+            errors.push({
+              field: 'dyndns_domain',
+              message: 'DynDNS domain name is required',
+            });
+          }
+          if (!prefs.dyndns_username || prefs.dyndns_username.trim() === '') {
+            errors.push({
+              field: 'dyndns_username',
+              message: 'DynDNS username is required',
+            });
+          }
+          if (!prefs.dyndns_password || prefs.dyndns_password.trim() === '') {
+            errors.push({
+              field: 'dyndns_password',
+              message: 'DynDNS password is required',
+            });
+          }
+        }
+
         // Speed limit validation
         if (prefs.dl_limit !== undefined && prefs.dl_limit < 0) {
           errors.push({
@@ -404,6 +450,31 @@ export const useSettingsStore = create<SettingsStore>()(
             web_ui_port: 8080,
             web_ui_address: '*',
             web_ui_username: 'admin',
+            web_ui_session_timeout: 3600,
+            web_ui_max_auth_fail_count: 5,
+            web_ui_ban_duration: 3600,
+            web_ui_clickjacking_protection_enabled: true,
+            web_ui_csrf_protection_enabled: true,
+            web_ui_secure_cookie_enabled: true,
+            web_ui_host_header_validation_enabled: true,
+            web_ui_upnp: true,
+            web_ui_https_enabled: false,
+            web_ui_https_cert_path: '',
+            web_ui_https_key_path: '',
+            web_ui_reverse_proxy_enabled: false,
+            web_ui_reverse_proxies_list: '',
+            web_ui_use_custom_http_headers_enabled: false,
+            web_ui_custom_http_headers: '',
+            alternative_webui_enabled: false,
+            alternative_webui_path: '',
+            bypass_local_auth: false,
+            bypass_auth_subnet_whitelist_enabled: false,
+            bypass_auth_subnet_whitelist: '',
+            dyndns_enabled: false,
+            dyndns_service: '0',
+            dyndns_domain: '',
+            dyndns_username: '',
+            dyndns_password: '',
             // Note: We don't reset password for security reasons
           };
 

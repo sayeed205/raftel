@@ -7,8 +7,8 @@ import {
   ConnectionSettings,
   DownloadSettings,
   SpeedSettings,
-  WebUISettings,
 } from '@/features/settings';
+import SettingsWebUI from '@/features/settings/webui';
 
 export const settingsCategories: Array<SettingsCategory> = [
   {
@@ -159,7 +159,7 @@ export const settingsCategories: Array<SettingsCategory> = [
         title: 'Web UI',
         description: 'Web interface settings and customization',
         icon: Monitor,
-        component: WebUISettings,
+        component: SettingsWebUI,
         keywords: [
           'webui',
           'web',
