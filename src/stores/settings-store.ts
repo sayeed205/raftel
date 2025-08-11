@@ -1,8 +1,8 @@
+import qbit from '@/services/qbit';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import type { QBittorrentPreferences } from '@/types/api';
-import qbit from '@/services/qbit';
 
 // WebUI specific settings that are stored locally
 export interface WebUISettings {
@@ -74,7 +74,9 @@ interface SettingsActions {
   resetWebUISettings: () => void;
 
   // Validation
-  validatePreferences: (prefs: Partial<QBittorrentPreferences>) => Array<SettingsValidationError>;
+  validatePreferences: (
+    prefs: Partial<QBittorrentPreferences>
+  ) => Array<SettingsValidationError>;
   clearValidationErrors: () => void;
 
   // Import/Export
@@ -123,7 +125,10 @@ export const useSettingsStore = create<SettingsStore>()(
             validationErrors: [],
           });
         } catch (error) {
-          const message = error instanceof Error ? error.message : 'Failed to fetch preferences';
+          const message =
+            error instanceof Error
+              ? error.message
+              : 'Failed to fetch preferences';
           set({
             isLoading: false,
             error: message,
@@ -157,7 +162,10 @@ export const useSettingsStore = create<SettingsStore>()(
             validationErrors: [],
           });
         } catch (error) {
-          const message = error instanceof Error ? error.message : 'Failed to update preferences';
+          const message =
+            error instanceof Error
+              ? error.message
+              : 'Failed to update preferences';
           set({
             isSaving: false,
             error: message,
@@ -205,7 +213,7 @@ export const useSettingsStore = create<SettingsStore>()(
 
       // Validation
       validatePreferences: (
-        prefs: Partial<QBittorrentPreferences>,
+        prefs: Partial<QBittorrentPreferences>
       ): Array<SettingsValidationError> => {
         const errors: Array<SettingsValidationError> = [];
 
@@ -230,7 +238,10 @@ export const useSettingsStore = create<SettingsStore>()(
         }
 
         // Session timeout validation
-        if (prefs.web_ui_session_timeout !== undefined && prefs.web_ui_session_timeout < 1) {
+        if (
+          prefs.web_ui_session_timeout !== undefined &&
+          prefs.web_ui_session_timeout < 1
+        ) {
           errors.push({
             field: 'web_ui_session_timeout',
             message: 'Session timeout must be at least 1 second',
@@ -238,7 +249,10 @@ export const useSettingsStore = create<SettingsStore>()(
         }
 
         // Auth failure count validation
-        if (prefs.web_ui_max_auth_fail_count !== undefined && prefs.web_ui_max_auth_fail_count < 1) {
+        if (
+          prefs.web_ui_max_auth_fail_count !== undefined &&
+          prefs.web_ui_max_auth_fail_count < 1
+        ) {
           errors.push({
             field: 'web_ui_max_auth_fail_count',
             message: 'Max authentication failures must be at least 1',
@@ -246,7 +260,10 @@ export const useSettingsStore = create<SettingsStore>()(
         }
 
         // Ban duration validation
-        if (prefs.web_ui_ban_duration !== undefined && prefs.web_ui_ban_duration < 1) {
+        if (
+          prefs.web_ui_ban_duration !== undefined &&
+          prefs.web_ui_ban_duration < 1
+        ) {
           errors.push({
             field: 'web_ui_ban_duration',
             message: 'Ban duration must be at least 1 second',
@@ -298,7 +315,10 @@ export const useSettingsStore = create<SettingsStore>()(
           });
         }
 
-        if (prefs.max_connec_per_torrent !== undefined && prefs.max_connec_per_torrent < 0) {
+        if (
+          prefs.max_connec_per_torrent !== undefined &&
+          prefs.max_connec_per_torrent < 0
+        ) {
           errors.push({
             field: 'max_connec_per_torrent',
             message: 'Maximum connections per torrent cannot be negative',
@@ -322,7 +342,10 @@ export const useSettingsStore = create<SettingsStore>()(
         }
 
         // Seeding time validation
-        if (prefs.max_seeding_time !== undefined && prefs.max_seeding_time < 0) {
+        if (
+          prefs.max_seeding_time !== undefined &&
+          prefs.max_seeding_time < 0
+        ) {
           errors.push({
             field: 'max_seeding_time',
             message: 'Maximum seeding time cannot be negative',
@@ -357,12 +380,16 @@ export const useSettingsStore = create<SettingsStore>()(
 
           // Validate import data structure
           if (!importData.preferences && !importData.webUISettings) {
-            throw new Error('Invalid settings file: No preferences or WebUI settings found');
+            throw new Error(
+              'Invalid settings file: No preferences or WebUI settings found'
+            );
           }
 
           // Validate version compatibility
           if (importData.version && importData.version !== '1.0') {
-            console.warn(`Settings file version ${importData.version} may not be fully compatible`);
+            console.warn(
+              `Settings file version ${importData.version} may not be fully compatible`
+            );
           }
 
           // Import WebUI settings if present
@@ -387,10 +414,12 @@ export const useSettingsStore = create<SettingsStore>()(
             const state = get();
 
             // Validate preferences before importing
-            const validationErrors = state.validatePreferences(importData.preferences);
+            const validationErrors = state.validatePreferences(
+              importData.preferences
+            );
             if (validationErrors.length > 0) {
               throw new Error(
-                `Invalid preferences: ${validationErrors.map((e) => e.message).join(', ')}`,
+                `Invalid preferences: ${validationErrors.map((e) => e.message).join(', ')}`
               );
             }
 
@@ -399,7 +428,10 @@ export const useSettingsStore = create<SettingsStore>()(
 
           set({ isLoading: false });
         } catch (error) {
-          const message = error instanceof Error ? error.message : 'Failed to import settings';
+          const message =
+            error instanceof Error
+              ? error.message
+              : 'Failed to import settings';
           set({
             isLoading: false,
             error: message,
@@ -486,7 +518,10 @@ export const useSettingsStore = create<SettingsStore>()(
             isDirty: false,
           });
         } catch (error) {
-          const message = error instanceof Error ? error.message : 'Failed to reset preferences';
+          const message =
+            error instanceof Error
+              ? error.message
+              : 'Failed to reset preferences';
           set({
             isLoading: false,
             error: message,
@@ -511,8 +546,8 @@ export const useSettingsStore = create<SettingsStore>()(
         webUISettings: state.webUISettings,
       }),
       version: 1,
-    },
-  ),
+    }
+  )
 );
 
 // Selector hooks for convenience

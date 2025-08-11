@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
+import { useTorrentStore } from '@/stores/torrent-store';
+
+import { Header } from '@/components/layout/header.tsx';
+import { Main } from '@/components/layout/main.tsx';
 
 import { columns } from './components/table/columns';
 import { DataTable } from './components/table/data-table';
-import { Header } from '@/components/layout/header.tsx';
-import { Main } from '@/components/layout/main.tsx';
-import { useTorrentStore } from '@/stores/torrent-store';
-
 
 const POLL_KEY = 'torrents_poll_interval';
 
@@ -57,11 +57,11 @@ export default function TorrentsPage() {
   return (
     <>
       <Header>
-        <h2 className='text-2xl font-bold tracking-tight'>Torrents</h2>
+        <h2 className="text-2xl font-bold tracking-tight">Torrents</h2>
       </Header>
 
       <Main>
-        <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-y-0 lg:space-x-12'>
+        <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-y-0 lg:space-x-12">
           <DataTable data={torrents} columns={columns} />
         </div>
       </Main>

@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-
+import qbit from '@/services/qbit';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import qbit from '@/services/qbit';
 
 export function AddTorrentModal({
   open,
@@ -79,7 +78,7 @@ export function AddTorrentModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-md'>
+      <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Add Torrent</DialogTitle>
         </DialogHeader>
@@ -97,29 +96,33 @@ export function AddTorrentModal({
           }}
           onDrop={handleDrop}
         >
-          <div className='mb-2'>Drag & drop .torrent files here</div>
-          <div className='text-muted-foreground mb-2 text-xs'>or</div>
-          <Button variant='outline' onClick={() => fileInputRef.current?.click()} disabled={adding}>
+          <div className="mb-2">Drag & drop .torrent files here</div>
+          <div className="text-muted-foreground mb-2 text-xs">or</div>
+          <Button
+            variant="outline"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={adding}
+          >
             Choose File
           </Button>
           <input
             ref={fileInputRef}
-            type='file'
-            accept='.torrent,application/x-bittorrent'
+            type="file"
+            accept=".torrent,application/x-bittorrent"
             multiple
-            className='hidden'
+            className="hidden"
             onChange={handleFileChange}
           />
         </div>
-        <div className='mt-6'>
+        <div className="mt-6">
           <Input
-            placeholder='Paste magnet link here'
+            placeholder="Paste magnet link here"
             value={magnet}
             onChange={(e) => setMagnet(e.target.value)}
             disabled={adding}
           />
           <Button
-            className='mt-2 w-full'
+            className="mt-2 w-full"
             onClick={handleMagnetAdd}
             disabled={adding || !magnet.trim()}
           >
@@ -127,7 +130,11 @@ export function AddTorrentModal({
           </Button>
         </div>
         <DialogFooter>
-          <Button variant='secondary' onClick={() => onOpenChange(false)} disabled={adding}>
+          <Button
+            variant="secondary"
+            onClick={() => onOpenChange(false)}
+            disabled={adding}
+          >
             Cancel
           </Button>
         </DialogFooter>

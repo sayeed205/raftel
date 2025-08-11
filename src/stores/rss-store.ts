@@ -1,8 +1,13 @@
+import qbit from '@/services/qbit';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 
-import type { Feed, FeedArticle, FeedRule, RSSDownloadHistory } from '@/types/qbit/rss';
-import qbit from '@/services/qbit';
+import type {
+  Feed,
+  FeedArticle,
+  FeedRule,
+  RSSDownloadHistory,
+} from '@/types/qbit/rss';
 
 interface RSSState {
   // Data
@@ -59,7 +64,9 @@ interface RSSActions {
   markAsRead: (feedName: string, articleId?: string) => Promise<void>;
   markAsUnread: (feedName: string, articleId: string) => Promise<void>;
   downloadArticle: (feedName: string, articleId: string) => Promise<void>;
-  getMatchingArticles: (ruleName: string) => Promise<Record<string, Array<string>>>;
+  getMatchingArticles: (
+    ruleName: string
+  ) => Promise<Record<string, Array<string>>>;
 
   // Selection management
   setSelectedFeed: (feedName: string | null) => void;
@@ -143,7 +150,8 @@ export const useRSSStore = create<RSSStore>()(
           lastUpdate: Date.now(),
         });
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to fetch feeds';
+        const message =
+          error instanceof Error ? error.message : 'Failed to fetch feeds';
         set({
           error: message,
           isFeedsLoading: false,
@@ -163,7 +171,8 @@ export const useRSSStore = create<RSSStore>()(
 
         set({ isLoading: false });
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to add feed';
+        const message =
+          error instanceof Error ? error.message : 'Failed to add feed';
         set({
           error: message,
           isLoading: false,
@@ -181,7 +190,9 @@ export const useRSSStore = create<RSSStore>()(
         // Remove feed from local state
         const { feeds, articles } = get();
         const updatedFeeds = feeds.filter((feed) => feed.name !== name);
-        const updatedArticles = articles.filter((article) => (article as any).feedName !== name);
+        const updatedArticles = articles.filter(
+          (article) => (article as any).feedName !== name
+        );
 
         set({
           feeds: updatedFeeds,
@@ -190,7 +201,8 @@ export const useRSSStore = create<RSSStore>()(
           isLoading: false,
         });
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to remove feed';
+        const message =
+          error instanceof Error ? error.message : 'Failed to remove feed';
         set({
           error: message,
           isLoading: false,
@@ -208,20 +220,24 @@ export const useRSSStore = create<RSSStore>()(
         // Update local state
         const { feeds, articles } = get();
         const updatedFeeds = feeds.map((feed) =>
-          feed.name === oldName ? { ...feed, name: newName } : feed,
+          feed.name === oldName ? { ...feed, name: newName } : feed
         );
         const updatedArticles = articles.map((article) =>
-          (article as any).feedName === oldName ? { ...article, feedName: newName } : article,
+          (article as any).feedName === oldName
+            ? { ...article, feedName: newName }
+            : article
         );
 
         set({
           feeds: updatedFeeds,
           articles: updatedArticles,
-          selectedFeed: get().selectedFeed === oldName ? newName : get().selectedFeed,
+          selectedFeed:
+            get().selectedFeed === oldName ? newName : get().selectedFeed,
           isLoading: false,
         });
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to rename feed';
+        const message =
+          error instanceof Error ? error.message : 'Failed to rename feed';
         set({
           error: message,
           isLoading: false,
@@ -238,14 +254,17 @@ export const useRSSStore = create<RSSStore>()(
 
         // Update local state
         const { feeds } = get();
-        const updatedFeeds = feeds.map((feed) => (feed.name === path ? { ...feed, url } : feed));
+        const updatedFeeds = feeds.map((feed) =>
+          feed.name === path ? { ...feed, url } : feed
+        );
 
         set({
           feeds: updatedFeeds,
           isLoading: false,
         });
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to update feed URL';
+        const message =
+          error instanceof Error ? error.message : 'Failed to update feed URL';
         set({
           error: message,
           isLoading: false,
@@ -259,7 +278,7 @@ export const useRSSStore = create<RSSStore>()(
         // Set loading state for specific feed
         const { feeds, feedErrors } = get();
         const updatedFeeds = feeds.map((feed) =>
-          feed.name === itemPath ? { ...feed, isLoading: true } : feed,
+          feed.name === itemPath ? { ...feed, isLoading: true } : feed
         );
         const updatedErrors = { ...feedErrors };
         delete updatedErrors[itemPath];
@@ -274,10 +293,13 @@ export const useRSSStore = create<RSSStore>()(
         // Refresh feeds data after refresh
         await get().fetchFeeds();
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to refresh feed';
+        const message =
+          error instanceof Error ? error.message : 'Failed to refresh feed';
         const { feeds, feedErrors } = get();
         const updatedFeeds = feeds.map((feed) =>
-          feed.name === itemPath ? { ...feed, isLoading: false, hasError: true } : feed,
+          feed.name === itemPath
+            ? { ...feed, isLoading: false, hasError: true }
+            : feed
         );
 
         set({
@@ -316,7 +338,8 @@ export const useRSSStore = create<RSSStore>()(
           lastUpdate: Date.now(),
         });
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to fetch rules';
+        const message =
+          error instanceof Error ? error.message : 'Failed to fetch rules';
         set({
           error: message,
           isRulesLoading: false,
@@ -340,7 +363,8 @@ export const useRSSStore = create<RSSStore>()(
           isLoading: false,
         });
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to add rule';
+        const message =
+          error instanceof Error ? error.message : 'Failed to add rule';
         set({
           error: message,
           isLoading: false,
@@ -358,7 +382,7 @@ export const useRSSStore = create<RSSStore>()(
         // Update rule in local state
         const { rules } = get();
         const updatedRules = rules.map((r) =>
-          r.name === ruleName ? { ...rule, name: ruleName } : r,
+          r.name === ruleName ? { ...rule, name: ruleName } : r
         );
 
         set({
@@ -366,7 +390,8 @@ export const useRSSStore = create<RSSStore>()(
           isLoading: false,
         });
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to update rule';
+        const message =
+          error instanceof Error ? error.message : 'Failed to update rule';
         set({
           error: message,
           isLoading: false,
@@ -387,11 +412,13 @@ export const useRSSStore = create<RSSStore>()(
 
         set({
           rules: updatedRules,
-          selectedRule: get().selectedRule === ruleName ? null : get().selectedRule,
+          selectedRule:
+            get().selectedRule === ruleName ? null : get().selectedRule,
           isLoading: false,
         });
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to remove rule';
+        const message =
+          error instanceof Error ? error.message : 'Failed to remove rule';
         set({
           error: message,
           isLoading: false,
@@ -409,16 +436,18 @@ export const useRSSStore = create<RSSStore>()(
         // Update rule in local state
         const { rules } = get();
         const updatedRules = rules.map((rule) =>
-          rule.name === oldName ? { ...rule, name: newName } : rule,
+          rule.name === oldName ? { ...rule, name: newName } : rule
         );
 
         set({
           rules: updatedRules,
-          selectedRule: get().selectedRule === oldName ? newName : get().selectedRule,
+          selectedRule:
+            get().selectedRule === oldName ? newName : get().selectedRule,
           isLoading: false,
         });
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to rename rule';
+        const message =
+          error instanceof Error ? error.message : 'Failed to rename rule';
         set({
           error: message,
           isLoading: false,
@@ -465,7 +494,8 @@ export const useRSSStore = create<RSSStore>()(
 
         set({ articles: updatedArticles });
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to mark as read';
+        const message =
+          error instanceof Error ? error.message : 'Failed to mark as read';
         set({ error: message });
         throw error;
       }
@@ -477,7 +507,7 @@ export const useRSSStore = create<RSSStore>()(
       const updatedArticles = articles.map((article) =>
         article.id === articleId && (article as any).feedName === feedName
           ? { ...article, isRead: false }
-          : article,
+          : article
       );
 
       set({ articles: updatedArticles });
@@ -512,7 +542,8 @@ export const useRSSStore = create<RSSStore>()(
           downloadHistory: [historyEntry, ...downloadHistory],
         });
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to download article';
+        const message =
+          error instanceof Error ? error.message : 'Failed to download article';
         set({ error: message });
         throw error;
       }
@@ -522,7 +553,10 @@ export const useRSSStore = create<RSSStore>()(
       try {
         return await qbit.getMatchingArticles(ruleName);
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to get matching articles';
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'Failed to get matching articles';
         set({ error: message });
         throw error;
       }
@@ -594,7 +628,9 @@ export const useRSSStore = create<RSSStore>()(
         if (searchQuery.trim()) {
           const query = searchQuery.toLowerCase();
           const matchesTitle = article.title.toLowerCase().includes(query);
-          const matchesDescription = article.description?.toLowerCase().includes(query);
+          const matchesDescription = article.description
+            ?.toLowerCase()
+            .includes(query);
 
           if (!matchesTitle && !matchesDescription) {
             return false;
@@ -637,17 +673,19 @@ export const useRSSStore = create<RSSStore>()(
     getArticleById: (id: string) => {
       return get().articles.find((article) => article.id === id);
     },
-  })),
+  }))
 );
 
 // Selector hooks for convenience
 export const useRSSFeeds = () => {
-  const { feeds, isFeedsLoading, feedErrors, fetchFeeds, refreshFeed } = useRSSStore();
+  const { feeds, isFeedsLoading, feedErrors, fetchFeeds, refreshFeed } =
+    useRSSStore();
   return { feeds, isFeedsLoading, feedErrors, fetchFeeds, refreshFeed };
 };
 
 export const useRSSRules = () => {
-  const { rules, isRulesLoading, fetchRules, addRule, updateRule, removeRule } = useRSSStore();
+  const { rules, isRulesLoading, fetchRules, addRule, updateRule, removeRule } =
+    useRSSStore();
   return { rules, isRulesLoading, fetchRules, addRule, updateRule, removeRule };
 };
 
@@ -684,7 +722,8 @@ export const useRSSArticles = () => {
 };
 
 export const useRSSSelection = () => {
-  const { selectedFeed, selectedRule, setSelectedFeed, setSelectedRule } = useRSSStore();
+  const { selectedFeed, selectedRule, setSelectedFeed, setSelectedRule } =
+    useRSSStore();
 
   return {
     selectedFeed,

@@ -1,7 +1,7 @@
 import * as React from 'react';
-
 import { AlertTriangle, Trash2 } from 'lucide-react';
 
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -11,7 +11,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
 
 interface ConfirmationDialogProps {
   open: boolean;
@@ -62,25 +61,35 @@ export function ConfirmationDialog({
 
   // Default icon based on variant
   const defaultIcon =
-    variant === 'destructive' ? <AlertTriangle className='text-destructive h-6 w-6' /> : null;
+    variant === 'destructive' ? (
+      <AlertTriangle className="text-destructive h-6 w-6" />
+    ) : null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='sm:max-w-md' showCloseButton={!isConfirming}>
+      <DialogContent className="sm:max-w-md" showCloseButton={!isConfirming}>
         <DialogHeader>
-          <div className='flex items-center gap-3'>
+          <div className="flex items-center gap-3">
             {icon || defaultIcon}
-            <DialogTitle className={cn(variant === 'destructive' && 'text-destructive')}>
+            <DialogTitle
+              className={cn(variant === 'destructive' && 'text-destructive')}
+            >
               {title}
             </DialogTitle>
           </div>
-          <DialogDescription className='text-left'>{description}</DialogDescription>
+          <DialogDescription className="text-left">
+            {description}
+          </DialogDescription>
         </DialogHeader>
 
-        {children && <div className='py-4'>{children}</div>}
+        {children && <div className="py-4">{children}</div>}
 
-        <DialogFooter className='flex-col-reverse gap-2 sm:flex-row sm:justify-end'>
-          <Button variant='outline' onClick={handleCancel} disabled={isConfirming}>
+        <DialogFooter className="flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <Button
+            variant="outline"
+            onClick={handleCancel}
+            disabled={isConfirming}
+          >
             {cancelText}
           </Button>
           <Button
@@ -131,23 +140,23 @@ export function DeleteConfirmationDialog({
           ? `Are you sure you want to delete ${itemCount} torrents? This action cannot be undone.`
           : `Are you sure you want to delete "${itemName}"? This action cannot be undone.`
       }
-      confirmText='Delete'
-      cancelText='Cancel'
-      variant='destructive'
-      icon={<Trash2 className='text-destructive h-6 w-6' />}
+      confirmText="Delete"
+      cancelText="Cancel"
+      variant="destructive"
+      icon={<Trash2 className="text-destructive h-6 w-6" />}
       onConfirm={onConfirm}
       isLoading={isLoading}
     >
       {onDeleteFilesChange && (
-        <div className='flex items-center space-x-2'>
+        <div className="flex items-center space-x-2">
           <input
-            type='checkbox'
-            id='delete-files'
+            type="checkbox"
+            id="delete-files"
             checked={deleteFiles}
             onChange={(e) => onDeleteFilesChange(e.target.checked)}
-            className='text-destructive focus:ring-destructive h-4 w-4 rounded border-gray-300'
+            className="text-destructive focus:ring-destructive h-4 w-4 rounded border-gray-300"
           />
-          <label htmlFor='delete-files' className='text-sm font-medium'>
+          <label htmlFor="delete-files" className="text-sm font-medium">
             Also delete files from disk
           </label>
         </div>
@@ -184,9 +193,13 @@ export function BulkActionConfirmationDialog({
       title={`${action} ${itemCount} torrents?`}
       description={`Are you sure you want to ${actionText} ${itemCount} selected torrents?`}
       confirmText={action}
-      cancelText='Cancel'
+      cancelText="Cancel"
       variant={isDestructive ? 'destructive' : 'default'}
-      icon={isDestructive ? <AlertTriangle className='text-destructive h-6 w-6' /> : undefined}
+      icon={
+        isDestructive ? (
+          <AlertTriangle className="text-destructive h-6 w-6" />
+        ) : undefined
+      }
       onConfirm={onConfirm}
       isLoading={isLoading}
     />

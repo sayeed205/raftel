@@ -16,7 +16,12 @@ export function capitalize(str: string): string {
 
 export function extractHostname(url: string): string {
   const match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
-  if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
+  if (
+    match != null &&
+    match.length > 2 &&
+    typeof match[2] === 'string' &&
+    match[2].length > 0
+  ) {
     return match[2];
   } else {
     return '';
@@ -25,7 +30,12 @@ export function extractHostname(url: string): string {
 
 export function getDomainBody(string: string): string {
   const match = string.match(/:\/\/([^/]+\.)?([^/.]+)\.[^/.:]+/i);
-  if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
+  if (
+    match != null &&
+    match.length > 2 &&
+    typeof match[2] === 'string' &&
+    match[2].length > 0
+  ) {
     return match[2];
   } else {
     return '';
@@ -40,7 +50,7 @@ export function getDomainBody(string: string): string {
  */
 function getUrlRegExp() {
   return new RegExp(
-    /(?:(?<protocol>https?|udp):\/\/)?(?<host>[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|\d{1,3}(?:\.\d{1,3}){3}|\[[a-fA-F0-9:]+])(?::(?<port>\d+))?(?<path>\/\S*)?/gi,
+    /(?:(?<protocol>https?|udp):\/\/)?(?<host>[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|\d{1,3}(?:\.\d{1,3}){3}|\[[a-fA-F0-9:]+])(?::(?<port>\d+))?(?<path>\/\S*)?/gi
   );
 }
 
@@ -78,7 +88,7 @@ export function containsUrl(data: string): boolean {
 
 export function isValidUri(
   data: string,
-  allowedProtocols: Array<string> = ['http:', 'https:', 'udp:'],
+  allowedProtocols: Array<string> = ['http:', 'https:', 'udp:']
 ): boolean {
   try {
     const parsedURL = new URL(data);

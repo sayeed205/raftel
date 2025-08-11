@@ -221,8 +221,18 @@ export interface ApiError {
 
 // Re-export enhanced types from qbit modules
 export * from './qbit/constants';
-export type { NetworkInterface, QBittorrentPreferences, ScanDirs } from './qbit/preferences';
-export type { Feed, FeedArticle, FeedRule, RSSDownloadHistory, RSSFeedData } from './qbit/rss';
+export type {
+  NetworkInterface,
+  QBittorrentPreferences,
+  ScanDirs,
+} from './qbit/preferences';
+export type {
+  Feed,
+  FeedArticle,
+  FeedRule,
+  RSSDownloadHistory,
+  RSSFeedData,
+} from './qbit/rss';
 export type {
   SearchEngine,
   SearchHistoryItem,

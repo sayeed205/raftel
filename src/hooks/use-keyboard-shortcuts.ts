@@ -35,7 +35,7 @@ const DEFAULT_OPTIONS: UseKeyboardShortcutsOptions = {
  */
 export function useKeyboardShortcuts(
   shortcuts: Array<KeyboardShortcut>,
-  options: UseKeyboardShortcutsOptions = {},
+  options: UseKeyboardShortcutsOptions = {}
 ) {
   const opts = { ...DEFAULT_OPTIONS, ...options };
   const shortcutsRef = useRef<Array<KeyboardShortcut>>([]);
@@ -97,7 +97,7 @@ export function useKeyboardShortcuts(
 
       return ctrlMatches && shiftMatches && altMatches && metaMatches;
     },
-    [],
+    []
   );
 
   const handleKeyDown = useCallback(
@@ -119,13 +119,15 @@ export function useKeyboardShortcuts(
 
       // Find matching shortcut
       const matchingShortcut = shortcutsRef.current.find((shortcut) =>
-        matchesShortcut(keyboardEvent, shortcut),
+        matchesShortcut(keyboardEvent, shortcut)
       );
 
       if (matchingShortcut) {
         // Handle preventDefault and stopPropagation
-        const shouldPreventDefault = matchingShortcut.preventDefault ?? opts.preventDefault;
-        const shouldStopPropagation = matchingShortcut.stopPropagation ?? opts.stopPropagation;
+        const shouldPreventDefault =
+          matchingShortcut.preventDefault ?? opts.preventDefault;
+        const shouldStopPropagation =
+          matchingShortcut.stopPropagation ?? opts.stopPropagation;
 
         if (shouldPreventDefault) {
           keyboardEvent.preventDefault();
@@ -149,7 +151,7 @@ export function useKeyboardShortcuts(
       opts.ignoreInputFields,
       isInputElement,
       matchesShortcut,
-    ],
+    ]
   );
 
   useEffect(() => {
@@ -175,7 +177,7 @@ export function useKeyboardShortcuts(
  */
 export function useKeyboardShortcut(
   shortcut: Omit<KeyboardShortcut, 'description' | 'category'>,
-  options: UseKeyboardShortcutsOptions = {},
+  options: UseKeyboardShortcutsOptions = {}
 ) {
   const fullShortcut: KeyboardShortcut = {
     ...shortcut,
@@ -293,7 +295,7 @@ export function createPlatformShortcut(
     useCmd?: boolean; // Use Cmd on Mac, Ctrl on Windows/Linux
     shiftKey?: boolean;
     altKey?: boolean;
-  } = {},
+  } = {}
 ): KeyboardShortcut {
   const { useCmd = false, shiftKey = false, altKey = false } = options;
   const platform = getPlatform();
@@ -314,7 +316,7 @@ export function createPlatformShortcut(
  * Utility function to group shortcuts by category
  */
 export function groupShortcutsByCategory(
-  shortcuts: Array<KeyboardShortcut>,
+  shortcuts: Array<KeyboardShortcut>
 ): Record<string, Array<KeyboardShortcut>> {
   return shortcuts.reduce(
     (groups, shortcut) => {
@@ -325,6 +327,6 @@ export function groupShortcutsByCategory(
       groups[category].push(shortcut);
       return groups;
     },
-    {} as Record<string, Array<KeyboardShortcut>>,
+    {} as Record<string, Array<KeyboardShortcut>>
   );
 }

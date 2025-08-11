@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
 import type { ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 import type { TorrentState } from '@/types/api';
 
@@ -9,7 +9,10 @@ export * from '../helpers';
 export { getTorrentStateColor as getStateColor } from '../helpers/colors';
 export { formatData as formatBytes } from '../helpers/data';
 export { formatDuration as formatTime } from '../helpers/datetime';
-export { formatPercent as formatProgress, formatRatio } from '../helpers/number';
+export {
+  formatPercent as formatProgress,
+  formatRatio,
+} from '../helpers/number';
 export { formatSpeed } from '../helpers/speed';
 
 export function cn(...inputs: Array<ClassValue>) {

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-
+import { SettingsSearchDialog } from '@/features/settings/components/settings-search-dialog';
+import { useSettings, useSettingsActions } from '@/stores/settings-store';
 import { Outlet } from '@tanstack/react-router';
 import {
   AppWindowIcon,
@@ -12,13 +13,11 @@ import {
   SlidersHorizontalIcon,
 } from 'lucide-react';
 
-import SidebarNav from './components/sidebar-nav';
+import { Separator } from '@/components/ui/separator';
 import { Header } from '@/components/layout/header';
 import { Main } from '@/components/layout/main';
-import { Separator } from '@/components/ui/separator';
-import { SettingsSearchDialog } from '@/features/settings/components/settings-search-dialog';
-import { useSettings, useSettingsActions } from '@/stores/settings-store';
 
+import SidebarNav from './components/sidebar-nav';
 
 export default function Settings() {
   const { preferences, isLoading } = useSettings();
@@ -37,16 +36,20 @@ export default function Settings() {
       </Header>
 
       <Main fixed>
-        <div className='space-y-0.5'>
-          <h1 className='text-2xl font-bold tracking-tight md:text-3xl'>Settings</h1>
-          <p className='text-muted-foreground'>Manage your qBittorrent settings and preferences.</p>
+        <div className="space-y-0.5">
+          <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
+            Settings
+          </h1>
+          <p className="text-muted-foreground">
+            Manage your qBittorrent settings and preferences.
+          </p>
         </div>
-        <Separator className='my-4' />
-        <div className='flex flex-1 flex-col space-y-2 overflow-hidden md:space-y-2 lg:flex-row lg:space-y-0 lg:space-x-4'>
-          <aside className='top-0 lg:sticky lg:w-1/5'>
+        <Separator className="my-4" />
+        <div className="flex flex-1 flex-col space-y-2 overflow-hidden md:space-y-2 lg:flex-row lg:space-y-0 lg:space-x-4">
+          <aside className="top-0 lg:sticky lg:w-1/5">
             <SidebarNav items={sidebarNavItems} />
           </aside>
-          <div className='flex w-full overflow-y-hidden'>
+          <div className="flex w-full overflow-y-hidden">
             <Outlet />
           </div>
         </div>

@@ -2,7 +2,11 @@ import { toPrecision } from './number';
 
 const units = ['', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
 
-export function formatDataValue(data: number, isBinary: boolean, precision?: number): string {
+export function formatDataValue(
+  data: number,
+  isBinary: boolean,
+  precision?: number
+): string {
   const base = isBinary ? 1024 : 1000;
   if (!data || data === 0) return '0';
 
@@ -23,7 +27,11 @@ export function formatDataUnit(data: number, isBinary: boolean): string {
   return `${units[i - 1]}${isBinary && i > 1 ? 'i' : ''}B`;
 }
 
-export function formatData(data: number, isBinary: boolean = true, precision?: number): string {
+export function formatData(
+  data: number,
+  isBinary: boolean = true,
+  precision?: number
+): string {
   return `${formatDataValue(data, isBinary, precision)} ${formatDataUnit(data, isBinary)}`;
 }
 

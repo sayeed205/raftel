@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 
 import { useInterfaceShortcuts } from './use-interface-shortcuts';
+import type { KeyboardShortcut } from './use-keyboard-shortcuts';
 import { useTorrentActions } from './use-torrent-actions';
 import { useTorrentNavigation } from './use-torrent-navigation';
 import { useTorrentSelection } from './use-torrent-selection';
-import type { KeyboardShortcut } from './use-keyboard-shortcuts';
 
 interface UseTorrentKeyboardShortcutsOptions {
   enabled?: boolean;
@@ -17,7 +17,9 @@ interface UseTorrentKeyboardShortcutsOptions {
  * Comprehensive hook that combines all torrent-related keyboard shortcuts
  * Provides navigation, actions, selection, and bulk operations
  */
-export function useTorrentKeyboardShortcuts(options: UseTorrentKeyboardShortcutsOptions = {}) {
+export function useTorrentKeyboardShortcuts(
+  options: UseTorrentKeyboardShortcutsOptions = {}
+) {
   const { enabled = true, onRefresh, onFocusSearch, onAddTorrent } = options;
 
   // Initialize all shortcut hooks
@@ -34,7 +36,12 @@ export function useTorrentKeyboardShortcuts(options: UseTorrentKeyboardShortcuts
       ...selection.shortcuts,
       ...interfaceShortcuts.shortcuts,
     ];
-  }, [navigation.shortcuts, actions.shortcuts, selection.shortcuts, interfaceShortcuts.shortcuts]);
+  }, [
+    navigation.shortcuts,
+    actions.shortcuts,
+    selection.shortcuts,
+    interfaceShortcuts.shortcuts,
+  ]);
 
   return {
     // Navigation functions

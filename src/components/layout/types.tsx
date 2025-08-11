@@ -1,5 +1,4 @@
 import type * as React from 'react';
-
 import type { LinkProps } from '@tanstack/react-router';
 
 interface User {

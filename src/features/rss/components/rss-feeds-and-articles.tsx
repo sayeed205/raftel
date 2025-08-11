@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-
+import { useRSSStore } from '@/stores/rss-store';
 import {
   DownloadIcon,
   EditIcon,
@@ -13,11 +13,17 @@ import {
   TrashIcon,
 } from 'lucide-react';
 
-import { RSSFeedDialog } from './rss-feed-dialog';
+import { useConfirmationDialog } from '@/hooks/use-confirmation-dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
@@ -34,9 +40,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useConfirmationDialog } from '@/hooks/use-confirmation-dialog';
-import { useRSSStore } from '@/stores/rss-store';
 
+import { RSSFeedDialog } from './rss-feed-dialog';
 
 export function RSSFeedsAndArticles({
   dashboardView = false,
@@ -98,7 +103,9 @@ export function RSSFeedsAndArticles({
           comparison = a.title.localeCompare(b.title);
           break;
         case 'feed':
-          comparison = ((a as any).feedName || '').localeCompare((b as any).feedName || '');
+          comparison = ((a as any).feedName || '').localeCompare(
+            (b as any).feedName || ''
+          );
           break;
       }
 
@@ -136,7 +143,7 @@ export function RSSFeedsAndArticles({
         } catch (error) {
           console.error('Failed to delete feed:', error);
         }
-      },
+      }
     );
   };
 
@@ -150,13 +157,17 @@ export function RSSFeedsAndArticles({
       return;
     }
 
-    confirmAction('Download', `Are you sure you want to download "${article.title}"?`, async () => {
-      try {
-        await downloadArticle(article.feedName, article.id);
-      } catch (error) {
-        console.error('Failed to download article:', error);
+    confirmAction(
+      'Download',
+      `Are you sure you want to download "${article.title}"?`,
+      async () => {
+        try {
+          await downloadArticle(article.feedName, article.id);
+        } catch (error) {
+          console.error('Failed to download article:', error);
+        }
       }
-    });
+    );
   };
 
   const handleMarkAsRead = async (article: any) => {
@@ -200,7 +211,7 @@ export function RSSFeedsAndArticles({
         } catch (error) {
           console.error('Failed to mark articles as read:', error);
         }
-      },
+      }
     );
   };
 
@@ -230,7 +241,7 @@ export function RSSFeedsAndArticles({
         } catch (error) {
           console.error('Failed to download articles:', error);
         }
-      },
+      }
     );
   };
 
@@ -253,39 +264,40 @@ export function RSSFeedsAndArticles({
 
   const getStatusBadge = (feed: any) => {
     if (feed.isLoading || isRefreshing[feed.name]) {
-      return <Badge variant='secondary'>Refreshing...</Badge>;
+      return <Badge variant="secondary">Refreshing...</Badge>;
     }
     if (feed.hasError || feedErrors[feed.name]) {
-      return <Badge variant='destructive'>Error</Badge>;
+      return <Badge variant="destructive">Error</Badge>;
     }
-    return <Badge variant='default'>Active</Badge>;
+    return <Badge variant="default">Active</Badge>;
   };
 
   const getUnreadCount = () => {
-    return filteredAndSortedArticles.filter((article) => !article.isRead).length;
+    return filteredAndSortedArticles.filter((article) => !article.isRead)
+      .length;
   };
 
   if (isFeedsLoading && feeds.length === 0) {
     return (
-      <div className='space-y-6'>
+      <div className="space-y-6">
         {/* Feeds Section */}
-        <div className='space-y-4'>
-          <div className='flex items-center justify-between'>
-            <Skeleton className='h-8 w-32' />
-            <div className='flex gap-2'>
-              <Skeleton className='h-10 w-24' />
-              <Skeleton className='h-10 w-20' />
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-8 w-32" />
+            <div className="flex gap-2">
+              <Skeleton className="h-10 w-24" />
+              <Skeleton className="h-10 w-20" />
             </div>
           </div>
-          <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 3 }).map((_, i) => (
               <Card key={i}>
                 <CardHeader>
-                  <Skeleton className='h-6 w-3/4' />
-                  <Skeleton className='h-4 w-full' />
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-4 w-full" />
                 </CardHeader>
                 <CardContent>
-                  <Skeleton className='h-4 w-1/2' />
+                  <Skeleton className="h-4 w-1/2" />
                 </CardContent>
               </Card>
             ))}
@@ -293,35 +305,37 @@ export function RSSFeedsAndArticles({
         </div>
 
         {/* Divider */}
-        <div className='relative'>
-          <div className='absolute inset-0 flex items-center'>
-            <div className='w-full border-t' />
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t" />
           </div>
-          <div className='relative flex justify-center text-xs uppercase'>
-            <span className='bg-background text-muted-foreground px-2'>Articles</span>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background text-muted-foreground px-2">
+              Articles
+            </span>
           </div>
         </div>
 
         {/* Articles Section */}
-        <div className='space-y-4'>
-          <div className='flex items-center justify-between'>
-            <Skeleton className='h-8 w-32' />
-            <div className='flex gap-2'>
-              <Skeleton className='h-10 w-32' />
-              <Skeleton className='h-10 w-24' />
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-8 w-32" />
+            <div className="flex gap-2">
+              <Skeleton className="h-10 w-32" />
+              <Skeleton className="h-10 w-24" />
             </div>
           </div>
-          <div className='space-y-2'>
+          <div className="space-y-2">
             {Array.from({ length: 5 }).map((_, i) => (
               <Card key={i}>
-                <CardContent className='p-4'>
-                  <div className='flex items-start justify-between'>
-                    <div className='flex-1 space-y-2'>
-                      <Skeleton className='h-5 w-3/4' />
-                      <Skeleton className='h-4 w-1/2' />
-                      <Skeleton className='h-3 w-1/4' />
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1 space-y-2">
+                      <Skeleton className="h-5 w-3/4" />
+                      <Skeleton className="h-4 w-1/2" />
+                      <Skeleton className="h-3 w-1/4" />
                     </div>
-                    <Skeleton className='h-8 w-20' />
+                    <Skeleton className="h-8 w-20" />
                   </div>
                 </CardContent>
               </Card>
@@ -336,22 +350,24 @@ export function RSSFeedsAndArticles({
     <div className={`space-y-6 ${dashboardView ? 'p-0' : ''}`}>
       {/* Feeds Section - Only show if not in articlesOnly mode */}
       {!articlesOnly && (
-        <div className='space-y-4'>
+        <div className="space-y-4">
           {!dashboardView && (
-            <div className='flex items-center justify-between'>
-              <h3 className='text-lg font-medium'>RSS Feeds ({feeds.length})</h3>
-              <div className='flex gap-2'>
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-medium">
+                RSS Feeds ({feeds.length})
+              </h3>
+              <div className="flex gap-2">
                 <Button
-                  variant='outline'
-                  size='sm'
+                  variant="outline"
+                  size="sm"
                   onClick={handleRefreshAll}
                   disabled={isFeedsLoading}
                 >
-                  <RefreshCwIcon className='mr-2 h-4 w-4' />
+                  <RefreshCwIcon className="mr-2 h-4 w-4" />
                   Refresh All
                 </Button>
-                <Button size='sm' onClick={() => setIsAddDialogOpen(true)}>
-                  <PlusIcon className='mr-2 h-4 w-4' />
+                <Button size="sm" onClick={() => setIsAddDialogOpen(true)}>
+                  <PlusIcon className="mr-2 h-4 w-4" />
                   Add Feed
                 </Button>
               </div>
@@ -360,14 +376,17 @@ export function RSSFeedsAndArticles({
 
           {feeds.length === 0 ? (
             <Card>
-              <CardContent className='flex flex-col items-center justify-center py-12'>
-                <div className='space-y-2 text-center'>
-                  <h3 className='text-lg font-medium'>No RSS feeds configured</h3>
-                  <p className='text-muted-foreground'>
-                    Add your first RSS feed to start monitoring for new torrents.
+              <CardContent className="flex flex-col items-center justify-center py-12">
+                <div className="space-y-2 text-center">
+                  <h3 className="text-lg font-medium">
+                    No RSS feeds configured
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Add your first RSS feed to start monitoring for new
+                    torrents.
                   </p>
                   <Button onClick={() => setIsAddDialogOpen(true)}>
-                    <PlusIcon className='mr-2 h-4 w-4' />
+                    <PlusIcon className="mr-2 h-4 w-4" />
                     Add Feed
                   </Button>
                 </div>
@@ -377,83 +396,96 @@ export function RSSFeedsAndArticles({
             <div
               className={`grid gap-4 ${dashboardView ? 'grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-3'}`}
             >
-              {feeds.slice(0, maxItems > 0 ? maxItems : feeds.length).map((feed) => (
-                <Card
-                  key={feed.name}
-                  className={`hover:bg-muted/50 cursor-pointer transition-colors ${
-                    selectedFeed === feed.name ? 'ring-primary ring-2' : ''
-                  } ${dashboardView ? 'mb-0' : ''}`}
-                  onClick={() => !dashboardView && handleFeedClick(feed.name)}
-                >
-                  <CardHeader className='pb-3'>
-                    <div className='flex items-start justify-between'>
-                      <div className='min-w-0 flex-1 space-y-1'>
-                        <CardTitle className='truncate text-base'>
-                          {feed.title || feed.name}
-                        </CardTitle>
-                        <CardDescription className='truncate text-xs'>{feed.url}</CardDescription>
-                      </div>
-                      {!dashboardView && (
-                        <div className='ml-2 flex items-center gap-2'>
-                          {getStatusBadge(feed)}
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                              <Button variant='ghost' size='sm' className='h-8 w-8 p-0'>
-                                <MoreHorizontalIcon className='h-4 w-4' />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align='end'>
-                              <DropdownMenuItem
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleRefreshFeed(feed.name);
-                                }}
-                                disabled={isRefreshing[feed.name]}
-                              >
-                                <RefreshCwIcon className='mr-2 h-4 w-4' />
-                                Refresh
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setEditingFeed(feed.name);
-                                }}
-                              >
-                                <EditIcon className='mr-2 h-4 w-4' />
-                                Edit
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDeleteFeed(feed.name);
-                                }}
-                                className='text-destructive'
-                              >
-                                <TrashIcon className='mr-2 h-4 w-4' />
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
+              {feeds
+                .slice(0, maxItems > 0 ? maxItems : feeds.length)
+                .map((feed) => (
+                  <Card
+                    key={feed.name}
+                    className={`hover:bg-muted/50 cursor-pointer transition-colors ${
+                      selectedFeed === feed.name ? 'ring-primary ring-2' : ''
+                    } ${dashboardView ? 'mb-0' : ''}`}
+                    onClick={() => !dashboardView && handleFeedClick(feed.name)}
+                  >
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <div className="min-w-0 flex-1 space-y-1">
+                          <CardTitle className="truncate text-base">
+                            {feed.title || feed.name}
+                          </CardTitle>
+                          <CardDescription className="truncate text-xs">
+                            {feed.url}
+                          </CardDescription>
                         </div>
-                      )}
-                      {dashboardView && getStatusBadge(feed)}
-                    </div>
-                  </CardHeader>
-                  <CardContent className='pt-0'>
-                    <div className='text-muted-foreground space-y-2 text-sm'>
-                      <div>Articles: {feed.articles?.length || 0}</div>
-                      <div>Last updated: {formatDate(feed.lastBuildDate)}</div>
-                      {feedErrors[feed.name] && !dashboardView && (
-                        <Alert className='mt-2'>
-                          <AlertDescription className='text-xs'>
-                            {feedErrors[feed.name]}
-                          </AlertDescription>
-                        </Alert>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                        {!dashboardView && (
+                          <div className="ml-2 flex items-center gap-2">
+                            {getStatusBadge(feed)}
+                            <DropdownMenu>
+                              <DropdownMenuTrigger
+                                asChild
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-8 w-8 p-0"
+                                >
+                                  <MoreHorizontalIcon className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRefreshFeed(feed.name);
+                                  }}
+                                  disabled={isRefreshing[feed.name]}
+                                >
+                                  <RefreshCwIcon className="mr-2 h-4 w-4" />
+                                  Refresh
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setEditingFeed(feed.name);
+                                  }}
+                                >
+                                  <EditIcon className="mr-2 h-4 w-4" />
+                                  Edit
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteFeed(feed.name);
+                                  }}
+                                  className="text-destructive"
+                                >
+                                  <TrashIcon className="mr-2 h-4 w-4" />
+                                  Delete
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+                        )}
+                        {dashboardView && getStatusBadge(feed)}
+                      </div>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <div className="text-muted-foreground space-y-2 text-sm">
+                        <div>Articles: {feed.articles?.length || 0}</div>
+                        <div>
+                          Last updated: {formatDate(feed.lastBuildDate)}
+                        </div>
+                        {feedErrors[feed.name] && !dashboardView && (
+                          <Alert className="mt-2">
+                            <AlertDescription className="text-xs">
+                              {feedErrors[feed.name]}
+                            </AlertDescription>
+                          </Alert>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
             </div>
           )}
         </div>
@@ -461,36 +493,50 @@ export function RSSFeedsAndArticles({
 
       {/* Divider - Only show if not in dashboard or articlesOnly mode */}
       {!dashboardView && !articlesOnly && (
-        <div className='relative'>
-          <div className='absolute inset-0 flex items-center'>
-            <div className='w-full border-t' />
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t" />
           </div>
-          <div className='relative flex justify-center text-xs uppercase'>
-            <span className='bg-background text-muted-foreground px-2'>Articles</span>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background text-muted-foreground px-2">
+              Articles
+            </span>
           </div>
         </div>
       )}
 
       {/* Articles Section */}
-      <div className='space-y-4'>
+      <div className="space-y-4">
         {/* Header - Only show if not in dashboard mode */}
         {!dashboardView && (
-          <div className='flex items-center justify-between'>
+          <div className="flex items-center justify-between">
             <div>
-              <h3 className='text-lg font-medium'>Articles ({filteredAndSortedArticles.length})</h3>
+              <h3 className="text-lg font-medium">
+                Articles ({filteredAndSortedArticles.length})
+              </h3>
               {getUnreadCount() > 0 && (
-                <p className='text-muted-foreground text-sm'>{getUnreadCount()} unread</p>
+                <p className="text-muted-foreground text-sm">
+                  {getUnreadCount()} unread
+                </p>
               )}
             </div>
 
             {selectedArticles.length > 0 && (
-              <div className='flex gap-2'>
-                <Button variant='outline' size='sm' onClick={handleBulkMarkAsRead}>
-                  <MailOpenIcon className='mr-2 h-4 w-4' />
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleBulkMarkAsRead}
+                >
+                  <MailOpenIcon className="mr-2 h-4 w-4" />
                   Mark as Read ({selectedArticles.length})
                 </Button>
-                <Button variant='outline' size='sm' onClick={handleBulkDownload}>
-                  <DownloadIcon className='mr-2 h-4 w-4' />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleBulkDownload}
+                >
+                  <DownloadIcon className="mr-2 h-4 w-4" />
                   Download ({selectedArticles.length})
                 </Button>
               </div>
@@ -501,63 +547,75 @@ export function RSSFeedsAndArticles({
         {/* Filters and Search - Only show if not in dashboard mode */}
         {!dashboardView && (
           <Card>
-            <CardContent className='p-4'>
-              <div className='flex flex-wrap items-center gap-4'>
-                <div className='flex items-center gap-2'>
-                  <SearchIcon className='text-muted-foreground h-4 w-4' />
+            <CardContent className="p-4">
+              <div className="flex flex-wrap items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <SearchIcon className="text-muted-foreground h-4 w-4" />
                   <Input
-                    placeholder='Search articles...'
+                    placeholder="Search articles..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className='w-64'
+                    className="w-64"
                   />
                 </div>
 
-                <div className='flex items-center gap-2'>
-                  <FilterIcon className='text-muted-foreground h-4 w-4' />
+                <div className="flex items-center gap-2">
+                  <FilterIcon className="text-muted-foreground h-4 w-4" />
                   <Select
                     value={articleFilter}
                     onValueChange={(value: any) => setArticleFilter(value)}
                   >
-                    <SelectTrigger className='w-32'>
+                    <SelectTrigger className="w-32">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value='all'>All</SelectItem>
-                      <SelectItem value='unread'>Unread</SelectItem>
-                      <SelectItem value='read'>Read</SelectItem>
+                      <SelectItem value="all">All</SelectItem>
+                      <SelectItem value="unread">Unread</SelectItem>
+                      <SelectItem value="read">Read</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
-                <div className='flex items-center gap-2'>
-                  <span className='text-muted-foreground text-sm'>Sort by:</span>
-                  <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-                    <SelectTrigger className='w-24'>
+                <div className="flex items-center gap-2">
+                  <span className="text-muted-foreground text-sm">
+                    Sort by:
+                  </span>
+                  <Select
+                    value={sortBy}
+                    onValueChange={(value: any) => setSortBy(value)}
+                  >
+                    <SelectTrigger className="w-24">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value='date'>Date</SelectItem>
-                      <SelectItem value='title'>Title</SelectItem>
-                      <SelectItem value='feed'>Feed</SelectItem>
+                      <SelectItem value="date">Date</SelectItem>
+                      <SelectItem value="title">Title</SelectItem>
+                      <SelectItem value="feed">Feed</SelectItem>
                     </SelectContent>
                   </Select>
                   <Button
-                    variant='outline'
-                    size='sm'
-                    onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+                    }
                   >
                     {sortOrder === 'asc' ? '↑' : '↓'}
                   </Button>
                 </div>
 
                 {filteredAndSortedArticles.length > 0 && (
-                  <div className='flex items-center gap-2'>
+                  <div className="flex items-center gap-2">
                     <Checkbox
-                      checked={selectedArticles.length === filteredAndSortedArticles.length}
+                      checked={
+                        selectedArticles.length ===
+                        filteredAndSortedArticles.length
+                      }
                       onCheckedChange={handleSelectAll}
                     />
-                    <span className='text-muted-foreground text-sm'>Select all</span>
+                    <span className="text-muted-foreground text-sm">
+                      Select all
+                    </span>
                   </div>
                 )}
               </div>
@@ -570,7 +628,11 @@ export function RSSFeedsAndArticles({
           <Alert>
             <AlertDescription>
               Showing articles from feed: <strong>{selectedFeed}</strong>
-              <Button variant='link' className='ml-2 p-0' onClick={() => setSelectedFeed(null)}>
+              <Button
+                variant="link"
+                className="ml-2 p-0"
+                onClick={() => setSelectedFeed(null)}
+              >
                 Clear filter
               </Button>
             </AlertDescription>
@@ -580,10 +642,10 @@ export function RSSFeedsAndArticles({
         {/* Articles List */}
         {filteredAndSortedArticles.length === 0 ? (
           <Card>
-            <CardContent className='flex flex-col items-center justify-center py-12'>
-              <div className='space-y-2 text-center'>
-                <h3 className='text-lg font-medium'>No articles found</h3>
-                <p className='text-muted-foreground'>
+            <CardContent className="flex flex-col items-center justify-center py-12">
+              <div className="space-y-2 text-center">
+                <h3 className="text-lg font-medium">No articles found</h3>
+                <p className="text-muted-foreground">
                   {articles.length === 0
                     ? 'No articles available. Add RSS feeds to see articles.'
                     : 'No articles match your current filters.'}
@@ -592,7 +654,7 @@ export function RSSFeedsAndArticles({
             </CardContent>
           </Card>
         ) : (
-          <div className='space-y-2'>
+          <div className="space-y-2">
             {filteredAndSortedArticles.map((article) => (
               <Card
                 key={article.id}
@@ -600,18 +662,20 @@ export function RSSFeedsAndArticles({
                   !article.isRead ? 'border-l-primary border-l-4' : ''
                 }`}
               >
-                <CardContent className='p-4'>
-                  <div className='flex items-start gap-3'>
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-3">
                     {!dashboardView && (
                       <Checkbox
                         checked={selectedArticles.includes(article.id)}
-                        onCheckedChange={() => toggleArticleSelection(article.id)}
+                        onCheckedChange={() =>
+                          toggleArticleSelection(article.id)
+                        }
                       />
                     )}
 
-                    <div className='min-w-0 flex-1 space-y-2'>
-                      <div className='flex items-start justify-between gap-2'>
-                        <div className='min-w-0 flex-1'>
+                    <div className="min-w-0 flex-1 space-y-2">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0 flex-1">
                           <h4
                             className={`leading-tight font-medium ${
                               !article.isRead ? 'font-semibold' : ''
@@ -619,15 +683,15 @@ export function RSSFeedsAndArticles({
                           >
                             {article.title}
                           </h4>
-                          <div className='mt-1 flex items-center gap-2'>
-                            <Badge variant='outline' className='text-xs'>
+                          <div className="mt-1 flex items-center gap-2">
+                            <Badge variant="outline" className="text-xs">
                               {(article as any).feedName}
                             </Badge>
-                            <span className='text-muted-foreground text-xs'>
+                            <span className="text-muted-foreground text-xs">
                               {formatDate(article.date)}
                             </span>
                             {!article.isRead && (
-                              <Badge variant='default' className='text-xs'>
+                              <Badge variant="default" className="text-xs">
                                 New
                               </Badge>
                             )}
@@ -635,35 +699,37 @@ export function RSSFeedsAndArticles({
                         </div>
 
                         {!dashboardView && (
-                          <div className='flex items-center gap-1'>
+                          <div className="flex items-center gap-1">
                             {!article.isRead && (
                               <Button
-                                variant='ghost'
-                                size='sm'
+                                variant="ghost"
+                                size="sm"
                                 onClick={() => handleMarkAsRead(article)}
-                                title='Mark as read'
+                                title="Mark as read"
                               >
-                                <MailOpenIcon className='h-4 w-4' />
+                                <MailOpenIcon className="h-4 w-4" />
                               </Button>
                             )}
 
                             <Button
-                              variant='ghost'
-                              size='sm'
-                              onClick={() => window.open(article.link, '_blank')}
-                              title='Open article'
+                              variant="ghost"
+                              size="sm"
+                              onClick={() =>
+                                window.open(article.link, '_blank')
+                              }
+                              title="Open article"
                             >
-                              <ExternalLinkIcon className='h-4 w-4' />
+                              <ExternalLinkIcon className="h-4 w-4" />
                             </Button>
 
                             {article.torrentURL && (
                               <Button
-                                variant='ghost'
-                                size='sm'
+                                variant="ghost"
+                                size="sm"
                                 onClick={() => handleDownloadArticle(article)}
-                                title='Download torrent'
+                                title="Download torrent"
                               >
-                                <DownloadIcon className='h-4 w-4' />
+                                <DownloadIcon className="h-4 w-4" />
                               </Button>
                             )}
                           </div>
@@ -689,13 +755,17 @@ export function RSSFeedsAndArticles({
       {/* Dialogs - Only show if not in dashboard mode */}
       {!dashboardView && (
         <>
-          <RSSFeedDialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen} mode='add' />
+          <RSSFeedDialog
+            open={isAddDialogOpen}
+            onOpenChange={setIsAddDialogOpen}
+            mode="add"
+          />
 
           {editingFeed && (
             <RSSFeedDialog
               open={!!editingFeed}
               onOpenChange={(open) => !open && setEditingFeed(null)}
-              mode='edit'
+              mode="edit"
               feedName={editingFeed}
             />
           )}

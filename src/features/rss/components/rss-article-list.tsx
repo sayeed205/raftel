@@ -1,7 +1,14 @@
 import { useMemo, useState } from 'react';
+import { useRSSStore } from '@/stores/rss-store';
+import {
+  DownloadIcon,
+  ExternalLinkIcon,
+  FilterIcon,
+  MailOpenIcon,
+  SearchIcon,
+} from 'lucide-react';
 
-import { DownloadIcon, ExternalLinkIcon, FilterIcon, MailOpenIcon, SearchIcon } from 'lucide-react';
-
+import { useConfirmationDialog } from '@/hooks/use-confirmation-dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -16,8 +23,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useConfirmationDialog } from '@/hooks/use-confirmation-dialog';
-import { useRSSStore } from '@/stores/rss-store';
 
 export function RSSArticleList() {
   const {
@@ -57,7 +62,9 @@ export function RSSArticleList() {
           comparison = a.title.localeCompare(b.title);
           break;
         case 'feed':
-          comparison = ((a as any).feedName || '').localeCompare((b as any).feedName || '');
+          comparison = ((a as any).feedName || '').localeCompare(
+            (b as any).feedName || ''
+          );
           break;
       }
 
@@ -71,13 +78,17 @@ export function RSSArticleList() {
       return;
     }
 
-    confirmAction('Download', `Are you sure you want to download "${article.title}"?`, async () => {
-      try {
-        await downloadArticle(article.feedName, article.id);
-      } catch (error) {
-        console.error('Failed to download article:', error);
+    confirmAction(
+      'Download',
+      `Are you sure you want to download "${article.title}"?`,
+      async () => {
+        try {
+          await downloadArticle(article.feedName, article.id);
+        } catch (error) {
+          console.error('Failed to download article:', error);
+        }
       }
-    });
+    );
   };
 
   const handleMarkAsRead = async (article: any) => {
@@ -121,7 +132,7 @@ export function RSSArticleList() {
         } catch (error) {
           console.error('Failed to mark articles as read:', error);
         }
-      },
+      }
     );
   };
 
@@ -151,7 +162,7 @@ export function RSSArticleList() {
         } catch (error) {
           console.error('Failed to download articles:', error);
         }
-      },
+      }
     );
   };
 
@@ -172,30 +183,31 @@ export function RSSArticleList() {
   };
 
   const getUnreadCount = () => {
-    return filteredAndSortedArticles.filter((article) => !article.isRead).length;
+    return filteredAndSortedArticles.filter((article) => !article.isRead)
+      .length;
   };
 
   if (isArticlesLoading && articles.length === 0) {
     return (
-      <div className='space-y-4'>
-        <div className='flex items-center justify-between'>
-          <Skeleton className='h-8 w-32' />
-          <div className='flex gap-2'>
-            <Skeleton className='h-10 w-32' />
-            <Skeleton className='h-10 w-24' />
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-8 w-32" />
+          <div className="flex gap-2">
+            <Skeleton className="h-10 w-32" />
+            <Skeleton className="h-10 w-24" />
           </div>
         </div>
-        <div className='space-y-2'>
+        <div className="space-y-2">
           {Array.from({ length: 5 }).map((_, i) => (
             <Card key={i}>
-              <CardContent className='p-4'>
-                <div className='flex items-start justify-between'>
-                  <div className='flex-1 space-y-2'>
-                    <Skeleton className='h-5 w-3/4' />
-                    <Skeleton className='h-4 w-1/2' />
-                    <Skeleton className='h-3 w-1/4' />
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-5 w-3/4" />
+                    <Skeleton className="h-4 w-1/2" />
+                    <Skeleton className="h-3 w-1/4" />
                   </div>
-                  <Skeleton className='h-8 w-20' />
+                  <Skeleton className="h-8 w-20" />
                 </div>
               </CardContent>
             </Card>
@@ -206,24 +218,28 @@ export function RSSArticleList() {
   }
 
   return (
-    <div className='space-y-4'>
+    <div className="space-y-4">
       {/* Header */}
-      <div className='flex items-center justify-between'>
+      <div className="flex items-center justify-between">
         <div>
-          <h3 className='text-lg font-medium'>RSS Articles ({filteredAndSortedArticles.length})</h3>
+          <h3 className="text-lg font-medium">
+            RSS Articles ({filteredAndSortedArticles.length})
+          </h3>
           {getUnreadCount() > 0 && (
-            <p className='text-muted-foreground text-sm'>{getUnreadCount()} unread</p>
+            <p className="text-muted-foreground text-sm">
+              {getUnreadCount()} unread
+            </p>
           )}
         </div>
 
         {selectedArticles.length > 0 && (
-          <div className='flex gap-2'>
-            <Button variant='outline' size='sm' onClick={handleBulkMarkAsRead}>
-              <MailOpenIcon className='mr-2 h-4 w-4' />
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={handleBulkMarkAsRead}>
+              <MailOpenIcon className="mr-2 h-4 w-4" />
               Mark as Read ({selectedArticles.length})
             </Button>
-            <Button variant='outline' size='sm' onClick={handleBulkDownload}>
-              <DownloadIcon className='mr-2 h-4 w-4' />
+            <Button variant="outline" size="sm" onClick={handleBulkDownload}>
+              <DownloadIcon className="mr-2 h-4 w-4" />
               Download ({selectedArticles.length})
             </Button>
           </div>
@@ -232,60 +248,72 @@ export function RSSArticleList() {
 
       {/* Filters and Search */}
       <Card>
-        <CardContent className='p-4'>
-          <div className='flex flex-wrap items-center gap-4'>
-            <div className='flex items-center gap-2'>
-              <SearchIcon className='text-muted-foreground h-4 w-4' />
+        <CardContent className="p-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2">
+              <SearchIcon className="text-muted-foreground h-4 w-4" />
               <Input
-                placeholder='Search articles...'
+                placeholder="Search articles..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className='w-64'
+                className="w-64"
               />
             </div>
 
-            <div className='flex items-center gap-2'>
-              <FilterIcon className='text-muted-foreground h-4 w-4' />
-              <Select value={articleFilter} onValueChange={(value: any) => setArticleFilter(value)}>
-                <SelectTrigger className='w-32'>
+            <div className="flex items-center gap-2">
+              <FilterIcon className="text-muted-foreground h-4 w-4" />
+              <Select
+                value={articleFilter}
+                onValueChange={(value: any) => setArticleFilter(value)}
+              >
+                <SelectTrigger className="w-32">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value='all'>All</SelectItem>
-                  <SelectItem value='unread'>Unread</SelectItem>
-                  <SelectItem value='read'>Read</SelectItem>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="unread">Unread</SelectItem>
+                  <SelectItem value="read">Read</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            <div className='flex items-center gap-2'>
-              <span className='text-muted-foreground text-sm'>Sort by:</span>
-              <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-                <SelectTrigger className='w-24'>
+            <div className="flex items-center gap-2">
+              <span className="text-muted-foreground text-sm">Sort by:</span>
+              <Select
+                value={sortBy}
+                onValueChange={(value: any) => setSortBy(value)}
+              >
+                <SelectTrigger className="w-24">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value='date'>Date</SelectItem>
-                  <SelectItem value='title'>Title</SelectItem>
-                  <SelectItem value='feed'>Feed</SelectItem>
+                  <SelectItem value="date">Date</SelectItem>
+                  <SelectItem value="title">Title</SelectItem>
+                  <SelectItem value="feed">Feed</SelectItem>
                 </SelectContent>
               </Select>
               <Button
-                variant='outline'
-                size='sm'
-                onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+                }
               >
                 {sortOrder === 'asc' ? '↑' : '↓'}
               </Button>
             </div>
 
             {filteredAndSortedArticles.length > 0 && (
-              <div className='flex items-center gap-2'>
+              <div className="flex items-center gap-2">
                 <Checkbox
-                  checked={selectedArticles.length === filteredAndSortedArticles.length}
+                  checked={
+                    selectedArticles.length === filteredAndSortedArticles.length
+                  }
                   onCheckedChange={handleSelectAll}
                 />
-                <span className='text-muted-foreground text-sm'>Select all</span>
+                <span className="text-muted-foreground text-sm">
+                  Select all
+                </span>
               </div>
             )}
           </div>
@@ -304,10 +332,10 @@ export function RSSArticleList() {
       {/* Articles List */}
       {filteredAndSortedArticles.length === 0 ? (
         <Card>
-          <CardContent className='flex flex-col items-center justify-center py-12'>
-            <div className='space-y-2 text-center'>
-              <h3 className='text-lg font-medium'>No articles found</h3>
-              <p className='text-muted-foreground'>
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <div className="space-y-2 text-center">
+              <h3 className="text-lg font-medium">No articles found</h3>
+              <p className="text-muted-foreground">
                 {articles.length === 0
                   ? 'No articles available. Add RSS feeds to see articles.'
                   : 'No articles match your current filters.'}
@@ -316,7 +344,7 @@ export function RSSArticleList() {
           </CardContent>
         </Card>
       ) : (
-        <div className='space-y-2'>
+        <div className="space-y-2">
           {filteredAndSortedArticles.map((article) => (
             <Card
               key={article.id}
@@ -324,16 +352,16 @@ export function RSSArticleList() {
                 !article.isRead ? 'border-l-primary border-l-4' : ''
               }`}
             >
-              <CardContent className='p-4'>
-                <div className='flex items-start gap-3'>
+              <CardContent className="p-4">
+                <div className="flex items-start gap-3">
                   <Checkbox
                     checked={selectedArticles.includes(article.id)}
                     onCheckedChange={() => toggleArticleSelection(article.id)}
                   />
 
-                  <div className='min-w-0 flex-1 space-y-2'>
-                    <div className='flex items-start justify-between gap-2'>
-                      <div className='min-w-0 flex-1'>
+                  <div className="min-w-0 flex-1 space-y-2">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0 flex-1">
                         <h4
                           className={`leading-tight font-medium ${
                             !article.isRead ? 'font-semibold' : ''
@@ -341,57 +369,57 @@ export function RSSArticleList() {
                         >
                           {article.title}
                         </h4>
-                        <div className='mt-1 flex items-center gap-2'>
-                          <Badge variant='outline' className='text-xs'>
+                        <div className="mt-1 flex items-center gap-2">
+                          <Badge variant="outline" className="text-xs">
                             {(article as any).feedName}
                           </Badge>
-                          <span className='text-muted-foreground text-xs'>
+                          <span className="text-muted-foreground text-xs">
                             {formatDate(article.date)}
                           </span>
                           {!article.isRead && (
-                            <Badge variant='default' className='text-xs'>
+                            <Badge variant="default" className="text-xs">
                               New
                             </Badge>
                           )}
                         </div>
                       </div>
 
-                      <div className='flex items-center gap-1'>
+                      <div className="flex items-center gap-1">
                         {!article.isRead && (
                           <Button
-                            variant='ghost'
-                            size='sm'
+                            variant="ghost"
+                            size="sm"
                             onClick={() => handleMarkAsRead(article)}
-                            title='Mark as read'
+                            title="Mark as read"
                           >
-                            <MailOpenIcon className='h-4 w-4' />
+                            <MailOpenIcon className="h-4 w-4" />
                           </Button>
                         )}
 
                         <Button
-                          variant='ghost'
-                          size='sm'
+                          variant="ghost"
+                          size="sm"
                           onClick={() => window.open(article.link, '_blank')}
-                          title='Open article'
+                          title="Open article"
                         >
-                          <ExternalLinkIcon className='h-4 w-4' />
+                          <ExternalLinkIcon className="h-4 w-4" />
                         </Button>
 
                         {article.torrentURL && (
                           <Button
-                            variant='ghost'
-                            size='sm'
+                            variant="ghost"
+                            size="sm"
                             onClick={() => handleDownloadArticle(article)}
-                            title='Download torrent'
+                            title="Download torrent"
                           >
-                            <DownloadIcon className='h-4 w-4' />
+                            <DownloadIcon className="h-4 w-4" />
                           </Button>
                         )}
                       </div>
                     </div>
 
                     {article.description && (
-                      <p className='text-muted-foreground line-clamp-2 text-sm'>
+                      <p className="text-muted-foreground line-clamp-2 text-sm">
                         {article.description}
                       </p>
                     )}

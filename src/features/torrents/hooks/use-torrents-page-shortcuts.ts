@@ -12,7 +12,9 @@ interface UseTorrentsPageShortcutsOptions {
  * Hook specifically for the torrents page that integrates keyboard shortcuts
  * with the page's specific functionality
  */
-export function useTorrentsPageShortcuts(options: UseTorrentsPageShortcutsOptions = {}) {
+export function useTorrentsPageShortcuts(
+  options: UseTorrentsPageShortcutsOptions = {}
+) {
   const { onRefresh, onAddTorrent, enabled = true } = options;
   // Note: We could use setSearchQuery from useTorrentStore if needed for search functionality
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -41,7 +43,9 @@ export function useTorrentsPageShortcuts(options: UseTorrentsPageShortcutsOption
     }
 
     // Fallback to querySelector
-    const searchInput = document.querySelector('input[placeholder*="Search"]') as HTMLInputElement;
+    const searchInput = document.querySelector(
+      'input[placeholder*="Search"]'
+    ) as HTMLInputElement;
     if (searchInput) {
       searchInput.focus();
       searchInput.select();

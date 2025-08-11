@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-
+import type { WebUISettings } from '@/stores/settings-store';
 import { Download, FileText, Settings } from 'lucide-react';
 
-import type { WebUISettings } from '@/stores/settings-store';
 import type { QBittorrentPreferences } from '@/types/api';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -141,27 +140,28 @@ export function SettingsExportDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-h-[80vh] max-w-2xl'>
+      <DialogContent className="max-h-[80vh] max-w-2xl">
         <DialogHeader>
-          <DialogTitle className='flex items-center gap-2'>
-            <Download className='h-5 w-5' />
+          <DialogTitle className="flex items-center gap-2">
+            <Download className="h-5 w-5" />
             Export Settings
           </DialogTitle>
           <DialogDescription>
-            Export your qBittorrent preferences and WebUI settings to a JSON file.
+            Export your qBittorrent preferences and WebUI settings to a JSON
+            file.
           </DialogDescription>
         </DialogHeader>
 
         {step === 'options' && (
-          <div className='space-y-6'>
+          <div className="space-y-6">
             {/* What to export */}
-            <div className='space-y-3'>
-              <Label className='text-base font-medium'>What to export</Label>
+            <div className="space-y-3">
+              <Label className="text-base font-medium">What to export</Label>
 
-              <div className='space-y-3'>
-                <div className='flex items-center space-x-2'>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2">
                   <Checkbox
-                    id='include-preferences'
+                    id="include-preferences"
                     checked={exportOptions.includePreferences}
                     onCheckedChange={(checked) =>
                       setExportOptions((prev) => ({
@@ -171,18 +171,23 @@ export function SettingsExportDialog({
                     }
                     disabled={!preferences}
                   />
-                  <Label htmlFor='include-preferences' className='flex items-center gap-2'>
-                    <Settings className='h-4 w-4' />
+                  <Label
+                    htmlFor="include-preferences"
+                    className="flex items-center gap-2"
+                  >
+                    <Settings className="h-4 w-4" />
                     qBittorrent Preferences
                     {preferences && (
-                      <Badge variant='secondary'>{Object.keys(preferences).length} settings</Badge>
+                      <Badge variant="secondary">
+                        {Object.keys(preferences).length} settings
+                      </Badge>
                     )}
                   </Label>
                 </div>
 
-                <div className='flex items-center space-x-2'>
+                <div className="flex items-center space-x-2">
                   <Checkbox
-                    id='include-webui'
+                    id="include-webui"
                     checked={exportOptions.includeWebUISettings}
                     onCheckedChange={(checked) =>
                       setExportOptions((prev) => ({
@@ -191,16 +196,21 @@ export function SettingsExportDialog({
                       }))
                     }
                   />
-                  <Label htmlFor='include-webui' className='flex items-center gap-2'>
-                    <FileText className='h-4 w-4' />
+                  <Label
+                    htmlFor="include-webui"
+                    className="flex items-center gap-2"
+                  >
+                    <FileText className="h-4 w-4" />
                     WebUI Settings
-                    <Badge variant='secondary'>{Object.keys(webUISettings).length} settings</Badge>
+                    <Badge variant="secondary">
+                      {Object.keys(webUISettings).length} settings
+                    </Badge>
                   </Label>
                 </div>
 
-                <div className='flex items-center space-x-2'>
+                <div className="flex items-center space-x-2">
                   <Checkbox
-                    id='include-metadata'
+                    id="include-metadata"
                     checked={exportOptions.includeMetadata}
                     onCheckedChange={(checked) =>
                       setExportOptions((prev) => ({
@@ -209,7 +219,9 @@ export function SettingsExportDialog({
                       }))
                     }
                   />
-                  <Label htmlFor='include-metadata'>Include metadata (export date, version)</Label>
+                  <Label htmlFor="include-metadata">
+                    Include metadata (export date, version)
+                  </Label>
                 </div>
               </div>
             </div>
@@ -217,15 +229,15 @@ export function SettingsExportDialog({
             <Separator />
 
             {/* Export format */}
-            <div className='space-y-3'>
-              <Label className='text-base font-medium'>Export format</Label>
+            <div className="space-y-3">
+              <Label className="text-base font-medium">Export format</Label>
 
-              <div className='space-y-2'>
-                <div className='flex items-center space-x-2'>
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
                   <input
-                    type='radio'
-                    id='format-download'
-                    name='format'
+                    type="radio"
+                    id="format-download"
+                    name="format"
                     checked={exportOptions.format === 'download'}
                     onChange={() =>
                       setExportOptions((prev) => ({
@@ -234,18 +246,20 @@ export function SettingsExportDialog({
                       }))
                     }
                   />
-                  <Label htmlFor='format-download'>Download as file</Label>
+                  <Label htmlFor="format-download">Download as file</Label>
                 </div>
 
-                <div className='flex items-center space-x-2'>
+                <div className="flex items-center space-x-2">
                   <input
-                    type='radio'
-                    id='format-copy'
-                    name='format'
+                    type="radio"
+                    id="format-copy"
+                    name="format"
                     checked={exportOptions.format === 'copy'}
-                    onChange={() => setExportOptions((prev) => ({ ...prev, format: 'copy' }))}
+                    onChange={() =>
+                      setExportOptions((prev) => ({ ...prev, format: 'copy' }))
+                    }
                   />
-                  <Label htmlFor='format-copy'>Copy to clipboard</Label>
+                  <Label htmlFor="format-copy">Copy to clipboard</Label>
                 </div>
               </div>
             </div>
@@ -254,11 +268,11 @@ export function SettingsExportDialog({
             {exportOptions.format === 'download' && (
               <>
                 <Separator />
-                <div className='space-y-2'>
-                  <Label htmlFor='filename'>Filename</Label>
-                  <div className='flex items-center space-x-2'>
+                <div className="space-y-2">
+                  <Label htmlFor="filename">Filename</Label>
+                  <div className="flex items-center space-x-2">
                     <Input
-                      id='filename'
+                      id="filename"
                       value={exportOptions.filename}
                       onChange={(e) =>
                         setExportOptions((prev) => ({
@@ -266,18 +280,18 @@ export function SettingsExportDialog({
                           filename: e.target.value,
                         }))
                       }
-                      placeholder='Enter filename'
+                      placeholder="Enter filename"
                     />
-                    <span className='text-muted-foreground text-sm'>.json</span>
+                    <span className="text-muted-foreground text-sm">.json</span>
                   </div>
                 </div>
               </>
             )}
 
             {/* Summary */}
-            <div className='bg-muted/50 rounded-lg p-4'>
-              <div className='space-y-1 text-sm'>
-                <div className='font-medium'>Export Summary</div>
+            <div className="bg-muted/50 rounded-lg p-4">
+              <div className="space-y-1 text-sm">
+                <div className="font-medium">Export Summary</div>
                 <div>Settings to export: {getSettingsCount()}</div>
                 <div>Estimated size: {getDataSize()} KB</div>
               </div>
@@ -286,10 +300,10 @@ export function SettingsExportDialog({
         )}
 
         {step === 'preview' && (
-          <div className='space-y-4'>
-            <div className='flex items-center justify-between'>
-              <Label className='text-base font-medium'>Export Preview</Label>
-              <Badge variant='outline'>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Label className="text-base font-medium">Export Preview</Label>
+              <Badge variant="outline">
                 {exportedData.split('\n').length} lines,{' '}
                 {(new Blob([exportedData]).size / 1024).toFixed(1)} KB
               </Badge>
@@ -298,34 +312,40 @@ export function SettingsExportDialog({
             <Textarea
               value={exportedData}
               readOnly
-              className='h-64 resize-none font-mono text-xs'
-              placeholder='Export data will appear here...'
+              className="h-64 resize-none font-mono text-xs"
+              placeholder="Export data will appear here..."
             />
 
-            <div className='text-muted-foreground text-xs'>
-              This is a preview of the data that will be exported. You can review it before
-              proceeding.
+            <div className="text-muted-foreground text-xs">
+              This is a preview of the data that will be exported. You can
+              review it before proceeding.
             </div>
           </div>
         )}
 
         <DialogFooter>
-          <Button variant='outline' onClick={() => onOpenChange(false)}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
 
           {step === 'options' && (
             <>
               <Button
-                variant='outline'
+                variant="outline"
                 onClick={handlePreview}
-                disabled={!exportOptions.includePreferences && !exportOptions.includeWebUISettings}
+                disabled={
+                  !exportOptions.includePreferences &&
+                  !exportOptions.includeWebUISettings
+                }
               >
                 Preview
               </Button>
               <Button
                 onClick={handleExport}
-                disabled={!exportOptions.includePreferences && !exportOptions.includeWebUISettings}
+                disabled={
+                  !exportOptions.includePreferences &&
+                  !exportOptions.includeWebUISettings
+                }
               >
                 {exportOptions.format === 'download' ? 'Download' : 'Copy'}
               </Button>
@@ -334,7 +354,7 @@ export function SettingsExportDialog({
 
           {step === 'preview' && (
             <>
-              <Button variant='outline' onClick={() => setStep('options')}>
+              <Button variant="outline" onClick={() => setStep('options')}>
                 Back
               </Button>
               <Button onClick={handleExport}>

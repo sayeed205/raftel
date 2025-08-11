@@ -1,9 +1,9 @@
+import qbit from '@/services/qbit';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 
 import type { Log, LogFilter, PeerLog } from '@/types/logs';
 import type { LogType } from '@/types/qbit/constants';
-import qbit from '@/services/qbit';
 
 interface LogState {
   // Main logs
@@ -102,7 +102,10 @@ export const useLogStore = create<LogStore>()(
         const state = get();
         const id = lastKnownId !== undefined ? lastKnownId : state.lastLogId;
 
-        const logs = await qbit.getLogs(id === -1 ? undefined : id, state.logLevel);
+        const logs = await qbit.getLogs(
+          id === -1 ? undefined : id,
+          state.logLevel
+        );
 
         if (logs.length > 0) {
           const currentLogs = get().logs;
@@ -125,7 +128,8 @@ export const useLogStore = create<LogStore>()(
         }
       } catch (error) {
         console.error('Failed to fetch logs:', error);
-        const message = error instanceof Error ? error.message : 'Failed to fetch logs';
+        const message =
+          error instanceof Error ? error.message : 'Failed to fetch logs';
         set({
           error: message,
           isLoading: false,
@@ -145,7 +149,8 @@ export const useLogStore = create<LogStore>()(
       try {
         set({ isLoadingPeerLogs: true, error: null });
         const state = get();
-        const id = lastKnownId !== undefined ? lastKnownId : state.lastPeerLogId;
+        const id =
+          lastKnownId !== undefined ? lastKnownId : state.lastPeerLogId;
 
         const peerLogs = await qbit.getPeerLogs(id === -1 ? undefined : id);
 
@@ -174,7 +179,8 @@ export const useLogStore = create<LogStore>()(
         }
       } catch (error) {
         console.error('Failed to fetch peer logs:', error);
-        const message = error instanceof Error ? error.message : 'Failed to fetch peer logs';
+        const message =
+          error instanceof Error ? error.message : 'Failed to fetch peer logs';
         set({
           error: message,
           isLoadingPeerLogs: false,
@@ -247,13 +253,18 @@ export const useLogStore = create<LogStore>()(
         // Filter by message content
         if (
           filter.messageFilter &&
-          !log.message.toLowerCase().includes(filter.messageFilter.toLowerCase())
+          !log.message
+            .toLowerCase()
+            .includes(filter.messageFilter.toLowerCase())
         ) {
           return false;
         }
 
         // Filter by date range
-        if (filter.startDate && log.timestamp < filter.startDate.getTime() / 1000) {
+        if (
+          filter.startDate &&
+          log.timestamp < filter.startDate.getTime() / 1000
+        ) {
           return false;
         }
 
@@ -272,13 +283,19 @@ export const useLogStore = create<LogStore>()(
         // Filter by IP or reason
         if (filter.messageFilter) {
           const query = filter.messageFilter.toLowerCase();
-          if (!log.ip.toLowerCase().includes(query) && !log.reason.toLowerCase().includes(query)) {
+          if (
+            !log.ip.toLowerCase().includes(query) &&
+            !log.reason.toLowerCase().includes(query)
+          ) {
             return false;
           }
         }
 
         // Filter by date range
-        if (filter.startDate && log.timestamp < filter.startDate.getTime() / 1000) {
+        if (
+          filter.startDate &&
+          log.timestamp < filter.startDate.getTime() / 1000
+        ) {
           return false;
         }
 
@@ -322,7 +339,7 @@ export const useLogStore = create<LogStore>()(
           const csvRows = logs
             .map(
               (log) =>
-                `${log.id},${new Date(log.timestamp * 1000).toISOString()},${log.type},"${log.message.replace(/"/g, '""')}"`,
+                `${log.id},${new Date(log.timestamp * 1000).toISOString()},${log.type},"${log.message.replace(/"/g, '""')}"`
             )
             .join('\n');
           return csvHeader + csvRows;
@@ -332,7 +349,7 @@ export const useLogStore = create<LogStore>()(
           return logs
             .map(
               (log) =>
-                `[${new Date(log.timestamp * 1000).toISOString()}] [${log.type}] ${log.message}`,
+                `[${new Date(log.timestamp * 1000).toISOString()}] [${log.type}] ${log.message}`
             )
             .join('\n');
 
@@ -353,7 +370,7 @@ export const useLogStore = create<LogStore>()(
           const csvRows = peerLogs
             .map(
               (log) =>
-                `${log.id},${new Date(log.timestamp * 1000).toISOString()},${log.ip},${log.blocked},"${log.reason.replace(/"/g, '""')}"`,
+                `${log.id},${new Date(log.timestamp * 1000).toISOString()},${log.ip},${log.blocked},"${log.reason.replace(/"/g, '""')}"`
             )
             .join('\n');
           return csvHeader + csvRows;
@@ -363,7 +380,7 @@ export const useLogStore = create<LogStore>()(
           return peerLogs
             .map(
               (log) =>
-                `[${new Date(log.timestamp * 1000).toISOString()}] ${log.ip} - ${log.blocked ? 'BLOCKED' : 'ALLOWED'}: ${log.reason}`,
+                `[${new Date(log.timestamp * 1000).toISOString()}] ${log.ip} - ${log.blocked ? 'BLOCKED' : 'ALLOWED'}: ${log.reason}`
             )
             .join('\n');
 
@@ -384,7 +401,7 @@ export const useLogStore = create<LogStore>()(
         set({ logs: trimmedLogs });
       }
     },
-  })),
+  }))
 );
 
 // Selector hooks for convenience
@@ -394,7 +411,13 @@ export const useLogs = () => {
 };
 
 export const usePeerLogs = () => {
-  const { peerLogs, isLoadingPeerLogs, error, lastUpdate, getFilteredPeerLogs } = useLogStore();
+  const {
+    peerLogs,
+    isLoadingPeerLogs,
+    error,
+    lastUpdate,
+    getFilteredPeerLogs,
+  } = useLogStore();
   return {
     peerLogs,
     isLoading: isLoadingPeerLogs,

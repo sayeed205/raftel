@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
-
 import { Search, Users } from 'lucide-react';
 
 import type { TorrentPeer } from '@/types/qbit/torrent.ts';
+import { formatBytes, formatProgress, formatSpeed } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -15,7 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { formatBytes, formatProgress, formatSpeed } from '@/lib/utils';
 
 interface TorrentPeersTabProps {
   peers: Record<string, TorrentPeer>;
@@ -59,9 +58,12 @@ const getFlagDescription = (flags: string, flagsDesc: string): string => {
   if (flags.includes('K')) descriptions.push('Peer is unchoking us');
   if (flags.includes('?')) descriptions.push('Peer is choked');
   if (flags.includes('X'))
-    descriptions.push('Peer was included in peerlists obtained through Peer Exchange (PEX)');
+    descriptions.push(
+      'Peer was included in peerlists obtained through Peer Exchange (PEX)'
+    );
   if (flags.includes('H')) descriptions.push('Peer was obtained through DHT');
-  if (flags.includes('E')) descriptions.push('Peer is using Protocol Encryption');
+  if (flags.includes('E'))
+    descriptions.push('Peer is using Protocol Encryption');
   if (flags.includes('L')) descriptions.push('Peer is local');
 
   return descriptions.length > 0 ? descriptions.join(', ') : flags;
@@ -86,7 +88,7 @@ export function TorrentPeersTab({ peers }: TorrentPeersTabProps) {
         peer.ip.toLowerCase().includes(term) ||
         peer.client.toLowerCase().includes(term) ||
         peer.country.toLowerCase().includes(term) ||
-        peer.country_code.toLowerCase().includes(term),
+        peer.country_code.toLowerCase().includes(term)
     );
   }, [peersList, searchTerm]);
 
@@ -107,64 +109,64 @@ export function TorrentPeersTab({ peers }: TorrentPeersTabProps) {
   }, [peersList]);
 
   return (
-    <div className='space-y-6'>
+    <div className="space-y-6">
       {/* Stats Cards */}
-      <div className='grid grid-cols-2 gap-4 md:grid-cols-5'>
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
         <Card>
-          <CardContent className='p-4'>
-            <div className='flex items-center space-x-2'>
-              <Users className='text-muted-foreground h-4 w-4' />
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <Users className="text-muted-foreground h-4 w-4" />
               <div>
-                <p className='text-2xl font-bold'>{stats.total}</p>
-                <p className='text-muted-foreground text-xs'>Total Peers</p>
+                <p className="text-2xl font-bold">{stats.total}</p>
+                <p className="text-muted-foreground text-xs">Total Peers</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className='p-4'>
-            <div className='flex items-center space-x-2'>
-              <div className='h-3 w-3 rounded-full bg-green-500' />
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <div className="h-3 w-3 rounded-full bg-green-500" />
               <div>
-                <p className='text-2xl font-bold'>{stats.seeders}</p>
-                <p className='text-muted-foreground text-xs'>Seeders</p>
+                <p className="text-2xl font-bold">{stats.seeders}</p>
+                <p className="text-muted-foreground text-xs">Seeders</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className='p-4'>
-            <div className='flex items-center space-x-2'>
-              <div className='h-3 w-3 rounded-full bg-blue-500' />
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <div className="h-3 w-3 rounded-full bg-blue-500" />
               <div>
-                <p className='text-2xl font-bold'>{stats.leechers}</p>
-                <p className='text-muted-foreground text-xs'>Leechers</p>
+                <p className="text-2xl font-bold">{stats.leechers}</p>
+                <p className="text-muted-foreground text-xs">Leechers</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className='p-4'>
-            <div className='flex items-center space-x-2'>
-              <div className='h-3 w-3 rounded-full bg-orange-500' />
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <div className="h-3 w-3 rounded-full bg-orange-500" />
               <div>
-                <p className='text-2xl font-bold'>{stats.downloading}</p>
-                <p className='text-muted-foreground text-xs'>Downloading</p>
+                <p className="text-2xl font-bold">{stats.downloading}</p>
+                <p className="text-muted-foreground text-xs">Downloading</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardContent className='p-4'>
-            <div className='flex items-center space-x-2'>
-              <div className='h-3 w-3 rounded-full bg-purple-500' />
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <div className="h-3 w-3 rounded-full bg-purple-500" />
               <div>
-                <p className='text-2xl font-bold'>{stats.uploading}</p>
-                <p className='text-muted-foreground text-xs'>Uploading</p>
+                <p className="text-2xl font-bold">{stats.uploading}</p>
+                <p className="text-muted-foreground text-xs">Uploading</p>
               </div>
             </div>
           </CardContent>
@@ -174,16 +176,16 @@ export function TorrentPeersTab({ peers }: TorrentPeersTabProps) {
       {/* Search and Filters */}
       <Card>
         <CardHeader>
-          <div className='flex items-center justify-between'>
-            <CardTitle className='text-lg'>Connected Peers</CardTitle>
-            <div className='flex items-center space-x-2'>
-              <div className='relative'>
-                <Search className='text-muted-foreground absolute top-2.5 left-2 h-4 w-4' />
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg">Connected Peers</CardTitle>
+            <div className="flex items-center space-x-2">
+              <div className="relative">
+                <Search className="text-muted-foreground absolute top-2.5 left-2 h-4 w-4" />
                 <Input
-                  placeholder='Search peers...'
+                  placeholder="Search peers..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className='w-64 pl-8'
+                  className="w-64 pl-8"
                 />
               </div>
             </div>
@@ -191,11 +193,13 @@ export function TorrentPeersTab({ peers }: TorrentPeersTabProps) {
         </CardHeader>
         <CardContent>
           {filteredPeers.length === 0 ? (
-            <div className='text-muted-foreground py-8 text-center'>
-              {peersList.length === 0 ? 'No peers connected' : 'No peers match your search'}
+            <div className="text-muted-foreground py-8 text-center">
+              {peersList.length === 0
+                ? 'No peers connected'
+                : 'No peers match your search'}
             </div>
           ) : (
-            <div className='rounded-md border'>
+            <div className="rounded-md border">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -215,27 +219,32 @@ export function TorrentPeersTab({ peers }: TorrentPeersTabProps) {
                   {filteredPeers.map((peer) => (
                     <TableRow key={peer.key}>
                       <TableCell>
-                        <div className='font-mono text-sm'>
+                        <div className="font-mono text-sm">
                           {peer.ip}:{peer.port}
                         </div>
                       </TableCell>
                       <TableCell>
-                        <div className='flex items-center space-x-2'>
+                        <div className="flex items-center space-x-2">
                           {peer.country_code && (
-                            <span className='bg-muted rounded px-1 font-mono text-xs'>
+                            <span className="bg-muted rounded px-1 font-mono text-xs">
                               {peer.country_code.toUpperCase()}
                             </span>
                           )}
-                          <span className='text-sm'>{peer.country || 'Unknown'}</span>
+                          <span className="text-sm">
+                            {peer.country || 'Unknown'}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <span className='font-mono text-sm'>{peer.client}</span>
+                        <span className="font-mono text-sm">{peer.client}</span>
                       </TableCell>
                       <TableCell>
-                        <div className='flex min-w-[120px] items-center space-x-2'>
-                          <Progress value={peer.progress * 100} className='flex-1' />
-                          <span className='w-12 text-right text-xs'>
+                        <div className="flex min-w-[120px] items-center space-x-2">
+                          <Progress
+                            value={peer.progress * 100}
+                            className="flex-1"
+                          />
+                          <span className="w-12 text-right text-xs">
                             {formatProgress(peer.progress)}
                           </span>
                         </div>
@@ -263,16 +272,20 @@ export function TorrentPeersTab({ peers }: TorrentPeersTabProps) {
                         </span>
                       </TableCell>
                       <TableCell>
-                        <span className='text-sm'>{formatBytes(peer.downloaded)}</span>
+                        <span className="text-sm">
+                          {formatBytes(peer.downloaded)}
+                        </span>
                       </TableCell>
                       <TableCell>
-                        <span className='text-sm'>{formatBytes(peer.uploaded)}</span>
+                        <span className="text-sm">
+                          {formatBytes(peer.uploaded)}
+                        </span>
                       </TableCell>
                       <TableCell>
                         <Badge
-                          variant='secondary'
+                          variant="secondary"
                           className={`${getConnectionTypeColor(
-                            peer.connection,
+                            peer.connection
                           )} text-xs text-white`}
                           title={getConnectionTypeText(peer.connection)}
                         >
@@ -280,11 +293,14 @@ export function TorrentPeersTab({ peers }: TorrentPeersTabProps) {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <div className='max-w-xs'>
+                        <div className="max-w-xs">
                           <Badge
-                            variant='outline'
-                            className='text-xs'
-                            title={getFlagDescription(peer.flags, peer.flags_desc)}
+                            variant="outline"
+                            className="text-xs"
+                            title={getFlagDescription(
+                              peer.flags,
+                              peer.flags_desc
+                            )}
                           >
                             {peer.flags}
                           </Badge>

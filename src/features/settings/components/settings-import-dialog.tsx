@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-
+import type { WebUISettings } from '@/stores/settings-store';
 import { AlertCircle, CheckCircle, Upload } from 'lucide-react';
 
-import type { WebUISettings } from '@/stores/settings-store';
 import type { QBittorrentPreferences } from '@/types/api';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
@@ -90,7 +89,9 @@ export function SettingsImportDialog({
   }, [open]);
 
   // Handle file selection
-  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const selectedFile = event.target.files?.[0];
     if (!selectedFile) return;
 
@@ -104,12 +105,16 @@ export function SettingsImportDialog({
 
       // Validate import data structure
       if (!data.preferences && !data.webUISettings) {
-        throw new Error('Invalid settings file: No preferences or WebUI settings found');
+        throw new Error(
+          'Invalid settings file: No preferences or WebUI settings found'
+        );
       }
 
       // Check version compatibility
       if (data.version && data.version !== '1.0') {
-        console.warn(`Settings file version ${data.version} may not be fully compatible`);
+        console.warn(
+          `Settings file version ${data.version} may not be fully compatible`
+        );
       }
 
       setImportData(data);
@@ -120,7 +125,8 @@ export function SettingsImportDialog({
 
       setStep(detectedConflicts.length > 0 ? 'conflicts' : 'review');
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to parse settings file';
+      const message =
+        err instanceof Error ? err.message : 'Failed to parse settings file';
       setError(message);
     } finally {
       setIsLoading(false);
@@ -134,7 +140,8 @@ export function SettingsImportDialog({
     // Check preferences conflicts
     if (data.preferences && currentPreferences) {
       Object.entries(data.preferences).forEach(([key, value]) => {
-        const currentValue = currentPreferences[key as keyof QBittorrentPreferences];
+        const currentValue =
+          currentPreferences[key as keyof QBittorrentPreferences];
         if (currentValue !== undefined && currentValue !== value) {
           conflicts.push({
             key,
@@ -181,7 +188,10 @@ export function SettingsImportDialog({
       lsd: 'Local Service Discovery enabled',
       // Add more as needed
     };
-    return descriptions[key] || key.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+    return (
+      descriptions[key] ||
+      key.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
+    );
   };
 
   // Get human-readable description for WebUI setting keys
@@ -196,7 +206,8 @@ export function SettingsImportDialog({
       // Add more as needed
     };
     return (
-      descriptions[key] || key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())
+      descriptions[key] ||
+      key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())
     );
   };
 
@@ -229,10 +240,13 @@ export function SettingsImportDialog({
           conflicts
             .filter(
               (c) =>
-                c.section === 'preferences' && !importOptions.selectedConflicts.includes(c.key),
+                c.section === 'preferences' &&
+                !importOptions.selectedConflicts.includes(c.key)
             )
             .forEach((c) => {
-              delete filteredData.preferences![c.key as keyof QBittorrentPreferences];
+              delete filteredData.preferences![
+                c.key as keyof QBittorrentPreferences
+              ];
             });
         }
       }
@@ -245,7 +259,8 @@ export function SettingsImportDialog({
           conflicts
             .filter(
               (c) =>
-                c.section === 'webUISettings' && !importOptions.selectedConflicts.includes(c.key),
+                c.section === 'webUISettings' &&
+                !importOptions.selectedConflicts.includes(c.key)
             )
             .forEach((c) => {
               delete filteredData.webUISettings![c.key as keyof WebUISettings];
@@ -256,7 +271,8 @@ export function SettingsImportDialog({
       await onImport(filteredData, importOptions);
       onOpenChange(false);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to import settings';
+      const message =
+        err instanceof Error ? err.message : 'Failed to import settings';
       setError(message);
     } finally {
       setIsLoading(false);
@@ -274,10 +290,10 @@ export function SettingsImportDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-h-[80vh] max-w-2xl'>
+      <DialogContent className="max-h-[80vh] max-w-2xl">
         <DialogHeader>
-          <DialogTitle className='flex items-center gap-2'>
-            <Upload className='h-5 w-5' />
+          <DialogTitle className="flex items-center gap-2">
+            <Upload className="h-5 w-5" />
             Import Settings
           </DialogTitle>
           <DialogDescription>
@@ -286,28 +302,28 @@ export function SettingsImportDialog({
         </DialogHeader>
 
         {error && (
-          <Alert variant='destructive'>
-            <AlertCircle className='h-4 w-4' />
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
 
         {step === 'select' && (
-          <div className='space-y-4'>
+          <div className="space-y-4">
             <div>
-              <Label htmlFor='settings-file'>Select Settings File</Label>
+              <Label htmlFor="settings-file">Select Settings File</Label>
               <Input
-                id='settings-file'
-                type='file'
-                accept='.json'
+                id="settings-file"
+                type="file"
+                accept=".json"
                 onChange={handleFileSelect}
                 disabled={isLoading}
-                className='mt-1'
+                className="mt-1"
               />
             </div>
 
             {file && (
-              <div className='text-muted-foreground text-sm'>
+              <div className="text-muted-foreground text-sm">
                 Selected: {file.name} ({(file.size / 1024).toFixed(1)} KB)
               </div>
             )}
@@ -315,22 +331,24 @@ export function SettingsImportDialog({
         )}
 
         {step === 'review' && importData && (
-          <div className='space-y-4'>
-            <div className='flex items-center gap-2'>
-              <CheckCircle className='h-5 w-5 text-green-500' />
-              <span className='font-medium'>Settings file loaded successfully</span>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <CheckCircle className="h-5 w-5 text-green-500" />
+              <span className="font-medium">
+                Settings file loaded successfully
+              </span>
             </div>
 
             {importData.exportedAt && (
-              <div className='text-muted-foreground text-sm'>
+              <div className="text-muted-foreground text-sm">
                 Exported: {new Date(importData.exportedAt).toLocaleString()}
               </div>
             )}
 
-            <div className='space-y-3'>
-              <div className='flex items-center space-x-2'>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-2">
                 <Checkbox
-                  id='import-preferences'
+                  id="import-preferences"
                   checked={importOptions.importPreferences}
                   onCheckedChange={(checked) =>
                     setImportOptions((prev) => ({
@@ -340,19 +358,19 @@ export function SettingsImportDialog({
                   }
                   disabled={!importData.preferences}
                 />
-                <Label htmlFor='import-preferences'>
+                <Label htmlFor="import-preferences">
                   Import qBittorrent Preferences
                   {importData.preferences && (
-                    <Badge variant='secondary' className='ml-2'>
+                    <Badge variant="secondary" className="ml-2">
                       {Object.keys(importData.preferences).length} settings
                     </Badge>
                   )}
                 </Label>
               </div>
 
-              <div className='flex items-center space-x-2'>
+              <div className="flex items-center space-x-2">
                 <Checkbox
-                  id='import-webui'
+                  id="import-webui"
                   checked={importOptions.importWebUISettings}
                   onCheckedChange={(checked) =>
                     setImportOptions((prev) => ({
@@ -362,10 +380,10 @@ export function SettingsImportDialog({
                   }
                   disabled={!importData.webUISettings}
                 />
-                <Label htmlFor='import-webui'>
+                <Label htmlFor="import-webui">
                   Import WebUI Settings
                   {importData.webUISettings && (
-                    <Badge variant='secondary' className='ml-2'>
+                    <Badge variant="secondary" className="ml-2">
                       {Object.keys(importData.webUISettings).length} settings
                     </Badge>
                   )}
@@ -376,70 +394,80 @@ export function SettingsImportDialog({
         )}
 
         {step === 'conflicts' && (
-          <div className='space-y-4'>
-            <div className='flex items-center gap-2'>
-              <AlertCircle className='h-5 w-5 text-yellow-500' />
-              <span className='font-medium'>Settings conflicts detected</span>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-yellow-500" />
+              <span className="font-medium">Settings conflicts detected</span>
             </div>
 
-            <div className='text-muted-foreground text-sm'>
-              The following settings have different values. Choose which ones to overwrite:
+            <div className="text-muted-foreground text-sm">
+              The following settings have different values. Choose which ones to
+              overwrite:
             </div>
 
-            <div className='space-y-3'>
-              <div className='flex items-center space-x-2'>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-2">
                 <Checkbox
-                  id='overwrite-all'
+                  id="overwrite-all"
                   checked={importOptions.overwriteConflicts}
                   onCheckedChange={(checked) =>
                     setImportOptions((prev) => ({
                       ...prev,
                       overwriteConflicts: !!checked,
-                      selectedConflicts: checked ? conflicts.map((c) => c.key) : [],
+                      selectedConflicts: checked
+                        ? conflicts.map((c) => c.key)
+                        : [],
                     }))
                   }
                 />
-                <Label htmlFor='overwrite-all' className='font-medium'>
+                <Label htmlFor="overwrite-all" className="font-medium">
                   Overwrite all conflicts
                 </Label>
               </div>
 
               <Separator />
 
-              <ScrollArea className='h-64'>
-                <div className='space-y-3'>
+              <ScrollArea className="h-64">
+                <div className="space-y-3">
                   {conflicts.map((conflict) => (
-                    <div key={conflict.key} className='rounded-lg border p-3'>
-                      <div className='mb-2 flex items-center space-x-2'>
+                    <div key={conflict.key} className="rounded-lg border p-3">
+                      <div className="mb-2 flex items-center space-x-2">
                         <Checkbox
                           id={`conflict-${conflict.key}`}
                           checked={
                             importOptions.overwriteConflicts ||
-                            importOptions.selectedConflicts.includes(conflict.key)
+                            importOptions.selectedConflicts.includes(
+                              conflict.key
+                            )
                           }
                           onCheckedChange={(checked) =>
                             handleConflictToggle(conflict.key, !!checked)
                           }
                           disabled={importOptions.overwriteConflicts}
                         />
-                        <Label htmlFor={`conflict-${conflict.key}`} className='font-medium'>
+                        <Label
+                          htmlFor={`conflict-${conflict.key}`}
+                          className="font-medium"
+                        >
                           {conflict.description}
                         </Label>
-                        <Badge variant='outline' className='text-xs'>
-                          {conflict.section === 'preferences' ? 'qBittorrent' : 'WebUI'}
+                        <Badge variant="outline" className="text-xs">
+                          {conflict.section === 'preferences'
+                            ? 'qBittorrent'
+                            : 'WebUI'}
                         </Badge>
                       </div>
 
-                      <div className='grid grid-cols-2 gap-4 text-sm'>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <div className='text-muted-foreground'>Current:</div>
-                          <div className='bg-muted rounded p-1 font-mono'>
+                          <div className="text-muted-foreground">Current:</div>
+                          <div className="bg-muted rounded p-1 font-mono">
                             {formatValue(conflict.currentValue)}
                           </div>
                         </div>
                         <div>
-                          <div className='text-muted-foreground'>Import:</div>
-                          <div className='bg-muted rounded p-1 font-mono'>
+                          <div className="text-muted-foreground">Import:</div>
+                          <div className="bg-muted rounded p-1 font-mono">
                             {formatValue(conflict.importValue)}
                           </div>
                         </div>
@@ -453,12 +481,14 @@ export function SettingsImportDialog({
         )}
 
         <DialogFooter>
-          <Button variant='outline' onClick={() => onOpenChange(false)}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
 
           {step === 'select' && (
-            <Button disabled={!file || isLoading}>{isLoading ? 'Loading...' : 'Next'}</Button>
+            <Button disabled={!file || isLoading}>
+              {isLoading ? 'Loading...' : 'Next'}
+            </Button>
           )}
 
           {(step === 'review' || step === 'conflicts') && (
@@ -466,7 +496,8 @@ export function SettingsImportDialog({
               onClick={handleImport}
               disabled={
                 isLoading ||
-                (!importOptions.importPreferences && !importOptions.importWebUISettings)
+                (!importOptions.importPreferences &&
+                  !importOptions.importWebUISettings)
               }
             >
               {isLoading ? 'Importing...' : 'Import Settings'}

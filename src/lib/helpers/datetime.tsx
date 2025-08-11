@@ -1,14 +1,16 @@
-import { Infinity } from 'lucide-react';
 import type React from 'react';
-
+import { Infinity } from 'lucide-react';
 
 export const QBIT_MAX_ETA = 8_640_000; // 100 days
 
-export function formatEta(value: number, isForced: boolean = false): React.ReactNode {
+export function formatEta(
+  value: number,
+  isForced: boolean = false
+): React.ReactNode {
   const MAX_UNITS = 2; // Will display 2 units max, from highest to lowest
 
   if (value >= QBIT_MAX_ETA || (isForced && value === 0)) {
-    return <Infinity className='h-6 w-6 text-sm' />;
+    return <Infinity className="h-6 w-6 text-sm" />;
   }
 
   const minute = 60;
@@ -46,7 +48,8 @@ export function formatEta(value: number, isForced: boolean = false): React.React
 }
 
 export function formatDuration(seconds: number): string | React.ReactNode {
-  if (seconds === QBIT_MAX_ETA || seconds < 0) return <Infinity className='h-6 w-6 text-sm' />;
+  if (seconds === QBIT_MAX_ETA || seconds < 0)
+    return <Infinity className="h-6 w-6 text-sm" />;
 
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
