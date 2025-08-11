@@ -1,13 +1,7 @@
 import { Network, Router, Shield, Users } from 'lucide-react';
-import ContentSection from '../components/content-section';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import ContentSection from '../components/content-section';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,8 +13,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-
 import { useSettings, useSettingsActions } from '@/stores/settings-store';
+
 
 export default function SettingsConnection() {
   const { preferences, pendingChanges, validationErrors } = useSettings();
@@ -38,9 +32,7 @@ export default function SettingsConnection() {
 
   // Get current values (pending changes take precedence)
   const getValue = (key: keyof typeof preferences) => {
-    return pendingChanges[key] !== undefined
-      ? pendingChanges[key]
-      : preferences[key];
+    return pendingChanges[key] !== undefined ? pendingChanges[key] : preferences[key];
   };
 
   // Get validation error for a field
@@ -61,9 +53,7 @@ export default function SettingsConnection() {
               <Network className='h-5 w-5' />
               Listening Port
             </CardTitle>
-            <CardDescription>
-              Configure the port used for incoming connections.
-            </CardDescription>
+            <CardDescription>Configure the port used for incoming connections.</CardDescription>
           </CardHeader>
           <CardContent className='space-y-4'>
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
@@ -75,17 +65,11 @@ export default function SettingsConnection() {
                   min='1'
                   max='65535'
                   value={(getValue('listen_port') as number) || 8999}
-                  onChange={(e) =>
-                    setPendingChange('listen_port', parseInt(e.target.value))
-                  }
-                  className={
-                    getFieldError('listen_port') ? 'border-destructive' : ''
-                  }
+                  onChange={(e) => setPendingChange('listen_port', parseInt(e.target.value))}
+                  className={getFieldError('listen_port') ? 'border-destructive' : ''}
                 />
                 {getFieldError('listen_port') && (
-                  <p className='text-destructive text-sm'>
-                    {getFieldError('listen_port')}
-                  </p>
+                  <p className='text-destructive text-sm'>{getFieldError('listen_port')}</p>
                 )}
               </div>
             </div>
@@ -95,22 +79,16 @@ export default function SettingsConnection() {
                 <Checkbox
                   id='random_port'
                   checked={(getValue('random_port') as boolean) || false}
-                  onCheckedChange={(checked) =>
-                    setPendingChange('random_port', checked)
-                  }
+                  onCheckedChange={(checked) => setPendingChange('random_port', checked)}
                 />
-                <Label htmlFor='random_port'>
-                  Use random port on each startup
-                </Label>
+                <Label htmlFor='random_port'>Use random port on each startup</Label>
               </div>
 
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='upnp'
                   checked={(getValue('upnp') as boolean) || false}
-                  onCheckedChange={(checked) =>
-                    setPendingChange('upnp', checked)
-                  }
+                  onCheckedChange={(checked) => setPendingChange('upnp', checked)}
                 />
                 <Label htmlFor='upnp' className='flex items-center gap-2'>
                   <Router className='h-4 w-4' />
@@ -144,17 +122,11 @@ export default function SettingsConnection() {
                   type='number'
                   min='0'
                   value={(getValue('max_connec') as number) || 200}
-                  onChange={(e) =>
-                    setPendingChange('max_connec', parseInt(e.target.value))
-                  }
-                  className={
-                    getFieldError('max_connec') ? 'border-destructive' : ''
-                  }
+                  onChange={(e) => setPendingChange('max_connec', parseInt(e.target.value))}
+                  className={getFieldError('max_connec') ? 'border-destructive' : ''}
                 />
                 {getFieldError('max_connec') && (
-                  <p className='text-destructive text-sm'>
-                    {getFieldError('max_connec')}
-                  </p>
+                  <p className='text-destructive text-sm'>{getFieldError('max_connec')}</p>
                 )}
               </div>
 
@@ -165,32 +137,21 @@ export default function SettingsConnection() {
                   type='number'
                   min='0'
                   value={(getValue('max_uploads') as number) || 4}
-                  onChange={(e) =>
-                    setPendingChange('max_uploads', parseInt(e.target.value))
-                  }
+                  onChange={(e) => setPendingChange('max_uploads', parseInt(e.target.value))}
                 />
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='max_connec_per_torrent'>
-                  Maximum connections per torrent
-                </Label>
+                <Label htmlFor='max_connec_per_torrent'>Maximum connections per torrent</Label>
                 <Input
                   id='max_connec_per_torrent'
                   type='number'
                   min='0'
                   value={(getValue('max_connec_per_torrent') as number) || 100}
                   onChange={(e) =>
-                    setPendingChange(
-                      'max_connec_per_torrent',
-                      parseInt(e.target.value),
-                    )
+                    setPendingChange('max_connec_per_torrent', parseInt(e.target.value))
                   }
-                  className={
-                    getFieldError('max_connec_per_torrent')
-                      ? 'border-destructive'
-                      : ''
-                  }
+                  className={getFieldError('max_connec_per_torrent') ? 'border-destructive' : ''}
                 />
                 {getFieldError('max_connec_per_torrent') && (
                   <p className='text-destructive text-sm'>
@@ -200,26 +161,21 @@ export default function SettingsConnection() {
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='max_uploads_per_torrent'>
-                  Maximum upload slots per torrent
-                </Label>
+                <Label htmlFor='max_uploads_per_torrent'>Maximum upload slots per torrent</Label>
                 <Input
                   id='max_uploads_per_torrent'
                   type='number'
                   min='0'
                   value={(getValue('max_uploads_per_torrent') as number) || 4}
                   onChange={(e) =>
-                    setPendingChange(
-                      'max_uploads_per_torrent',
-                      parseInt(e.target.value),
-                    )
+                    setPendingChange('max_uploads_per_torrent', parseInt(e.target.value))
                   }
                 />
               </div>
             </div>
             <p className='text-muted-foreground text-sm'>
-              Set to 0 for unlimited connections. Higher values may improve
-              performance but use more resources.
+              Set to 0 for unlimited connections. Higher values may improve performance but use more
+              resources.
             </p>
           </CardContent>
         </Card>
@@ -231,9 +187,7 @@ export default function SettingsConnection() {
               <Shield className='h-5 w-5' />
               Proxy Settings
             </CardTitle>
-            <CardDescription>
-              Configure proxy server for connections.
-            </CardDescription>
+            <CardDescription>Configure proxy server for connections.</CardDescription>
           </CardHeader>
           <CardContent className='space-y-4'>
             <div className='space-y-4'>
@@ -241,9 +195,7 @@ export default function SettingsConnection() {
                 <Label htmlFor='proxy_type'>Proxy Type</Label>
                 <Select
                   value={(getValue('proxy_type') as number).toString() || '0'}
-                  onValueChange={(value) =>
-                    setPendingChange('proxy_type', parseInt(value))
-                  }
+                  onValueChange={(value) => setPendingChange('proxy_type', parseInt(value))}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -265,9 +217,7 @@ export default function SettingsConnection() {
                       <Input
                         id='proxy_ip'
                         value={(getValue('proxy_ip') as string) || ''}
-                        onChange={(e) =>
-                          setPendingChange('proxy_ip', e.target.value)
-                        }
+                        onChange={(e) => setPendingChange('proxy_ip', e.target.value)}
                         placeholder='127.0.0.1'
                       />
                     </div>
@@ -280,42 +230,29 @@ export default function SettingsConnection() {
                         min='1'
                         max='65535'
                         value={(getValue('proxy_port') as number) || 8080}
-                        onChange={(e) =>
-                          setPendingChange(
-                            'proxy_port',
-                            parseInt(e.target.value),
-                          )
-                        }
+                        onChange={(e) => setPendingChange('proxy_port', parseInt(e.target.value))}
                       />
                     </div>
 
                     <div className='space-y-2'>
-                      <Label htmlFor='proxy_username'>
-                        Username (optional)
-                      </Label>
+                      <Label htmlFor='proxy_username'>Username (optional)</Label>
                       <Input
                         id='proxy_username'
                         autoComplete='off'
                         value={(getValue('proxy_username') as string) || ''}
-                        onChange={(e) =>
-                          setPendingChange('proxy_username', e.target.value)
-                        }
+                        onChange={(e) => setPendingChange('proxy_username', e.target.value)}
                         placeholder='Username'
                       />
                     </div>
 
                     <div className='space-y-2'>
-                      <Label htmlFor='proxy_password'>
-                        Password (optional)
-                      </Label>
+                      <Label htmlFor='proxy_password'>Password (optional)</Label>
                       <Input
                         id='proxy_password'
                         type='password'
                         autoComplete='off'
                         value={(getValue('proxy_password') as string) || ''}
-                        onChange={(e) =>
-                          setPendingChange('proxy_password', e.target.value)
-                        }
+                        onChange={(e) => setPendingChange('proxy_password', e.target.value)}
                         placeholder='Password'
                       />
                     </div>
@@ -329,26 +266,19 @@ export default function SettingsConnection() {
                     <div className='flex items-center space-x-2'>
                       <Checkbox
                         id='proxy_peer_connections'
-                        checked={
-                          (getValue('proxy_peer_connections') as boolean) ||
-                          false
-                        }
+                        checked={(getValue('proxy_peer_connections') as boolean) || false}
                         onCheckedChange={(checked) =>
                           setPendingChange('proxy_peer_connections', checked)
                         }
                       />
-                      <Label htmlFor='proxy_peer_connections'>
-                        Peer connections
-                      </Label>
+                      <Label htmlFor='proxy_peer_connections'>Peer connections</Label>
                     </div>
 
                     <div className='flex items-center space-x-2'>
                       <Checkbox
                         id='proxy_rss'
                         checked={(getValue('proxy_rss') as boolean) || false}
-                        onCheckedChange={(checked) =>
-                          setPendingChange('proxy_rss', checked)
-                        }
+                        onCheckedChange={(checked) => setPendingChange('proxy_rss', checked)}
                       />
                       <Label htmlFor='proxy_rss'>RSS feeds</Label>
                     </div>
@@ -357,29 +287,20 @@ export default function SettingsConnection() {
                       <Checkbox
                         id='proxy_misc'
                         checked={(getValue('proxy_misc') as boolean) || false}
-                        onCheckedChange={(checked) =>
-                          setPendingChange('proxy_misc', checked)
-                        }
+                        onCheckedChange={(checked) => setPendingChange('proxy_misc', checked)}
                       />
-                      <Label htmlFor='proxy_misc'>
-                        General purposes (search engines, etc.)
-                      </Label>
+                      <Label htmlFor='proxy_misc'>General purposes (search engines, etc.)</Label>
                     </div>
 
                     <div className='flex items-center space-x-2'>
                       <Checkbox
                         id='proxy_hostname_lookup'
-                        checked={
-                          (getValue('proxy_hostname_lookup') as boolean) ||
-                          false
-                        }
+                        checked={(getValue('proxy_hostname_lookup') as boolean) || false}
                         onCheckedChange={(checked) =>
                           setPendingChange('proxy_hostname_lookup', checked)
                         }
                       />
-                      <Label htmlFor='proxy_hostname_lookup'>
-                        Hostname lookup
-                      </Label>
+                      <Label htmlFor='proxy_hostname_lookup'>Hostname lookup</Label>
                     </div>
                   </div>
                 </div>

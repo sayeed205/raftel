@@ -40,7 +40,6 @@ import type {
   TorrentCreatorParams,
   TorrentCreatorTask,
 } from '@/types/statistics';
-import { QBIT_MAX_ETA } from '@/lib/helpers';
 import { TorrentState } from '@/types/qbit/constants';
 import {
   ConnectionStatus,
@@ -56,6 +55,7 @@ import {
   TorrentFormat,
   TorrentOperatingMode,
 } from '@/types/api';
+import { QBIT_MAX_ETA } from '@/lib/helpers';
 
 export default class MockProvider implements IProvider {
   private static instance: MockProvider;
@@ -506,10 +506,9 @@ export default class MockProvider implements IProvider {
     _?: DirectoryContentMode,
   ): Promise<Array<string> | null> {
     return this.generateResponse({
-      result: faker.helpers.multiple(
-        () => `${dirPath}/${faker.system.fileName()}`,
-        { count: { min: 0, max: 5 } },
-      ),
+      result: faker.helpers.multiple(() => `${dirPath}/${faker.system.fileName()}`, {
+        count: { min: 0, max: 5 },
+      }),
     });
   }
 
@@ -613,29 +612,25 @@ export default class MockProvider implements IProvider {
         },
         {
           id: 10,
-          message:
-            'Successfully listening on IP. IP: "127.0.0.1". Port: "TCP/6881"',
+          message: 'Successfully listening on IP. IP: "127.0.0.1". Port: "TCP/6881"',
           timestamp,
           type: LogType.INFO,
         },
         {
           id: 11,
-          message:
-            'Successfully listening on IP. IP: "127.0.0.1". Port: "UTP/6881"',
+          message: 'Successfully listening on IP. IP: "127.0.0.1". Port: "UTP/6881"',
           timestamp,
           type: LogType.INFO,
         },
         {
           id: 12,
-          message:
-            'Successfully listening on IP. IP: "172.21.0.2". Port: "TCP/6881"',
+          message: 'Successfully listening on IP. IP: "172.21.0.2". Port: "TCP/6881"',
           timestamp,
           type: LogType.INFO,
         },
         {
           id: 13,
-          message:
-            'Successfully listening on IP. IP: "172.21.0.2". Port: "UTP/6881"',
+          message: 'Successfully listening on IP. IP: "172.21.0.2". Port: "UTP/6881"',
           timestamp,
           type: LogType.INFO,
         },
@@ -753,8 +748,7 @@ export default class MockProvider implements IProvider {
         },
         {
           id: 10,
-          message:
-            'Successfully listening on IP. IP: "127.0.0.1". Port: "TCP/6881"',
+          message: 'Successfully listening on IP. IP: "127.0.0.1". Port: "TCP/6881"',
           timestamp,
           type: LogType.INFO,
           ip: faker.internet.ip(),
@@ -763,8 +757,7 @@ export default class MockProvider implements IProvider {
         },
         {
           id: 11,
-          message:
-            'Successfully listening on IP. IP: "127.0.0.1". Port: "UTP/6881"',
+          message: 'Successfully listening on IP. IP: "127.0.0.1". Port: "UTP/6881"',
           timestamp,
           type: LogType.INFO,
           ip: faker.internet.ip(),
@@ -773,8 +766,7 @@ export default class MockProvider implements IProvider {
         },
         {
           id: 12,
-          message:
-            'Successfully listening on IP. IP: "172.21.0.2". Port: "TCP/6881"',
+          message: 'Successfully listening on IP. IP: "172.21.0.2". Port: "TCP/6881"',
           timestamp,
           type: LogType.INFO,
           ip: faker.internet.ip(),
@@ -783,8 +775,7 @@ export default class MockProvider implements IProvider {
         },
         {
           id: 13,
-          message:
-            'Successfully listening on IP. IP: "172.21.0.2". Port: "UTP/6881"',
+          message: 'Successfully listening on IP. IP: "172.21.0.2". Port: "UTP/6881"',
           timestamp,
           type: LogType.INFO,
           ip: faker.internet.ip(),
@@ -837,8 +828,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:46 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm1',
               isRead: false,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -849,8 +839,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:47 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm1a',
               isRead: true,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -860,8 +849,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:48 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm1b',
               isRead: false,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -882,8 +870,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:46 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm2',
               isRead: true,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -904,8 +891,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:46 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm3',
               isRead: true,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -926,8 +912,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:46 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm4',
               isRead: true,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -948,8 +933,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:46 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm5',
               isRead: true,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -970,8 +954,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:46 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm6',
               isRead: false,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -992,8 +975,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:46 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm7',
               isRead: true,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -1014,8 +996,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:46 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm8',
               isRead: true,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -1036,8 +1017,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:46 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm9',
               isRead: true,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -1058,8 +1038,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:46 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm10',
               isRead: true,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -1080,8 +1059,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:46 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm11',
               isRead: true,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -1102,8 +1080,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:46 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm12',
               isRead: true,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -1124,8 +1101,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:46 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm13',
               isRead: true,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -1146,8 +1122,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:46 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm14',
               isRead: true,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -1168,8 +1143,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:46 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm15',
               isRead: true,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -1190,8 +1164,7 @@ export default class MockProvider implements IProvider {
             {
               author: 'John Doe',
               date: '02 Aug 2023 16:00:46 +0000',
-              description:
-                'This is a <strong>sample</strong> <i>description</i>',
+              description: 'This is a <strong>sample</strong> <i>description</i>',
               id: 'SDb4v2op8wm16',
               isRead: true,
               link: 'https://www.example.com/article/SDb4v2op8wm',
@@ -1276,9 +1249,7 @@ export default class MockProvider implements IProvider {
     return this.generateResponse({ delay: 1000 });
   }
 
-  async getMatchingArticles(
-    ruleName: string,
-  ): Promise<Record<string, Array<string>>> {
+  async getMatchingArticles(ruleName: string): Promise<Record<string, Array<string>>> {
     return this.generateResponse({
       result: {
         [ruleName]: ['Sample title 1'],
@@ -1286,11 +1257,7 @@ export default class MockProvider implements IProvider {
     });
   }
 
-  async startSearch(
-    _0: string,
-    _1: string,
-    _2: Array<string>,
-  ): Promise<SearchJob> {
+  async startSearch(_0: string, _1: string, _2: Array<string>): Promise<SearchJob> {
     return this.generateResponse({ result: { id: 1 } });
   }
 
@@ -1304,11 +1271,7 @@ export default class MockProvider implements IProvider {
     });
   }
 
-  async getSearchResults(
-    _0: number,
-    _1?: number,
-    _2?: number,
-  ): Promise<SearchResultsResponse> {
+  async getSearchResults(_0: number, _1?: number, _2?: number): Promise<SearchResultsResponse> {
     return this.generateResponse({
       result: {
         results: [
@@ -1431,10 +1394,7 @@ export default class MockProvider implements IProvider {
     });
   }
 
-  async syncTorrentPeers(
-    _: string,
-    rid?: number,
-  ): Promise<TorrentPeersResponse> {
+  async syncTorrentPeers(_: string, rid?: number): Promise<TorrentPeersResponse> {
     function randomConnType() {
       return faker.helpers.arrayElement(['BT', 'μTP', 'WEB']);
     }
@@ -1532,9 +1492,7 @@ export default class MockProvider implements IProvider {
     return this.generateResponse({ result: 'id' });
   }
 
-  async getTorrentCreatorStatus(
-    taskID?: string,
-  ): Promise<Array<TorrentCreatorTask>> {
+  async getTorrentCreatorStatus(taskID?: string): Promise<Array<TorrentCreatorTask>> {
     return this.generateResponse({
       result: [
         {
@@ -1664,10 +1622,7 @@ export default class MockProvider implements IProvider {
     });
   }
 
-  async getTorrentFiles(
-    _0: string,
-    _1?: Array<number>,
-  ): Promise<Array<TorrentFile>> {
+  async getTorrentFiles(_0: string, _1?: Array<number>): Promise<Array<TorrentFile>> {
     return this.generateResponse({
       result: [
         {
@@ -1777,19 +1732,11 @@ export default class MockProvider implements IProvider {
     });
   }
 
-  async addTorrents(
-    _0: Array<File>,
-    _1: string,
-    _2?: AddTorrentPayload,
-  ): Promise<void> {
+  async addTorrents(_0: Array<File>, _1: string, _2?: AddTorrentPayload): Promise<void> {
     return this.generateResponse();
   }
 
-  async setTorrentFilePriority(
-    _0: string,
-    _1: Array<number>,
-    _2: FilePriority,
-  ): Promise<void> {
+  async setTorrentFilePriority(_0: string, _1: Array<number>, _2: FilePriority): Promise<void> {
     return this.generateResponse();
   }
 
@@ -1845,12 +1792,7 @@ export default class MockProvider implements IProvider {
     return this.generateResponse({ result: MockProvider.hashes.length });
   }
 
-  async setShareLimit(
-    _0: Array<string>,
-    _1: number,
-    _2: number,
-    _3: number,
-  ): Promise<void> {
+  async setShareLimit(_0: Array<string>, _1: number, _2: number, _3: number): Promise<void> {
     return this.generateResponse();
   }
 
@@ -1993,8 +1935,7 @@ export default class MockProvider implements IProvider {
     // Update dynamic properties that should change on each poll (speeds, etc.)
     torrent.dlspeed = Math.floor(Math.random() * 5000000); // 0-5 MB/s
     torrent.upspeed = Math.floor(Math.random() * 1000000); // 0-1 MB/s
-    torrent.downloaded =
-      torrent.completed + Math.floor(Math.random() * 100000000); // Add some variance
+    torrent.downloaded = torrent.completed + Math.floor(Math.random() * 100000000); // Add some variance
     torrent.uploaded = Math.floor(Math.random() * 3000000000); // 0-3 GB
 
     // Randomly change state occasionally to simulate real torrent behavior
@@ -2010,9 +1951,7 @@ export default class MockProvider implements IProvider {
 
     // Update progress slightly to show activity
     torrent.progress = 0.7 + Math.random() * 0.25; // 70-95%
-    torrent.amount_left = Math.floor(
-      torrent.total_size * (1 - torrent.progress),
-    );
+    torrent.amount_left = Math.floor(torrent.total_size * (1 - torrent.progress));
 
     // Update magnet URI with the current hash
     torrent.magnet_uri = `magnet:?xt=urn:btih:${hash}&dn=${encodeURIComponent(torrent.name)}&tr=${encodeURIComponent(torrent.tracker)}`;
@@ -2035,12 +1974,7 @@ export default class MockProvider implements IProvider {
       | { shouldResolve?: true; result?: T; delay?: number }
       | { shouldResolve: false; reason: E; delay?: number },
   ): Promise<T> {
-    const {
-      result,
-      reason,
-      shouldResolve = true,
-      delay = 0,
-    } = options || ({} as any);
+    const { result, reason, shouldResolve = true, delay = 0 } = options || ({} as any);
 
     return new Promise<T>((resolve, reject) => {
       function action() {

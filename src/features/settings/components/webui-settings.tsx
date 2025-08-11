@@ -1,20 +1,6 @@
-import {
-  Bell,
-  Globe,
-  Lock,
-  Monitor,
-  Palette,
-  RefreshCw,
-  Table,
-} from 'lucide-react';
+import { Bell, Globe, Lock, Monitor, Palette, RefreshCw, Table } from 'lucide-react';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -27,12 +13,10 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Slider } from '@/components/ui/slider';
-
 import { useSettings, useSettingsActions } from '@/stores/settings-store';
 
 export function WebUISettings() {
-  const { preferences, webUISettings, pendingChanges, validationErrors } =
-    useSettings();
+  const { preferences, webUISettings, pendingChanges, validationErrors } = useSettings();
   const { setPendingChange, updateWebUISettings } = useSettingsActions();
 
   if (!preferences) {
@@ -40,9 +24,7 @@ export function WebUISettings() {
       <div className='space-y-6'>
         <Card>
           <CardContent className='p-6'>
-            <div className='text-muted-foreground text-center'>
-              Loading Web UI settings...
-            </div>
+            <div className='text-muted-foreground text-center'>Loading Web UI settings...</div>
           </CardContent>
         </Card>
       </div>
@@ -51,9 +33,7 @@ export function WebUISettings() {
 
   // Get current values (pending changes take precedence)
   const getValue = (key: keyof typeof preferences) => {
-    return pendingChanges[key] !== undefined
-      ? pendingChanges[key]
-      : preferences[key];
+    return pendingChanges[key] !== undefined ? pendingChanges[key] : preferences[key];
   };
 
   // Get validation error for a field
@@ -70,9 +50,7 @@ export function WebUISettings() {
             <Globe className='h-5 w-5' />
             Web UI Server
           </CardTitle>
-          <CardDescription>
-            Configure Web UI server settings and access control.
-          </CardDescription>
+          <CardDescription>Configure Web UI server settings and access control.</CardDescription>
         </CardHeader>
         <CardContent className='space-y-4'>
           <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
@@ -81,9 +59,7 @@ export function WebUISettings() {
               <Input
                 id='web_ui_address'
                 value={(getValue('web_ui_address') as string) || '*'}
-                onChange={(e) =>
-                  setPendingChange('web_ui_address', e.target.value)
-                }
+                onChange={(e) => setPendingChange('web_ui_address', e.target.value)}
                 placeholder='* (all interfaces)'
               />
               <p className='text-muted-foreground text-sm'>
@@ -99,31 +75,21 @@ export function WebUISettings() {
                 min='1'
                 max='65535'
                 value={(getValue('web_ui_port') as number) || 8080}
-                onChange={(e) =>
-                  setPendingChange('web_ui_port', parseInt(e.target.value))
-                }
-                className={
-                  getFieldError('web_ui_port') ? 'border-destructive' : ''
-                }
+                onChange={(e) => setPendingChange('web_ui_port', parseInt(e.target.value))}
+                className={getFieldError('web_ui_port') ? 'border-destructive' : ''}
               />
               {getFieldError('web_ui_port') && (
-                <p className='text-destructive text-sm'>
-                  {getFieldError('web_ui_port')}
-                </p>
+                <p className='text-destructive text-sm'>{getFieldError('web_ui_port')}</p>
               )}
             </div>
           </div>
 
           <div className='space-y-2'>
-            <Label htmlFor='web_ui_domain_list'>
-              Allowed domains (optional)
-            </Label>
+            <Label htmlFor='web_ui_domain_list'>Allowed domains (optional)</Label>
             <Input
               id='web_ui_domain_list'
               value={(getValue('web_ui_domain_list') as string) || ''}
-              onChange={(e) =>
-                setPendingChange('web_ui_domain_list', e.target.value)
-              }
+              onChange={(e) => setPendingChange('web_ui_domain_list', e.target.value)}
               placeholder='example.com, *.example.com'
             />
             <p className='text-muted-foreground text-sm'>
@@ -135,9 +101,7 @@ export function WebUISettings() {
             <Checkbox
               id='web_ui_upnp'
               checked={(getValue('web_ui_upnp') as boolean) || false}
-              onCheckedChange={(checked) =>
-                setPendingChange('web_ui_upnp', checked)
-              }
+              onCheckedChange={(checked) => setPendingChange('web_ui_upnp', checked)}
             />
             <Label htmlFor='web_ui_upnp'>Use UPnP for Web UI port</Label>
           </div>
@@ -151,9 +115,7 @@ export function WebUISettings() {
             <Lock className='h-5 w-5' />
             Authentication & Security
           </CardTitle>
-          <CardDescription>
-            Configure authentication and security settings.
-          </CardDescription>
+          <CardDescription>Configure authentication and security settings.</CardDescription>
         </CardHeader>
         <CardContent className='space-y-4'>
           <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
@@ -162,9 +124,7 @@ export function WebUISettings() {
               <Input
                 id='web_ui_username'
                 value={(getValue('web_ui_username') as string) || 'admin'}
-                onChange={(e) =>
-                  setPendingChange('web_ui_username', e.target.value)
-                }
+                onChange={(e) => setPendingChange('web_ui_username', e.target.value)}
               />
             </div>
 
@@ -174,14 +134,10 @@ export function WebUISettings() {
                 id='web_ui_password'
                 type='password'
                 value={(getValue('web_ui_password') as string) || ''}
-                onChange={(e) =>
-                  setPendingChange('web_ui_password', e.target.value)
-                }
+                onChange={(e) => setPendingChange('web_ui_password', e.target.value)}
                 placeholder='Enter new password'
               />
-              <p className='text-muted-foreground text-sm'>
-                Leave empty to keep current password.
-              </p>
+              <p className='text-muted-foreground text-sm'>Leave empty to keep current password.</p>
             </div>
           </div>
 
@@ -189,19 +145,14 @@ export function WebUISettings() {
 
           <div className='space-y-4'>
             <div className='space-y-2'>
-              <Label htmlFor='web_ui_session_timeout'>
-                Session timeout (seconds)
-              </Label>
+              <Label htmlFor='web_ui_session_timeout'>Session timeout (seconds)</Label>
               <Input
                 id='web_ui_session_timeout'
                 type='number'
                 min='60'
                 value={(getValue('web_ui_session_timeout') as number) || 3600}
                 onChange={(e) =>
-                  setPendingChange(
-                    'web_ui_session_timeout',
-                    parseInt(e.target.value),
-                  )
+                  setPendingChange('web_ui_session_timeout', parseInt(e.target.value))
                 }
               />
               <p className='text-muted-foreground text-sm'>
@@ -211,39 +162,27 @@ export function WebUISettings() {
 
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
               <div className='space-y-2'>
-                <Label htmlFor='web_ui_max_auth_fail_count'>
-                  Max authentication failures
-                </Label>
+                <Label htmlFor='web_ui_max_auth_fail_count'>Max authentication failures</Label>
                 <Input
                   id='web_ui_max_auth_fail_count'
                   type='number'
                   min='1'
-                  value={
-                    (getValue('web_ui_max_auth_fail_count') as number) || 5
-                  }
+                  value={(getValue('web_ui_max_auth_fail_count') as number) || 5}
                   onChange={(e) =>
-                    setPendingChange(
-                      'web_ui_max_auth_fail_count',
-                      parseInt(e.target.value),
-                    )
+                    setPendingChange('web_ui_max_auth_fail_count', parseInt(e.target.value))
                   }
                 />
               </div>
 
               <div className='space-y-2'>
-                <Label htmlFor='web_ui_ban_duration'>
-                  Ban duration (seconds)
-                </Label>
+                <Label htmlFor='web_ui_ban_duration'>Ban duration (seconds)</Label>
                 <Input
                   id='web_ui_ban_duration'
                   type='number'
                   min='1'
                   value={(getValue('web_ui_ban_duration') as number) || 3600}
                   onChange={(e) =>
-                    setPendingChange(
-                      'web_ui_ban_duration',
-                      parseInt(e.target.value),
-                    )
+                    setPendingChange('web_ui_ban_duration', parseInt(e.target.value))
                   }
                 />
               </div>
@@ -253,32 +192,20 @@ export function WebUISettings() {
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='web_ui_csrf_protection_enabled'
-                  checked={
-                    (getValue('web_ui_csrf_protection_enabled') as boolean) ||
-                    false
-                  }
+                  checked={(getValue('web_ui_csrf_protection_enabled') as boolean) || false}
                   onCheckedChange={(checked) =>
                     setPendingChange('web_ui_csrf_protection_enabled', checked)
                   }
                 />
-                <Label htmlFor='web_ui_csrf_protection_enabled'>
-                  Enable CSRF protection
-                </Label>
+                <Label htmlFor='web_ui_csrf_protection_enabled'>Enable CSRF protection</Label>
               </div>
 
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='web_ui_clickjacking_protection_enabled'
-                  checked={
-                    (getValue(
-                      'web_ui_clickjacking_protection_enabled',
-                    ) as boolean) || false
-                  }
+                  checked={(getValue('web_ui_clickjacking_protection_enabled') as boolean) || false}
                   onCheckedChange={(checked) =>
-                    setPendingChange(
-                      'web_ui_clickjacking_protection_enabled',
-                      checked,
-                    )
+                    setPendingChange('web_ui_clickjacking_protection_enabled', checked)
                   }
                 />
                 <Label htmlFor='web_ui_clickjacking_protection_enabled'>
@@ -289,10 +216,7 @@ export function WebUISettings() {
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='web_ui_secure_cookie_enabled'
-                  checked={
-                    (getValue('web_ui_secure_cookie_enabled') as boolean) ||
-                    false
-                  }
+                  checked={(getValue('web_ui_secure_cookie_enabled') as boolean) || false}
                   onCheckedChange={(checked) =>
                     setPendingChange('web_ui_secure_cookie_enabled', checked)
                   }
@@ -313,22 +237,16 @@ export function WebUISettings() {
             <Lock className='h-5 w-5' />
             HTTPS Settings
           </CardTitle>
-          <CardDescription>
-            Configure HTTPS encryption for the Web UI.
-          </CardDescription>
+          <CardDescription>Configure HTTPS encryption for the Web UI.</CardDescription>
         </CardHeader>
         <CardContent className='space-y-4'>
           <div className='flex items-center space-x-2'>
             <Checkbox
               id='web_ui_https_enabled'
               checked={(getValue('web_ui_https_enabled') as boolean) || false}
-              onCheckedChange={(checked) =>
-                setPendingChange('web_ui_https_enabled', checked)
-              }
+              onCheckedChange={(checked) => setPendingChange('web_ui_https_enabled', checked)}
             />
-            <Label htmlFor='web_ui_https_enabled'>
-              Use HTTPS instead of HTTP
-            </Label>
+            <Label htmlFor='web_ui_https_enabled'>Use HTTPS instead of HTTP</Label>
           </div>
 
           {(getValue('web_ui_https_enabled') as boolean) && (
@@ -338,9 +256,7 @@ export function WebUISettings() {
                 <Input
                   id='web_ui_https_cert_path'
                   value={(getValue('web_ui_https_cert_path') as string) || ''}
-                  onChange={(e) =>
-                    setPendingChange('web_ui_https_cert_path', e.target.value)
-                  }
+                  onChange={(e) => setPendingChange('web_ui_https_cert_path', e.target.value)}
                   placeholder='/path/to/certificate.crt'
                 />
               </div>
@@ -350,9 +266,7 @@ export function WebUISettings() {
                 <Input
                   id='web_ui_https_key_path'
                   value={(getValue('web_ui_https_key_path') as string) || ''}
-                  onChange={(e) =>
-                    setPendingChange('web_ui_https_key_path', e.target.value)
-                  }
+                  onChange={(e) => setPendingChange('web_ui_https_key_path', e.target.value)}
                   placeholder='/path/to/private.key'
                 />
               </div>
@@ -368,24 +282,16 @@ export function WebUISettings() {
             <Monitor className='h-5 w-5' />
             Alternative Web UI
           </CardTitle>
-          <CardDescription>
-            Use a custom Web UI instead of the default one.
-          </CardDescription>
+          <CardDescription>Use a custom Web UI instead of the default one.</CardDescription>
         </CardHeader>
         <CardContent className='space-y-4'>
           <div className='flex items-center space-x-2'>
             <Checkbox
               id='alternative_webui_enabled'
-              checked={
-                (getValue('alternative_webui_enabled') as boolean) || false
-              }
-              onCheckedChange={(checked) =>
-                setPendingChange('alternative_webui_enabled', checked)
-              }
+              checked={(getValue('alternative_webui_enabled') as boolean) || false}
+              onCheckedChange={(checked) => setPendingChange('alternative_webui_enabled', checked)}
             />
-            <Label htmlFor='alternative_webui_enabled'>
-              Use alternative Web UI
-            </Label>
+            <Label htmlFor='alternative_webui_enabled'>Use alternative Web UI</Label>
           </div>
 
           {(getValue('alternative_webui_enabled') as boolean) && (
@@ -394,14 +300,10 @@ export function WebUISettings() {
               <Input
                 id='alternative_webui_path'
                 value={(getValue('alternative_webui_path') as string) || ''}
-                onChange={(e) =>
-                  setPendingChange('alternative_webui_path', e.target.value)
-                }
+                onChange={(e) => setPendingChange('alternative_webui_path', e.target.value)}
                 placeholder='/path/to/webui'
               />
-              <p className='text-muted-foreground text-sm'>
-                Path to the alternative Web UI files.
-              </p>
+              <p className='text-muted-foreground text-sm'>Path to the alternative Web UI files.</p>
             </div>
           )}
         </CardContent>
@@ -414,9 +316,7 @@ export function WebUISettings() {
             <Palette className='h-5 w-5' />
             Interface Customization
           </CardTitle>
-          <CardDescription>
-            Customize the appearance and behavior of the Web UI.
-          </CardDescription>
+          <CardDescription>Customize the appearance and behavior of the Web UI.</CardDescription>
         </CardHeader>
         <CardContent className='space-y-4'>
           <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
@@ -443,9 +343,7 @@ export function WebUISettings() {
               <Label htmlFor='language'>Language</Label>
               <Select
                 value={webUISettings.language}
-                onValueChange={(value) =>
-                  updateWebUISettings({ language: value })
-                }
+                onValueChange={(value) => updateWebUISettings({ language: value })}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -493,9 +391,7 @@ export function WebUISettings() {
                   })
                 }
               />
-              <Label htmlFor='showAdvancedSettings'>
-                Show advanced settings
-              </Label>
+              <Label htmlFor='showAdvancedSettings'>Show advanced settings</Label>
             </div>
             <p className='text-muted-foreground ml-6 text-sm'>
               Display advanced configuration options in settings.
@@ -519,8 +415,7 @@ export function WebUISettings() {
           <div className='space-y-4'>
             <div className='space-y-2'>
               <Label htmlFor='autoRefreshInterval'>
-                Auto-refresh interval:{' '}
-                {webUISettings.autoRefreshInterval / 1000}s
+                Auto-refresh interval: {webUISettings.autoRefreshInterval / 1000}s
               </Label>
               <Slider
                 id='autoRefreshInterval'
@@ -528,9 +423,7 @@ export function WebUISettings() {
                 max={10000}
                 step={500}
                 value={[webUISettings.autoRefreshInterval]}
-                onValueChange={([value]) =>
-                  updateWebUISettings({ autoRefreshInterval: value })
-                }
+                onValueChange={([value]) => updateWebUISettings({ autoRefreshInterval: value })}
                 className='w-full'
               />
               <div className='text-muted-foreground flex justify-between text-sm'>
@@ -552,9 +445,7 @@ export function WebUISettings() {
             <Table className='h-5 w-5' />
             Table Settings
           </CardTitle>
-          <CardDescription>
-            Configure torrent table display and sorting options.
-          </CardDescription>
+          <CardDescription>Configure torrent table display and sorting options.</CardDescription>
         </CardHeader>
         <CardContent className='space-y-4'>
           <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
@@ -562,9 +453,7 @@ export function WebUISettings() {
               <Label htmlFor='torrentTableSortBy'>Default sort column</Label>
               <Select
                 value={webUISettings.torrentTableSortBy}
-                onValueChange={(value) =>
-                  updateWebUISettings({ torrentTableSortBy: value })
-                }
+                onValueChange={(value) => updateWebUISettings({ torrentTableSortBy: value })}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -610,9 +499,7 @@ export function WebUISettings() {
             <Bell className='h-5 w-5' />
             Notifications
           </CardTitle>
-          <CardDescription>
-            Configure notification settings for torrent events.
-          </CardDescription>
+          <CardDescription>Configure notification settings for torrent events.</CardDescription>
         </CardHeader>
         <CardContent className='space-y-4'>
           <div className='space-y-4'>
@@ -637,9 +524,7 @@ export function WebUISettings() {
                   })
                 }
               />
-              <Label htmlFor='desktopNotifications'>
-                Desktop notifications
-              </Label>
+              <Label htmlFor='desktopNotifications'>Desktop notifications</Label>
             </div>
 
             <div className='flex items-center space-x-2'>

@@ -1,7 +1,8 @@
-import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { Link, useNavigate } from '@tanstack/react-router';
+import { ArrowLeft, RefreshCw } from 'lucide-react';
+
 import {
   TorrentContentTab,
   TorrentGeneralTab,
@@ -16,18 +17,9 @@ import type {
   TorrentProperties,
   TorrentTracker,
 } from '@/types/qbit/torrent.ts';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  formatBytes,
-  formatProgress,
-  getStateColor,
-  getStateText,
-} from '@/lib/utils';
-
 import { Header } from '@/components/layout/header.tsx';
 import { Main } from '@/components/layout/main.tsx';
+import { Badge } from '@/components/ui/badge';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -36,8 +28,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { formatBytes, formatProgress, getStateColor, getStateText } from '@/lib/utils';
 import { Route as TorrentDetailsRoute } from '@/routes/_authenticated/torrents/$hash';
 import qbit from '@/services/qbit';
+
 
 interface TorrentDetailsData {
   torrent: TorrentInfo | null;
@@ -105,20 +101,15 @@ export default function TorrentDetailsPage() {
         if (foundTorrent) {
           console.log('Found torrent by partial match:', foundTorrent);
           // Update the hash to the correct one
-          window.history.replaceState(
-            null,
-            '',
-            `/torrent/${foundTorrent.hash}`,
-          );
+          window.history.replaceState(null, '', `/torrent/${foundTorrent.hash}`);
 
           // Fetch data with correct hash
-          const [properties, files, trackers, peersResponse] =
-            await Promise.all([
-              qbit.getTorrentProperties(foundTorrent.hash),
-              qbit.getTorrentFiles(foundTorrent.hash),
-              qbit.getTorrentTrackers(foundTorrent.hash),
-              qbit.syncTorrentPeers(foundTorrent.hash),
-            ]);
+          const [properties, files, trackers, peersResponse] = await Promise.all([
+            qbit.getTorrentProperties(foundTorrent.hash),
+            qbit.getTorrentFiles(foundTorrent.hash),
+            qbit.getTorrentTrackers(foundTorrent.hash),
+            qbit.syncTorrentPeers(foundTorrent.hash),
+          ]);
 
           setData({
             torrent: foundTorrent,
@@ -151,9 +142,7 @@ export default function TorrentDetailsPage() {
       });
     } catch (err) {
       console.error('Failed to fetch torrent data:', err);
-      setError(
-        err instanceof Error ? err.message : 'Failed to load torrent data',
-      );
+      setError(err instanceof Error ? err.message : 'Failed to load torrent data');
     } finally {
       setIsLoading(false);
     }
@@ -272,8 +261,7 @@ export default function TorrentDetailsPage() {
                 {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
                 {data.torrent ? (
                   <>
-                    {formatBytes(data.torrent.size)} •{' '}
-                    {formatProgress(data.torrent.progress)}
+                    {formatBytes(data.torrent.size)} • {formatProgress(data.torrent.progress)}
                   </>
                 ) : (
                   <div className='bg-muted h-4 w-32 animate-pulse rounded' />
@@ -282,18 +270,12 @@ export default function TorrentDetailsPage() {
             </div>
             <h1 className='mt-2 truncate text-xl font-bold'>
               {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
-              {data.torrent.name ?? (
-                <div className='bg-muted h-6 w-3/4 animate-pulse rounded' />
-              )}
+              {data.torrent.name ?? <div className='bg-muted h-6 w-3/4 animate-pulse rounded' />}
             </h1>
           </section>
 
           {/* ───────────── Tabs ───────────── */}
-          <Tabs
-            value={activeTab}
-            onValueChange={handleTabChange}
-            className='w-full'
-          >
+          <Tabs value={activeTab} onValueChange={handleTabChange} className='w-full'>
             <TabsList className='grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5'>
               <TabsTrigger value='general'>General</TabsTrigger>
               <TabsTrigger value='trackers'>Trackers</TabsTrigger>
@@ -304,10 +286,7 @@ export default function TorrentDetailsPage() {
 
             <div className='mt-4'>
               <TabsContent value='general'>
-                <TorrentGeneralTab
-                  torrent={data.torrent}
-                  properties={data.properties}
-                />
+                <TorrentGeneralTab torrent={data.torrent} properties={data.properties} />
               </TabsContent>
               <TabsContent value='trackers'>
                 <TorrentTrackersTab

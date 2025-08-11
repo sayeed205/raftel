@@ -18,23 +18,14 @@ export class Comparator<T = any> {
 
 export function isObjectEqual(a: any, b: any): boolean {
   if (typeof a !== 'object' && typeof b !== 'object' && a === b) return true;
-  if (
-    a === null ||
-    b === null ||
-    typeof a !== 'object' ||
-    typeof b !== 'object'
-  )
-    return false;
+  if (a === null || b === null || typeof a !== 'object' || typeof b !== 'object') return false;
 
   const keysA = Object.keys(a);
   const keysB = Object.keys(b);
   if (keysA.length !== keysB.length) return false;
 
   for (const key of keysA) {
-    if (
-      !Object.prototype.hasOwnProperty.call(b, key) ||
-      !isObjectEqual(a[key], b[key])
-    )
+    if (!Object.prototype.hasOwnProperty.call(b, key) || !isObjectEqual(a[key], b[key]))
       return false;
   }
 
@@ -76,9 +67,7 @@ const comparators: ComparatorMap = {
     }
     return as.length - bs.length;
   }),
-  boolean: new Comparator((a: boolean, b: boolean) =>
-    a === b ? 0 : a ? 1 : -1,
-  ),
+  boolean: new Comparator((a: boolean, b: boolean) => (a === b ? 0 : a ? 1 : -1)),
   arrayNumeric: new Comparator((a: Array<number>, b: Array<number>) => {
     for (let i = 0; i < Math.min(a.length, b.length); i++) {
       const diff = a[i] - b[i];
@@ -117,11 +106,7 @@ export function sortTorrents<T>(
       result = comparators.boolean.compare(aVal, bVal, direction === 'asc');
     } else {
       // Fallback to string comparison
-      result = comparators.text.compare(
-        String(aVal),
-        String(bVal),
-        direction === 'asc',
-      );
+      result = comparators.text.compare(String(aVal), String(bVal), direction === 'asc');
     }
 
     return result;
@@ -146,11 +131,7 @@ export function multiSort<T>(
       } else if (typeof aVal === 'boolean' && typeof bVal === 'boolean') {
         result = comparators.boolean.compare(aVal, bVal, direction === 'asc');
       } else {
-        result = comparators.text.compare(
-          String(aVal),
-          String(bVal),
-          direction === 'asc',
-        );
+        result = comparators.text.compare(String(aVal), String(bVal), direction === 'asc');
       }
 
       if (result !== 0) return result;

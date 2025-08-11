@@ -1,23 +1,12 @@
-import {
-  EditIcon,
-  MoreHorizontalIcon,
-  PlusIcon,
-  RefreshCwIcon,
-  TrashIcon,
-} from 'lucide-react';
 import { useState } from 'react';
+
+import { EditIcon, MoreHorizontalIcon, PlusIcon, RefreshCwIcon, TrashIcon } from 'lucide-react';
 
 import { RSSFeedDialog } from './rss-feed-dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -133,12 +122,7 @@ export function RSSFeedList() {
       <div className='flex items-center justify-between'>
         <h3 className='text-lg font-medium'>RSS Feeds ({feeds.length})</h3>
         <div className='flex gap-2'>
-          <Button
-            variant='outline'
-            size='sm'
-            onClick={handleRefreshAll}
-            disabled={isFeedsLoading}
-          >
+          <Button variant='outline' size='sm' onClick={handleRefreshAll} disabled={isFeedsLoading}>
             <RefreshCwIcon className='mr-2 h-4 w-4' />
             Refresh All
           </Button>
@@ -177,25 +161,14 @@ export function RSSFeedList() {
               <CardHeader className='pb-3'>
                 <div className='flex items-start justify-between'>
                   <div className='min-w-0 flex-1 space-y-1'>
-                    <CardTitle className='truncate text-base'>
-                      {feed.title || feed.name}
-                    </CardTitle>
-                    <CardDescription className='truncate text-xs'>
-                      {feed.url}
-                    </CardDescription>
+                    <CardTitle className='truncate text-base'>{feed.title || feed.name}</CardTitle>
+                    <CardDescription className='truncate text-xs'>{feed.url}</CardDescription>
                   </div>
                   <div className='ml-2 flex items-center gap-2'>
                     {getStatusBadge(feed)}
                     <DropdownMenu>
-                      <DropdownMenuTrigger
-                        asChild
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <Button
-                          variant='ghost'
-                          size='sm'
-                          className='h-8 w-8 p-0'
-                        >
+                      <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                        <Button variant='ghost' size='sm' className='h-8 w-8 p-0'>
                           <MoreHorizontalIcon className='h-4 w-4' />
                         </Button>
                       </DropdownMenuTrigger>
@@ -252,11 +225,7 @@ export function RSSFeedList() {
         </div>
       )}
 
-      <RSSFeedDialog
-        open={isAddDialogOpen}
-        onOpenChange={setIsAddDialogOpen}
-        mode='add'
-      />
+      <RSSFeedDialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen} mode='add' />
 
       {editingFeed && (
         <RSSFeedDialog

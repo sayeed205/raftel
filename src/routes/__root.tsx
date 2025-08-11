@@ -17,9 +17,7 @@ export const Route = createRootRouteWithContext<{}>()({
           <Outlet />
         </AuthGuard>
         <Toaster duration={5000} />
-        {import.meta.env.DEV && (
-          <TanStackRouterDevtools position='bottom-right' />
-        )}
+        {import.meta.env.DEV && <TanStackRouterDevtools position='bottom-right' />}
       </ThemeProvider>
     );
   },

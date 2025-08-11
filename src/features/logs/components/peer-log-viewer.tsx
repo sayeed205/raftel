@@ -1,3 +1,5 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import {
   Download,
   RefreshCw,
@@ -8,7 +10,6 @@ import {
   Users,
   XCircle,
 } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FixedSizeList as List } from 'react-window';
 
 import type { PeerLog } from '@/types/logs';
@@ -18,11 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { useLogActions, usePeerLogs } from '@/stores/log-store';
 
@@ -43,10 +40,7 @@ function PeerLogItem({ index, style, data }: PeerLogItemProps) {
   const timestamp = new Date(log.timestamp * 1000);
 
   return (
-    <div
-      style={style}
-      className='border-border/50 hover:bg-muted/50 border-b px-4 py-2'
-    >
+    <div style={style} className='border-border/50 hover:bg-muted/50 border-b px-4 py-2'>
       <div className='flex items-start gap-3'>
         <div className='mt-0.5 flex-shrink-0'>
           {log.blocked ? (
@@ -58,18 +52,13 @@ function PeerLogItem({ index, style, data }: PeerLogItemProps) {
 
         <div className='min-w-0 flex-1'>
           <div className='mb-1 flex items-center gap-2'>
-            <Badge
-              variant={log.blocked ? 'destructive' : 'secondary'}
-              className='text-xs'
-            >
+            <Badge variant={log.blocked ? 'destructive' : 'secondary'} className='text-xs'>
               {log.blocked ? 'BLOCKED' : 'ALLOWED'}
             </Badge>
 
             <span className='font-mono text-sm'>{log.ip}</span>
 
-            <span className='text-muted-foreground text-xs'>
-              {timestamp.toLocaleString()}
-            </span>
+            <span className='text-muted-foreground text-xs'>{timestamp.toLocaleString()}</span>
 
             <span className='text-muted-foreground text-xs'>ID: {log.id}</span>
           </div>
@@ -101,9 +90,7 @@ export function PeerLogViewer({
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       result = result.filter(
-        (log) =>
-          log.ip.toLowerCase().includes(query) ||
-          log.reason.toLowerCase().includes(query),
+        (log) => log.ip.toLowerCase().includes(query) || log.reason.toLowerCase().includes(query),
       );
     }
 
@@ -184,15 +171,8 @@ export function PeerLogViewer({
 
           {showControls && (
             <div className='flex items-center gap-2'>
-              <Button
-                variant='outline'
-                size='sm'
-                onClick={handleRefresh}
-                disabled={isLoading}
-              >
-                <RefreshCw
-                  className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
-                />
+              <Button variant='outline' size='sm' onClick={handleRefresh} disabled={isLoading}>
+                <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
                 Refresh
               </Button>
 
@@ -268,14 +248,9 @@ export function PeerLogViewer({
                   <Checkbox
                     id='show-blocked'
                     checked={showBlocked}
-                    onCheckedChange={(checked) =>
-                      setShowBlocked(checked === true)
-                    }
+                    onCheckedChange={(checked) => setShowBlocked(checked === true)}
                   />
-                  <Label
-                    htmlFor='show-blocked'
-                    className='cursor-pointer text-sm'
-                  >
+                  <Label htmlFor='show-blocked' className='cursor-pointer text-sm'>
                     <div className='flex items-center gap-2'>
                       <Shield className='h-4 w-4 text-red-500' />
                       Blocked ({blockedCount})
@@ -287,14 +262,9 @@ export function PeerLogViewer({
                   <Checkbox
                     id='show-allowed'
                     checked={showAllowed}
-                    onCheckedChange={(checked) =>
-                      setShowAllowed(checked === true)
-                    }
+                    onCheckedChange={(checked) => setShowAllowed(checked === true)}
                   />
-                  <Label
-                    htmlFor='show-allowed'
-                    className='cursor-pointer text-sm'
-                  >
+                  <Label htmlFor='show-allowed' className='cursor-pointer text-sm'>
                     <div className='flex items-center gap-2'>
                       <ShieldCheck className='h-4 w-4 text-green-500' />
                       Allowed ({allowedCount})
@@ -302,12 +272,7 @@ export function PeerLogViewer({
                   </Label>
                 </div>
 
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  onClick={clearAllFilters}
-                  className='ml-auto'
-                >
+                <Button variant='ghost' size='sm' onClick={clearAllFilters} className='ml-auto'>
                   Clear Filters
                 </Button>
               </div>

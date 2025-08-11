@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+
 import type { LoginRequest } from '@/types/api';
 import qbit from '@/services/qbit';
 
@@ -42,8 +43,7 @@ export const useAuthStore = create<AuthStore>()(
             error: null,
           });
         } catch (error) {
-          const message =
-            error instanceof Error ? error.message : 'Login failed';
+          const message = error instanceof Error ? error.message : 'Login failed';
           set({
             isAuthenticated: false,
             isLoading: false,

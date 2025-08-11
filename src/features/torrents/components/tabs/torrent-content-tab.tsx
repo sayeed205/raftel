@@ -1,24 +1,12 @@
-import {
-  ChevronDown,
-  ChevronRight,
-  Edit,
-  File,
-  Folder,
-  FolderOpen,
-  Search,
-} from 'lucide-react';
 import { useMemo, useState } from 'react';
 
+import { ChevronDown, ChevronRight, Edit, File, Folder, FolderOpen, Search } from 'lucide-react';
 import { toast } from 'sonner';
+
 import type { TorrentFile, TorrentInfo } from '@/types/api';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import {
@@ -28,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
 import { formatBytes, formatProgress } from '@/lib/utils';
 
 interface TorrentContentTabProps {
@@ -63,10 +50,7 @@ const PRIORITY_COLORS = {
   7: 'bg-red-500',
 };
 
-export function TorrentContentTab({
-  files,
-  onRefresh,
-}: TorrentContentTabProps) {
+export function TorrentContentTab({ files, onRefresh }: TorrentContentTabProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
@@ -95,9 +79,7 @@ export function TorrentContentTab({
         const isLastPart = index === pathParts.length - 1;
         const currentPath = pathParts.slice(0, index + 1).join('/');
 
-        let existingChild = currentNode.children.find(
-          (child) => child.name === part,
-        );
+        let existingChild = currentNode.children.find((child) => child.name === part);
 
         if (!existingChild) {
           existingChild = {
@@ -162,17 +144,12 @@ export function TorrentContentTab({
     setExpandedNodes(newExpanded);
   };
 
-  const handleSetPriority = async (
-    _fileIndexes: Array<number>,
-    _priority: number,
-  ) => {
+  const handleSetPriority = async (_fileIndexes: Array<number>, _priority: number) => {
     try {
       setIsLoading(true);
 
       // Note: This would need to be implemented in the API client
-      toast.info(
-        'Set file priority functionality needs to be implemented in the API client',
-      );
+      toast.info('Set file priority functionality needs to be implemented in the API client');
 
       onRefresh();
     } catch (error) {
@@ -190,9 +167,7 @@ export function TorrentContentTab({
       setIsLoading(true);
 
       // Note: This would need to be implemented in the API client
-      toast.info(
-        'Rename file functionality needs to be implemented in the API client',
-      );
+      toast.info('Rename file functionality needs to be implemented in the API client');
 
       setNewFileName('');
       setRenamingFile(null);
@@ -212,16 +187,11 @@ export function TorrentContentTab({
     setIsRenameDialogOpen(true);
   };
 
-  const renderFileNode = (
-    node: FileNode,
-    depth: number = 0,
-  ): React.ReactNode => {
+  const renderFileNode = (node: FileNode, depth: number = 0): React.ReactNode => {
     const isVisible =
       !searchTerm ||
       node.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      node.children.some((child) =>
-        child.name.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
+      node.children.some((child) => child.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
     if (!isVisible) return null;
 
@@ -234,10 +204,7 @@ export function TorrentContentTab({
           style={{ paddingLeft: `${paddingLeft + 8}px` }}
         >
           {node.isDirectory ? (
-            <div
-              className='flex flex-1 items-center'
-              onClick={() => toggleExpanded(node.path)}
-            >
+            <div className='flex flex-1 items-center' onClick={() => toggleExpanded(node.path)}>
               {node.isExpanded ? (
                 <ChevronDown className='mr-1 h-4 w-4' />
               ) : (
@@ -263,15 +230,11 @@ export function TorrentContentTab({
             <div className='w-32'>
               <div className='flex items-center space-x-2'>
                 <Progress value={node.progress * 100} className='h-2 flex-1' />
-                <span className='w-12 text-right text-xs'>
-                  {formatProgress(node.progress)}
-                </span>
+                <span className='w-12 text-right text-xs'>{formatProgress(node.progress)}</span>
               </div>
             </div>
 
-            <div className='w-20 text-right text-sm'>
-              {formatBytes(node.size)}
-            </div>
+            <div className='w-20 text-right text-sm'>{formatBytes(node.size)}</div>
 
             {!node.isDirectory && (
               <>
@@ -294,11 +257,7 @@ export function TorrentContentTab({
                           <div className='flex items-center space-x-2'>
                             <div
                               className={`h-2 w-2 rounded-full ${
-                                PRIORITY_COLORS[
-                                  parseInt(
-                                    value,
-                                  ) as keyof typeof PRIORITY_COLORS
-                                ]
+                                PRIORITY_COLORS[parseInt(value) as keyof typeof PRIORITY_COLORS]
                               }`}
                             />
                             <span>{label}</span>
@@ -326,9 +285,7 @@ export function TorrentContentTab({
         </div>
 
         {node.isDirectory && node.isExpanded && (
-          <div>
-            {node.children.map((child) => renderFileNode(child, depth + 1))}
-          </div>
+          <div>{node.children.map((child) => renderFileNode(child, depth + 1))}</div>
         )}
       </div>
     );
@@ -338,10 +295,7 @@ export function TorrentContentTab({
     const totalFiles = files.length;
     const completedFiles = files.filter((f) => f.progress >= 1).length;
     const totalSize = files.reduce((sum, f) => sum + f.size, 0);
-    const downloadedSize = files.reduce(
-      (sum, f) => sum + f.size * f.progress,
-      0,
-    );
+    const downloadedSize = files.reduce((sum, f) => sum + f.size * f.progress, 0);
 
     return {
       totalFiles,
@@ -377,9 +331,7 @@ export function TorrentContentTab({
         <Card>
           <CardContent className='p-4'>
             <div>
-              <p className='text-2xl font-bold'>
-                {formatBytes(stats.totalSize)}
-              </p>
+              <p className='text-2xl font-bold'>{formatBytes(stats.totalSize)}</p>
               <p className='text-muted-foreground text-xs'>Total Size</p>
             </div>
           </CardContent>
@@ -388,9 +340,7 @@ export function TorrentContentTab({
         <Card>
           <CardContent className='p-4'>
             <div>
-              <p className='text-2xl font-bold'>
-                {formatProgress(stats.progress)}
-              </p>
+              <p className='text-2xl font-bold'>{formatProgress(stats.progress)}</p>
               <p className='text-muted-foreground text-xs'>Overall Progress</p>
             </div>
           </CardContent>
@@ -417,9 +367,7 @@ export function TorrentContentTab({
         </CardHeader>
         <CardContent>
           {files.length === 0 ? (
-            <div className='text-muted-foreground py-8 text-center'>
-              No files found
-            </div>
+            <div className='text-muted-foreground py-8 text-center'>No files found</div>
           ) : (
             <div className='rounded-md border'>
               <div className='bg-muted/50 border-b px-4 py-2'>
@@ -458,16 +406,10 @@ export function TorrentContentTab({
               />
             </div>
             <div className='flex justify-end space-x-2'>
-              <Button
-                variant='outline'
-                onClick={() => setIsRenameDialogOpen(false)}
-              >
+              <Button variant='outline' onClick={() => setIsRenameDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button
-                onClick={handleRenameFile}
-                disabled={!newFileName.trim() || isLoading}
-              >
+              <Button onClick={handleRenameFile} disabled={!newFileName.trim() || isLoading}>
                 Rename
               </Button>
             </div>

@@ -1,5 +1,7 @@
 import { useRef, useState } from 'react';
+
 import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -97,11 +99,7 @@ export function AddTorrentModal({
         >
           <div className='mb-2'>Drag & drop .torrent files here</div>
           <div className='text-muted-foreground mb-2 text-xs'>or</div>
-          <Button
-            variant='outline'
-            onClick={() => fileInputRef.current?.click()}
-            disabled={adding}
-          >
+          <Button variant='outline' onClick={() => fileInputRef.current?.click()} disabled={adding}>
             Choose File
           </Button>
           <input
@@ -129,11 +127,7 @@ export function AddTorrentModal({
           </Button>
         </div>
         <DialogFooter>
-          <Button
-            variant='secondary'
-            onClick={() => onOpenChange(false)}
-            disabled={adding}
-          >
+          <Button variant='secondary' onClick={() => onOpenChange(false)} disabled={adding}>
             Cancel
           </Button>
         </DialogFooter>

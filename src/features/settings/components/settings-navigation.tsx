@@ -1,14 +1,11 @@
+import React from 'react';
+
 import { useNavigate } from '@tanstack/react-router';
 import { ChevronRight } from 'lucide-react';
-import React from 'react';
 
 import { settingsCategories } from '../utils/settings-categories';
 import { Button } from '@/components/ui/button';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { cn } from '@/lib/utils';
 
 
@@ -16,13 +13,9 @@ interface SettingsNavigationProps {
   currentSection?: string;
 }
 
-export function SettingsNavigation({
-  currentSection,
-}: SettingsNavigationProps) {
+export function SettingsNavigation({ currentSection }: SettingsNavigationProps) {
   const navigate = useNavigate();
-  const [openCategories, setOpenCategories] = React.useState<Set<string>>(
-    new Set(['core']),
-  );
+  const [openCategories, setOpenCategories] = React.useState<Set<string>>(new Set(['core']));
 
   // Find which category contains the current section
   const getCurrentCategory = () => {
@@ -81,10 +74,7 @@ export function SettingsNavigation({
               >
                 <span>{category.title}</span>
                 <ChevronRight
-                  className={cn(
-                    'h-4 w-4 transition-transform',
-                    isOpen && 'rotate-90',
-                  )}
+                  className={cn('h-4 w-4 transition-transform', isOpen && 'rotate-90')}
                 />
               </Button>
             </CollapsibleTrigger>

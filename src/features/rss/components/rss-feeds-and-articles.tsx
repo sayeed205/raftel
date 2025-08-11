@@ -1,3 +1,5 @@
+import { useMemo, useState } from 'react';
+
 import {
   DownloadIcon,
   EditIcon,
@@ -10,19 +12,12 @@ import {
   SearchIcon,
   TrashIcon,
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
 
 import { RSSFeedDialog } from './rss-feed-dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
@@ -103,9 +98,7 @@ export function RSSFeedsAndArticles({
           comparison = a.title.localeCompare(b.title);
           break;
         case 'feed':
-          comparison = ((a as any).feedName || '').localeCompare(
-            (b as any).feedName || '',
-          );
+          comparison = ((a as any).feedName || '').localeCompare((b as any).feedName || '');
           break;
       }
 
@@ -157,17 +150,13 @@ export function RSSFeedsAndArticles({
       return;
     }
 
-    confirmAction(
-      'Download',
-      `Are you sure you want to download "${article.title}"?`,
-      async () => {
-        try {
-          await downloadArticle(article.feedName, article.id);
-        } catch (error) {
-          console.error('Failed to download article:', error);
-        }
-      },
-    );
+    confirmAction('Download', `Are you sure you want to download "${article.title}"?`, async () => {
+      try {
+        await downloadArticle(article.feedName, article.id);
+      } catch (error) {
+        console.error('Failed to download article:', error);
+      }
+    });
   };
 
   const handleMarkAsRead = async (article: any) => {
@@ -273,8 +262,7 @@ export function RSSFeedsAndArticles({
   };
 
   const getUnreadCount = () => {
-    return filteredAndSortedArticles.filter((article) => !article.isRead)
-      .length;
+    return filteredAndSortedArticles.filter((article) => !article.isRead).length;
   };
 
   if (isFeedsLoading && feeds.length === 0) {
@@ -310,9 +298,7 @@ export function RSSFeedsAndArticles({
             <div className='w-full border-t' />
           </div>
           <div className='relative flex justify-center text-xs uppercase'>
-            <span className='bg-background text-muted-foreground px-2'>
-              Articles
-            </span>
+            <span className='bg-background text-muted-foreground px-2'>Articles</span>
           </div>
         </div>
 
@@ -353,9 +339,7 @@ export function RSSFeedsAndArticles({
         <div className='space-y-4'>
           {!dashboardView && (
             <div className='flex items-center justify-between'>
-              <h3 className='text-lg font-medium'>
-                RSS Feeds ({feeds.length})
-              </h3>
+              <h3 className='text-lg font-medium'>RSS Feeds ({feeds.length})</h3>
               <div className='flex gap-2'>
                 <Button
                   variant='outline'
@@ -378,12 +362,9 @@ export function RSSFeedsAndArticles({
             <Card>
               <CardContent className='flex flex-col items-center justify-center py-12'>
                 <div className='space-y-2 text-center'>
-                  <h3 className='text-lg font-medium'>
-                    No RSS feeds configured
-                  </h3>
+                  <h3 className='text-lg font-medium'>No RSS feeds configured</h3>
                   <p className='text-muted-foreground'>
-                    Add your first RSS feed to start monitoring for new
-                    torrents.
+                    Add your first RSS feed to start monitoring for new torrents.
                   </p>
                   <Button onClick={() => setIsAddDialogOpen(true)}>
                     <PlusIcon className='mr-2 h-4 w-4' />
@@ -396,96 +377,83 @@ export function RSSFeedsAndArticles({
             <div
               className={`grid gap-4 ${dashboardView ? 'grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-3'}`}
             >
-              {feeds
-                .slice(0, maxItems > 0 ? maxItems : feeds.length)
-                .map((feed) => (
-                  <Card
-                    key={feed.name}
-                    className={`hover:bg-muted/50 cursor-pointer transition-colors ${
-                      selectedFeed === feed.name ? 'ring-primary ring-2' : ''
-                    } ${dashboardView ? 'mb-0' : ''}`}
-                    onClick={() => !dashboardView && handleFeedClick(feed.name)}
-                  >
-                    <CardHeader className='pb-3'>
-                      <div className='flex items-start justify-between'>
-                        <div className='min-w-0 flex-1 space-y-1'>
-                          <CardTitle className='truncate text-base'>
-                            {feed.title || feed.name}
-                          </CardTitle>
-                          <CardDescription className='truncate text-xs'>
-                            {feed.url}
-                          </CardDescription>
-                        </div>
-                        {!dashboardView && (
-                          <div className='ml-2 flex items-center gap-2'>
-                            {getStatusBadge(feed)}
-                            <DropdownMenu>
-                              <DropdownMenuTrigger
-                                asChild
-                                onClick={(e) => e.stopPropagation()}
+              {feeds.slice(0, maxItems > 0 ? maxItems : feeds.length).map((feed) => (
+                <Card
+                  key={feed.name}
+                  className={`hover:bg-muted/50 cursor-pointer transition-colors ${
+                    selectedFeed === feed.name ? 'ring-primary ring-2' : ''
+                  } ${dashboardView ? 'mb-0' : ''}`}
+                  onClick={() => !dashboardView && handleFeedClick(feed.name)}
+                >
+                  <CardHeader className='pb-3'>
+                    <div className='flex items-start justify-between'>
+                      <div className='min-w-0 flex-1 space-y-1'>
+                        <CardTitle className='truncate text-base'>
+                          {feed.title || feed.name}
+                        </CardTitle>
+                        <CardDescription className='truncate text-xs'>{feed.url}</CardDescription>
+                      </div>
+                      {!dashboardView && (
+                        <div className='ml-2 flex items-center gap-2'>
+                          {getStatusBadge(feed)}
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                              <Button variant='ghost' size='sm' className='h-8 w-8 p-0'>
+                                <MoreHorizontalIcon className='h-4 w-4' />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align='end'>
+                              <DropdownMenuItem
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleRefreshFeed(feed.name);
+                                }}
+                                disabled={isRefreshing[feed.name]}
                               >
-                                <Button
-                                  variant='ghost'
-                                  size='sm'
-                                  className='h-8 w-8 p-0'
-                                >
-                                  <MoreHorizontalIcon className='h-4 w-4' />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align='end'>
-                                <DropdownMenuItem
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleRefreshFeed(feed.name);
-                                  }}
-                                  disabled={isRefreshing[feed.name]}
-                                >
-                                  <RefreshCwIcon className='mr-2 h-4 w-4' />
-                                  Refresh
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setEditingFeed(feed.name);
-                                  }}
-                                >
-                                  <EditIcon className='mr-2 h-4 w-4' />
-                                  Edit
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDeleteFeed(feed.name);
-                                  }}
-                                  className='text-destructive'
-                                >
-                                  <TrashIcon className='mr-2 h-4 w-4' />
-                                  Delete
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </div>
-                        )}
-                        {dashboardView && getStatusBadge(feed)}
-                      </div>
-                    </CardHeader>
-                    <CardContent className='pt-0'>
-                      <div className='text-muted-foreground space-y-2 text-sm'>
-                        <div>Articles: {feed.articles?.length || 0}</div>
-                        <div>
-                          Last updated: {formatDate(feed.lastBuildDate)}
+                                <RefreshCwIcon className='mr-2 h-4 w-4' />
+                                Refresh
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setEditingFeed(feed.name);
+                                }}
+                              >
+                                <EditIcon className='mr-2 h-4 w-4' />
+                                Edit
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteFeed(feed.name);
+                                }}
+                                className='text-destructive'
+                              >
+                                <TrashIcon className='mr-2 h-4 w-4' />
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
-                        {feedErrors[feed.name] && !dashboardView && (
-                          <Alert className='mt-2'>
-                            <AlertDescription className='text-xs'>
-                              {feedErrors[feed.name]}
-                            </AlertDescription>
-                          </Alert>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                      )}
+                      {dashboardView && getStatusBadge(feed)}
+                    </div>
+                  </CardHeader>
+                  <CardContent className='pt-0'>
+                    <div className='text-muted-foreground space-y-2 text-sm'>
+                      <div>Articles: {feed.articles?.length || 0}</div>
+                      <div>Last updated: {formatDate(feed.lastBuildDate)}</div>
+                      {feedErrors[feed.name] && !dashboardView && (
+                        <Alert className='mt-2'>
+                          <AlertDescription className='text-xs'>
+                            {feedErrors[feed.name]}
+                          </AlertDescription>
+                        </Alert>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           )}
         </div>
@@ -498,9 +466,7 @@ export function RSSFeedsAndArticles({
             <div className='w-full border-t' />
           </div>
           <div className='relative flex justify-center text-xs uppercase'>
-            <span className='bg-background text-muted-foreground px-2'>
-              Articles
-            </span>
+            <span className='bg-background text-muted-foreground px-2'>Articles</span>
           </div>
         </div>
       )}
@@ -511,31 +477,19 @@ export function RSSFeedsAndArticles({
         {!dashboardView && (
           <div className='flex items-center justify-between'>
             <div>
-              <h3 className='text-lg font-medium'>
-                Articles ({filteredAndSortedArticles.length})
-              </h3>
+              <h3 className='text-lg font-medium'>Articles ({filteredAndSortedArticles.length})</h3>
               {getUnreadCount() > 0 && (
-                <p className='text-muted-foreground text-sm'>
-                  {getUnreadCount()} unread
-                </p>
+                <p className='text-muted-foreground text-sm'>{getUnreadCount()} unread</p>
               )}
             </div>
 
             {selectedArticles.length > 0 && (
               <div className='flex gap-2'>
-                <Button
-                  variant='outline'
-                  size='sm'
-                  onClick={handleBulkMarkAsRead}
-                >
+                <Button variant='outline' size='sm' onClick={handleBulkMarkAsRead}>
                   <MailOpenIcon className='mr-2 h-4 w-4' />
                   Mark as Read ({selectedArticles.length})
                 </Button>
-                <Button
-                  variant='outline'
-                  size='sm'
-                  onClick={handleBulkDownload}
-                >
+                <Button variant='outline' size='sm' onClick={handleBulkDownload}>
                   <DownloadIcon className='mr-2 h-4 w-4' />
                   Download ({selectedArticles.length})
                 </Button>
@@ -577,13 +531,8 @@ export function RSSFeedsAndArticles({
                 </div>
 
                 <div className='flex items-center gap-2'>
-                  <span className='text-muted-foreground text-sm'>
-                    Sort by:
-                  </span>
-                  <Select
-                    value={sortBy}
-                    onValueChange={(value: any) => setSortBy(value)}
-                  >
+                  <span className='text-muted-foreground text-sm'>Sort by:</span>
+                  <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
                     <SelectTrigger className='w-24'>
                       <SelectValue />
                     </SelectTrigger>
@@ -596,9 +545,7 @@ export function RSSFeedsAndArticles({
                   <Button
                     variant='outline'
                     size='sm'
-                    onClick={() =>
-                      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
-                    }
+                    onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
                   >
                     {sortOrder === 'asc' ? '↑' : '↓'}
                   </Button>
@@ -607,15 +554,10 @@ export function RSSFeedsAndArticles({
                 {filteredAndSortedArticles.length > 0 && (
                   <div className='flex items-center gap-2'>
                     <Checkbox
-                      checked={
-                        selectedArticles.length ===
-                        filteredAndSortedArticles.length
-                      }
+                      checked={selectedArticles.length === filteredAndSortedArticles.length}
                       onCheckedChange={handleSelectAll}
                     />
-                    <span className='text-muted-foreground text-sm'>
-                      Select all
-                    </span>
+                    <span className='text-muted-foreground text-sm'>Select all</span>
                   </div>
                 )}
               </div>
@@ -628,11 +570,7 @@ export function RSSFeedsAndArticles({
           <Alert>
             <AlertDescription>
               Showing articles from feed: <strong>{selectedFeed}</strong>
-              <Button
-                variant='link'
-                className='ml-2 p-0'
-                onClick={() => setSelectedFeed(null)}
-              >
+              <Button variant='link' className='ml-2 p-0' onClick={() => setSelectedFeed(null)}>
                 Clear filter
               </Button>
             </AlertDescription>
@@ -667,9 +605,7 @@ export function RSSFeedsAndArticles({
                     {!dashboardView && (
                       <Checkbox
                         checked={selectedArticles.includes(article.id)}
-                        onCheckedChange={() =>
-                          toggleArticleSelection(article.id)
-                        }
+                        onCheckedChange={() => toggleArticleSelection(article.id)}
                       />
                     )}
 
@@ -714,9 +650,7 @@ export function RSSFeedsAndArticles({
                             <Button
                               variant='ghost'
                               size='sm'
-                              onClick={() =>
-                                window.open(article.link, '_blank')
-                              }
+                              onClick={() => window.open(article.link, '_blank')}
                               title='Open article'
                             >
                               <ExternalLinkIcon className='h-4 w-4' />
@@ -755,11 +689,7 @@ export function RSSFeedsAndArticles({
       {/* Dialogs - Only show if not in dashboard mode */}
       {!dashboardView && (
         <>
-          <RSSFeedDialog
-            open={isAddDialogOpen}
-            onOpenChange={setIsAddDialogOpen}
-            mode='add'
-          />
+          <RSSFeedDialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen} mode='add' />
 
           {editingFeed && (
             <RSSFeedDialog

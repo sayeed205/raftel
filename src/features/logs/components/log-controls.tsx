@@ -1,3 +1,5 @@
+import { useCallback, useState } from 'react';
+
 import {
   AlertTriangle,
   Download,
@@ -10,7 +12,6 @@ import {
   Trash2,
   XCircle,
 } from 'lucide-react';
-import { useCallback, useState } from 'react';
 
 import {
   AlertDialog,
@@ -28,11 +29,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
   Select,
   SelectContent,
@@ -42,12 +39,7 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
-import {
-  useLogActions,
-  useLogSettings,
-  useLogs,
-  usePeerLogs,
-} from '@/stores/log-store';
+import { useLogActions, useLogSettings, useLogs, usePeerLogs } from '@/stores/log-store';
 import { LogType as LogTypeEnum } from '@/types/qbit/constants';
 
 interface LogControlsProps {
@@ -112,20 +104,13 @@ export function LogControls({ showPeerControls = true }: LogControlsProps) {
     setMaxLogsInMemory,
   } = useLogSettings();
 
-  const {
-    fetchLogs,
-    fetchPeerLogs,
-    clearLogs,
-    clearPeerLogs,
-    exportLogs,
-    exportPeerLogs,
-  } = useLogActions();
+  const { fetchLogs, fetchPeerLogs, clearLogs, clearPeerLogs, exportLogs, exportPeerLogs } =
+    useLogActions();
 
   const { logs } = useLogs();
   const { peerLogs } = usePeerLogs();
 
-  const [customRefreshInterval, setCustomRefreshInterval] =
-    useState(refreshInterval);
+  const [customRefreshInterval, setCustomRefreshInterval] = useState(refreshInterval);
   const [customMemoryLimit, setCustomMemoryLimit] = useState(maxLogsInMemory);
 
   const handleRefreshIntervalChange = useCallback(
@@ -182,14 +167,11 @@ export function LogControls({ showPeerControls = true }: LogControlsProps) {
     [exportPeerLogs],
   );
 
-  const currentLogLevel =
-    LOG_LEVELS.find((level) => level.value === logLevel) || LOG_LEVELS[4];
+  const currentLogLevel = LOG_LEVELS.find((level) => level.value === logLevel) || LOG_LEVELS[4];
   const currentRefreshInterval = REFRESH_INTERVALS.find(
     (interval) => interval.value === refreshInterval,
   );
-  const currentMemoryLimit = MEMORY_LIMITS.find(
-    (limit) => limit.value === maxLogsInMemory,
-  );
+  const currentMemoryLimit = MEMORY_LIMITS.find((limit) => limit.value === maxLogsInMemory);
 
   return (
     <Card>
@@ -213,23 +195,15 @@ export function LogControls({ showPeerControls = true }: LogControlsProps) {
               ) : (
                 <Pause className='text-muted-foreground h-4 w-4' />
               )}
-              <Switch
-                id='auto-refresh'
-                checked={autoRefresh}
-                onCheckedChange={setAutoRefresh}
-              />
+              <Switch id='auto-refresh' checked={autoRefresh} onCheckedChange={setAutoRefresh} />
             </div>
           </div>
 
           <div className='flex items-center justify-between'>
-            <Label className='text-muted-foreground text-sm'>
-              Refresh Interval
-            </Label>
+            <Label className='text-muted-foreground text-sm'>Refresh Interval</Label>
             <Select
               value={refreshInterval.toString()}
-              onValueChange={(value) =>
-                handleRefreshIntervalChange(parseInt(value))
-              }
+              onValueChange={(value) => handleRefreshIntervalChange(parseInt(value))}
               disabled={!autoRefresh}
             >
               <SelectTrigger className='w-32'>
@@ -237,10 +211,7 @@ export function LogControls({ showPeerControls = true }: LogControlsProps) {
               </SelectTrigger>
               <SelectContent>
                 {REFRESH_INTERVALS.map((interval) => (
-                  <SelectItem
-                    key={interval.value}
-                    value={interval.value.toString()}
-                  >
+                  <SelectItem key={interval.value} value={interval.value.toString()}>
                     {interval.label}
                   </SelectItem>
                 ))}
@@ -254,12 +225,8 @@ export function LogControls({ showPeerControls = true }: LogControlsProps) {
               <Input
                 type='number'
                 value={customRefreshInterval}
-                onChange={(e) =>
-                  setCustomRefreshInterval(parseInt(e.target.value) || 1000)
-                }
-                onBlur={() =>
-                  handleRefreshIntervalChange(customRefreshInterval)
-                }
+                onChange={(e) => setCustomRefreshInterval(parseInt(e.target.value) || 1000)}
+                onBlur={() => handleRefreshIntervalChange(customRefreshInterval)}
                 className='w-20'
                 min='1000'
                 step='1000'
@@ -306,14 +273,10 @@ export function LogControls({ showPeerControls = true }: LogControlsProps) {
           <Label className='text-sm font-medium'>Memory Management</Label>
 
           <div className='flex items-center justify-between'>
-            <Label className='text-muted-foreground text-sm'>
-              Max logs in memory
-            </Label>
+            <Label className='text-muted-foreground text-sm'>Max logs in memory</Label>
             <Select
               value={maxLogsInMemory.toString()}
-              onValueChange={(value) =>
-                handleMemoryLimitChange(parseInt(value))
-              }
+              onValueChange={(value) => handleMemoryLimitChange(parseInt(value))}
             >
               <SelectTrigger className='w-32'>
                 <SelectValue />
@@ -334,9 +297,7 @@ export function LogControls({ showPeerControls = true }: LogControlsProps) {
               <Input
                 type='number'
                 value={customMemoryLimit}
-                onChange={(e) =>
-                  setCustomMemoryLimit(parseInt(e.target.value) || 1000)
-                }
+                onChange={(e) => setCustomMemoryLimit(parseInt(e.target.value) || 1000)}
                 onBlur={() => handleMemoryLimitChange(customMemoryLimit)}
                 className='w-20'
                 min='100'
@@ -350,9 +311,7 @@ export function LogControls({ showPeerControls = true }: LogControlsProps) {
             <span className='text-muted-foreground'>Current usage:</span>
             <div className='flex items-center gap-4'>
               <Badge variant='secondary'>System: {logs.length}</Badge>
-              {showPeerControls && (
-                <Badge variant='secondary'>Peer: {peerLogs.length}</Badge>
-              )}
+              {showPeerControls && <Badge variant='secondary'>Peer: {peerLogs.length}</Badge>}
             </div>
           </div>
         </div>
@@ -370,11 +329,7 @@ export function LogControls({ showPeerControls = true }: LogControlsProps) {
             </Button>
 
             {showPeerControls && (
-              <Button
-                variant='outline'
-                size='sm'
-                onClick={() => fetchPeerLogs()}
-              >
+              <Button variant='outline' size='sm' onClick={() => fetchPeerLogs()}>
                 <RotateCcw className='mr-2 h-4 w-4' />
                 Refresh Peers
               </Button>
@@ -455,9 +410,7 @@ export function LogControls({ showPeerControls = true }: LogControlsProps) {
 
         {/* Clear Actions */}
         <div className='space-y-3'>
-          <Label className='text-destructive text-sm font-medium'>
-            Danger Zone
-          </Label>
+          <Label className='text-destructive text-sm font-medium'>Danger Zone</Label>
 
           <div className='flex flex-wrap gap-2'>
             <AlertDialog>
@@ -475,8 +428,8 @@ export function LogControls({ showPeerControls = true }: LogControlsProps) {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Clear System Logs</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This will permanently delete all system logs from memory.
-                    This action cannot be undone.
+                    This will permanently delete all system logs from memory. This action cannot be
+                    undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -507,8 +460,8 @@ export function LogControls({ showPeerControls = true }: LogControlsProps) {
                   <AlertDialogHeader>
                     <AlertDialogTitle>Clear Peer Logs</AlertDialogTitle>
                     <AlertDialogDescription>
-                      This will permanently delete all peer logs from memory.
-                      This action cannot be undone.
+                      This will permanently delete all peer logs from memory. This action cannot be
+                      undone.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>

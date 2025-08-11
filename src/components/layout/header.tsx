@@ -2,22 +2,17 @@ import React from 'react';
 
 import { ProfileDropdown } from '../profile-dropdown';
 import { ThemeToggle } from '../theme-toggle';
-
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
+
 
 interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   fixed?: boolean;
   ref?: React.Ref<HTMLElement>;
 }
 
-export const Header = ({
-  className,
-  fixed,
-  children,
-  ...props
-}: HeaderProps) => {
+export const Header = ({ className, fixed, children, ...props }: HeaderProps) => {
   return (
     <header
       className={cn(

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import type { TorrentInfo } from '@/types/api';
 import {
   AlertDialog,
@@ -19,11 +20,7 @@ type DeleteProps = {
   showActionToggle: (open: boolean) => void;
 };
 
-export default function DeleteDialog({
-  torrent,
-  isOpen,
-  showActionToggle,
-}: DeleteProps) {
+export default function DeleteDialog({ torrent, isOpen, showActionToggle }: DeleteProps) {
   const { deleteTorrents } = useTorrentStore();
   const [deleteFiles, setDeleteFiles] = useState(true);
 
@@ -38,8 +35,7 @@ export default function DeleteDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. You are about to delete Torrent{' '}
-            <b>{torrent.name}</b>
+            This action cannot be undone. You are about to delete Torrent <b>{torrent.name}</b>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className='my-2 flex items-center gap-2'>
@@ -50,9 +46,7 @@ export default function DeleteDialog({
               setDeleteFiles(!!checked);
             }}
           />
-          <label htmlFor='delete-files-checkbox'>
-            Also delete downloaded files
-          </label>
+          <label htmlFor='delete-files-checkbox'>Also delete downloaded files</label>
         </div>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>

@@ -1,6 +1,7 @@
+import { useState } from 'react';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SearchIcon, StopCircleIcon, XIcon } from 'lucide-react';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -30,15 +31,8 @@ const searchSchema = z.object({
 type SearchFormData = z.infer<typeof searchSchema>;
 
 export function SearchForm() {
-  const {
-    engines,
-    searchStatus,
-    isSearching,
-    error,
-    startSearch,
-    stopSearch,
-    clearError,
-  } = useSearchStore();
+  const { engines, searchStatus, isSearching, error, startSearch, stopSearch, clearError } =
+    useSearchStore();
 
   const [selectedEngines, setSelectedEngines] = useState<Array<string>>([]);
   const [formError, setFormError] = useState<string | null>(null);
@@ -66,9 +60,7 @@ export function SearchForm() {
     clearError();
 
     if (enabledEngines.length === 0) {
-      setFormError(
-        'No search engines are enabled. Please enable at least one search engine.',
-      );
+      setFormError('No search engines are enabled. Please enable at least one search engine.');
       return;
     }
 
@@ -76,18 +68,14 @@ export function SearchForm() {
       const searchQuery = {
         pattern: data.pattern,
         category: data.category || 'all',
-        plugins:
-          selectedEngines.length > 0
-            ? selectedEngines
-            : enabledEngines.map((e) => e.name),
+        plugins: selectedEngines.length > 0 ? selectedEngines : enabledEngines.map((e) => e.name),
         minSeeds: data.minSeeds,
         maxSize: data.maxSize,
       };
 
       await startSearch(searchQuery);
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'Failed to start search';
+      const message = error instanceof Error ? error.message : 'Failed to start search';
       setFormError(message);
     }
   };
@@ -129,11 +117,7 @@ export function SearchForm() {
         <CardTitle className='flex items-center justify-between'>
           <span>Search Torrents</span>
           {searchStatus && (
-            <Badge
-              variant={
-                searchStatus.status === 'Running' ? 'default' : 'secondary'
-              }
-            >
+            <Badge variant={searchStatus.status === 'Running' ? 'default' : 'secondary'}>
               {searchStatus.status} - {searchStatus.total} results
             </Badge>
           )}
@@ -157,9 +141,7 @@ export function SearchForm() {
                 disabled={isSearching}
               />
               {errors.pattern && (
-                <p className='text-destructive text-sm'>
-                  {errors.pattern.message}
-                </p>
+                <p className='text-destructive text-sm'>{errors.pattern.message}</p>
               )}
             </div>
 
@@ -215,8 +197,7 @@ export function SearchForm() {
             <div className='space-y-2'>
               <div className='flex items-center justify-between'>
                 <Label>
-                  Search Engines (
-                  {selectedEngines.length || enabledEngines.length} selected)
+                  Search Engines ({selectedEngines.length || enabledEngines.length} selected)
                 </Label>
                 <div className='flex gap-2'>
                   <Button
@@ -244,8 +225,7 @@ export function SearchForm() {
                   <Badge
                     key={engine.id}
                     variant={
-                      selectedEngines.length === 0 ||
-                      selectedEngines.includes(engine.name)
+                      selectedEngines.length === 0 || selectedEngines.includes(engine.name)
                         ? 'default'
                         : 'outline'
                     }
@@ -253,17 +233,14 @@ export function SearchForm() {
                     onClick={() => !isSearching && toggleEngine(engine.name)}
                   >
                     {engine.fullName || engine.name}
-                    {selectedEngines.includes(engine.name) &&
-                      selectedEngines.length > 0 && (
-                        <XIcon className='ml-1 h-3 w-3' />
-                      )}
+                    {selectedEngines.includes(engine.name) && selectedEngines.length > 0 && (
+                      <XIcon className='ml-1 h-3 w-3' />
+                    )}
                   </Badge>
                 ))}
               </div>
               {selectedEngines.length === 0 && (
-                <p className='text-muted-foreground text-sm'>
-                  All enabled engines will be used
-                </p>
+                <p className='text-muted-foreground text-sm'>All enabled engines will be used</p>
               )}
             </div>
           )}
@@ -272,19 +249,13 @@ export function SearchForm() {
             {!isSearching ? (
               <Button
                 type='submit'
-                disabled={
-                  !watchedPattern?.trim() || enabledEngines.length === 0
-                }
+                disabled={!watchedPattern?.trim() || enabledEngines.length === 0}
               >
                 <SearchIcon className='mr-2 h-4 w-4' />
                 Search
               </Button>
             ) : (
-              <Button
-                type='button'
-                variant='destructive'
-                onClick={handleStopSearch}
-              >
+              <Button type='button' variant='destructive' onClick={handleStopSearch}>
                 <StopCircleIcon className='mr-2 h-4 w-4' />
                 Stop Search
               </Button>

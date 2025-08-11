@@ -1,11 +1,6 @@
-import {
-  DownloadIcon,
-  ExternalLinkIcon,
-  FilterIcon,
-  MailOpenIcon,
-  SearchIcon,
-} from 'lucide-react';
 import { useMemo, useState } from 'react';
+
+import { DownloadIcon, ExternalLinkIcon, FilterIcon, MailOpenIcon, SearchIcon } from 'lucide-react';
 
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
@@ -62,9 +57,7 @@ export function RSSArticleList() {
           comparison = a.title.localeCompare(b.title);
           break;
         case 'feed':
-          comparison = ((a as any).feedName || '').localeCompare(
-            (b as any).feedName || '',
-          );
+          comparison = ((a as any).feedName || '').localeCompare((b as any).feedName || '');
           break;
       }
 
@@ -78,17 +71,13 @@ export function RSSArticleList() {
       return;
     }
 
-    confirmAction(
-      'Download',
-      `Are you sure you want to download "${article.title}"?`,
-      async () => {
-        try {
-          await downloadArticle(article.feedName, article.id);
-        } catch (error) {
-          console.error('Failed to download article:', error);
-        }
-      },
-    );
+    confirmAction('Download', `Are you sure you want to download "${article.title}"?`, async () => {
+      try {
+        await downloadArticle(article.feedName, article.id);
+      } catch (error) {
+        console.error('Failed to download article:', error);
+      }
+    });
   };
 
   const handleMarkAsRead = async (article: any) => {
@@ -183,8 +172,7 @@ export function RSSArticleList() {
   };
 
   const getUnreadCount = () => {
-    return filteredAndSortedArticles.filter((article) => !article.isRead)
-      .length;
+    return filteredAndSortedArticles.filter((article) => !article.isRead).length;
   };
 
   if (isArticlesLoading && articles.length === 0) {
@@ -222,13 +210,9 @@ export function RSSArticleList() {
       {/* Header */}
       <div className='flex items-center justify-between'>
         <div>
-          <h3 className='text-lg font-medium'>
-            RSS Articles ({filteredAndSortedArticles.length})
-          </h3>
+          <h3 className='text-lg font-medium'>RSS Articles ({filteredAndSortedArticles.length})</h3>
           {getUnreadCount() > 0 && (
-            <p className='text-muted-foreground text-sm'>
-              {getUnreadCount()} unread
-            </p>
+            <p className='text-muted-foreground text-sm'>{getUnreadCount()} unread</p>
           )}
         </div>
 
@@ -262,10 +246,7 @@ export function RSSArticleList() {
 
             <div className='flex items-center gap-2'>
               <FilterIcon className='text-muted-foreground h-4 w-4' />
-              <Select
-                value={articleFilter}
-                onValueChange={(value: any) => setArticleFilter(value)}
-              >
+              <Select value={articleFilter} onValueChange={(value: any) => setArticleFilter(value)}>
                 <SelectTrigger className='w-32'>
                   <SelectValue />
                 </SelectTrigger>
@@ -279,10 +260,7 @@ export function RSSArticleList() {
 
             <div className='flex items-center gap-2'>
               <span className='text-muted-foreground text-sm'>Sort by:</span>
-              <Select
-                value={sortBy}
-                onValueChange={(value: any) => setSortBy(value)}
-              >
+              <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
                 <SelectTrigger className='w-24'>
                   <SelectValue />
                 </SelectTrigger>
@@ -295,9 +273,7 @@ export function RSSArticleList() {
               <Button
                 variant='outline'
                 size='sm'
-                onClick={() =>
-                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
-                }
+                onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
               >
                 {sortOrder === 'asc' ? '↑' : '↓'}
               </Button>
@@ -306,14 +282,10 @@ export function RSSArticleList() {
             {filteredAndSortedArticles.length > 0 && (
               <div className='flex items-center gap-2'>
                 <Checkbox
-                  checked={
-                    selectedArticles.length === filteredAndSortedArticles.length
-                  }
+                  checked={selectedArticles.length === filteredAndSortedArticles.length}
                   onCheckedChange={handleSelectAll}
                 />
-                <span className='text-muted-foreground text-sm'>
-                  Select all
-                </span>
+                <span className='text-muted-foreground text-sm'>Select all</span>
               </div>
             )}
           </div>

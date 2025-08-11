@@ -1,18 +1,13 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
+
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import type { FeedRule } from '@/types/qbit/rss';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
@@ -36,14 +31,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useRSSStore } from '@/stores/rss-store';
 
 const ruleSchema = z.object({
-  name: z
-    .string()
-    .min(1, 'Rule name is required')
-    .max(100, 'Rule name too long'),
+  name: z.string().min(1, 'Rule name is required').max(100, 'Rule name too long'),
   enabled: z.boolean(),
-  affectedFeeds: z
-    .array(z.string())
-    .min(1, 'At least one feed must be selected'),
+  affectedFeeds: z.array(z.string()).min(1, 'At least one feed must be selected'),
   mustContain: z.string().optional(),
   mustNotContain: z.string().optional(),
   useRegex: z.boolean(),
@@ -73,12 +63,7 @@ interface RSSRuleDialogProps {
   ruleName?: string;
 }
 
-export function RSSRuleDialog({
-  open,
-  onOpenChange,
-  mode,
-  ruleName,
-}: RSSRuleDialogProps) {
+export function RSSRuleDialog({ open, onOpenChange, mode, ruleName }: RSSRuleDialogProps) {
   const { feeds, rules, addRule, updateRule, getRuleByName } = useRSSStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -138,19 +123,10 @@ export function RSSRuleDialog({
           setValue('tags', rule.torrentParams?.tags || []);
           setValue('paused', rule.torrentParams?.paused || false);
           setValue('skipChecking', rule.torrentParams?.skip_checking || false);
-          setValue(
-            'contentLayout',
-            rule.torrentParams?.contentLayout || 'Original',
-          );
+          setValue('contentLayout', rule.torrentParams?.contentLayout || 'Original');
           setValue('autoTMM', rule.torrentParams?.autoTMM || false);
-          setValue(
-            'sequentialDownload',
-            rule.torrentParams?.sequentialDownload || false,
-          );
-          setValue(
-            'firstLastPiecePrio',
-            rule.torrentParams?.firstLastPiecePrio || false,
-          );
+          setValue('sequentialDownload', rule.torrentParams?.sequentialDownload || false);
+          setValue('firstLastPiecePrio', rule.torrentParams?.firstLastPiecePrio || false);
           setValue('dlLimit', rule.torrentParams?.dlLimit || -1);
           setValue('upLimit', rule.torrentParams?.upLimit || -1);
         }
@@ -229,9 +205,7 @@ export function RSSRuleDialog({
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className='max-h-[90vh] overflow-y-auto sm:max-w-4xl'>
         <DialogHeader>
-          <DialogTitle>
-            {mode === 'add' ? 'Add RSS Rule' : 'Edit RSS Rule'}
-          </DialogTitle>
+          <DialogTitle>{mode === 'add' ? 'Add RSS Rule' : 'Edit RSS Rule'}</DialogTitle>
           <DialogDescription>
             {mode === 'add'
               ? 'Create a new rule to automatically download torrents from RSS feeds.'
@@ -251,9 +225,7 @@ export function RSSRuleDialog({
               <Card>
                 <CardHeader>
                   <CardTitle className='text-lg'>Basic Settings</CardTitle>
-                  <CardDescription>
-                    Configure the rule name, feeds, and priority
-                  </CardDescription>
+                  <CardDescription>Configure the rule name, feeds, and priority</CardDescription>
                 </CardHeader>
                 <CardContent className='space-y-4'>
                   <div className='grid grid-cols-2 gap-4'>
@@ -266,9 +238,7 @@ export function RSSRuleDialog({
                         {...register('name')}
                       />
                       {errors.name && (
-                        <p className='text-destructive text-sm'>
-                          {errors.name.message}
-                        </p>
+                        <p className='text-destructive text-sm'>{errors.name.message}</p>
                       )}
                     </div>
 
@@ -283,9 +253,7 @@ export function RSSRuleDialog({
                         {...register('priority', { valueAsNumber: true })}
                       />
                       {errors.priority && (
-                        <p className='text-destructive text-sm'>
-                          {errors.priority.message}
-                        </p>
+                        <p className='text-destructive text-sm'>{errors.priority.message}</p>
                       )}
                     </div>
                   </div>
@@ -309,10 +277,7 @@ export function RSSRuleDialog({
                     <Label>Affected Feeds</Label>
                     <div className='grid max-h-32 grid-cols-2 gap-2 overflow-y-auto rounded border p-2'>
                       {feeds.map((feed) => (
-                        <div
-                          key={feed.name}
-                          className='flex items-center space-x-2'
-                        >
+                        <div key={feed.name} className='flex items-center space-x-2'>
                           <Controller
                             name='affectedFeeds'
                             control={control}
@@ -323,27 +288,19 @@ export function RSSRuleDialog({
                                   if (checked) {
                                     field.onChange([...field.value, feed.name]);
                                   } else {
-                                    field.onChange(
-                                      field.value.filter(
-                                        (f) => f !== feed.name,
-                                      ),
-                                    );
+                                    field.onChange(field.value.filter((f) => f !== feed.name));
                                   }
                                 }}
                                 disabled={isSubmitting}
                               />
                             )}
                           />
-                          <Label className='truncate text-sm'>
-                            {feed.title || feed.name}
-                          </Label>
+                          <Label className='truncate text-sm'>{feed.title || feed.name}</Label>
                         </div>
                       ))}
                     </div>
                     {errors.affectedFeeds && (
-                      <p className='text-destructive text-sm'>
-                        {errors.affectedFeeds.message}
-                      </p>
+                      <p className='text-destructive text-sm'>{errors.affectedFeeds.message}</p>
                     )}
                   </div>
                 </CardContent>
@@ -354,9 +311,7 @@ export function RSSRuleDialog({
               <Card>
                 <CardHeader>
                   <CardTitle className='text-lg'>Filter Settings</CardTitle>
-                  <CardDescription>
-                    Configure filters to match specific torrents
-                  </CardDescription>
+                  <CardDescription>Configure filters to match specific torrents</CardDescription>
                 </CardHeader>
                 <CardContent className='space-y-4'>
                   <div className='space-y-2'>
@@ -429,9 +384,7 @@ export function RSSRuleDialog({
               <Card>
                 <CardHeader>
                   <CardTitle className='text-lg'>Torrent Settings</CardTitle>
-                  <CardDescription>
-                    Configure how matched torrents are added
-                  </CardDescription>
+                  <CardDescription>Configure how matched torrents are added</CardDescription>
                 </CardHeader>
                 <CardContent className='space-y-4'>
                   <div className='grid grid-cols-2 gap-4'>
@@ -472,12 +425,8 @@ export function RSSRuleDialog({
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value='Original'>Original</SelectItem>
-                            <SelectItem value='Subfolder'>
-                              Create subfolder
-                            </SelectItem>
-                            <SelectItem value='NoSubfolder'>
-                              Don't create subfolder
-                            </SelectItem>
+                            <SelectItem value='Subfolder'>Create subfolder</SelectItem>
+                            <SelectItem value='NoSubfolder'>Don't create subfolder</SelectItem>
                           </SelectContent>
                         </Select>
                       )}
@@ -486,9 +435,7 @@ export function RSSRuleDialog({
 
                   <div className='grid grid-cols-2 gap-4'>
                     <div className='space-y-2'>
-                      <Label htmlFor='dlLimit'>
-                        Download Limit (KB/s, -1 = unlimited)
-                      </Label>
+                      <Label htmlFor='dlLimit'>Download Limit (KB/s, -1 = unlimited)</Label>
                       <Input
                         id='dlLimit'
                         type='number'
@@ -499,9 +446,7 @@ export function RSSRuleDialog({
                     </div>
 
                     <div className='space-y-2'>
-                      <Label htmlFor='upLimit'>
-                        Upload Limit (KB/s, -1 = unlimited)
-                      </Label>
+                      <Label htmlFor='upLimit'>Upload Limit (KB/s, -1 = unlimited)</Label>
                       <Input
                         id='upLimit'
                         type='number'
@@ -602,12 +547,7 @@ export function RSSRuleDialog({
           )}
 
           <DialogFooter>
-            <Button
-              type='button'
-              variant='outline'
-              onClick={handleClose}
-              disabled={isSubmitting}
-            >
+            <Button type='button' variant='outline' onClick={handleClose} disabled={isSubmitting}>
               Cancel
             </Button>
             <Button type='submit' disabled={isSubmitting}>

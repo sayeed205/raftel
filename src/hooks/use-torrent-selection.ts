@@ -1,10 +1,8 @@
 import { useCallback, useMemo } from 'react';
-import {
-  
-  createPlatformShortcut,
-  useKeyboardShortcuts
-} from './use-keyboard-shortcuts';
-import type {KeyboardShortcut} from './use-keyboard-shortcuts';
+
+
+import { createPlatformShortcut, useKeyboardShortcuts } from './use-keyboard-shortcuts';
+import type { KeyboardShortcut } from './use-keyboard-shortcuts';
 import { useTorrentStore } from '@/stores/torrent-store';
 
 interface UseTorrentSelectionOptions {
@@ -21,26 +19,17 @@ export function useTorrentSelection(options: UseTorrentSelectionOptions = {}) {
 
   // Select all visible torrents
   const selectAll = useCallback(() => {
-    const {
-      selectedTorrents,
-      selectAllTorrents,
-      clearSelection,
-      getFilteredTorrents,
-    } = useTorrentStore.getState();
+    const { selectedTorrents, selectAllTorrents, clearSelection, getFilteredTorrents } =
+      useTorrentStore.getState();
     const filteredTorrents = getFilteredTorrents();
 
     if (filteredTorrents.length === 0) return;
 
     // If all visible torrents are already selected, deselect all
     const visibleHashes = filteredTorrents.map((t) => t.hash);
-    const allVisibleSelected = visibleHashes.every((hash) =>
-      selectedTorrents.includes(hash),
-    );
+    const allVisibleSelected = visibleHashes.every((hash) => selectedTorrents.includes(hash));
 
-    if (
-      allVisibleSelected &&
-      selectedTorrents.length === visibleHashes.length
-    ) {
+    if (allVisibleSelected && selectedTorrents.length === visibleHashes.length) {
       clearSelection();
     } else {
       selectAllTorrents();
@@ -95,13 +84,10 @@ export function useTorrentSelection(options: UseTorrentSelectionOptions = {}) {
 
   // Invert selection
   const invertSelection = useCallback(() => {
-    const { selectedTorrents, getFilteredTorrents, selectTorrents } =
-      useTorrentStore.getState();
+    const { selectedTorrents, getFilteredTorrents, selectTorrents } = useTorrentStore.getState();
     const filteredTorrents = getFilteredTorrents();
     const visibleHashes = filteredTorrents.map((t) => t.hash);
-    const newSelection = visibleHashes.filter(
-      (hash) => !selectedTorrents.includes(hash),
-    );
+    const newSelection = visibleHashes.filter((hash) => !selectedTorrents.includes(hash));
 
     selectTorrents(newSelection);
   }, []);
@@ -121,14 +107,9 @@ export function useTorrentSelection(options: UseTorrentSelectionOptions = {}) {
     const { getFilteredTorrents, selectTorrents } = useTorrentStore.getState();
     const filteredTorrents = getFilteredTorrents();
     const downloadingTorrents = filteredTorrents.filter((t) =>
-      [
-        'downloading',
-        'metaDL',
-        'stalledDL',
-        'queuedDL',
-        'checkingDL',
-        'forcedDL',
-      ].includes(t.state),
+      ['downloading', 'metaDL', 'stalledDL', 'queuedDL', 'checkingDL', 'forcedDL'].includes(
+        t.state,
+      ),
     );
     const hashes = downloadingTorrents.map((t) => t.hash);
 
@@ -140,9 +121,7 @@ export function useTorrentSelection(options: UseTorrentSelectionOptions = {}) {
     const { getFilteredTorrents, selectTorrents } = useTorrentStore.getState();
     const filteredTorrents = getFilteredTorrents();
     const seedingTorrents = filteredTorrents.filter((t) =>
-      ['uploading', 'stalledUP', 'queuedUP', 'checkingUP', 'forcedUP'].includes(
-        t.state,
-      ),
+      ['uploading', 'stalledUP', 'queuedUP', 'checkingUP', 'forcedUP'].includes(t.state),
     );
     const hashes = seedingTorrents.map((t) => t.hash);
 
@@ -153,36 +132,22 @@ export function useTorrentSelection(options: UseTorrentSelectionOptions = {}) {
   const selectionShortcuts: Array<KeyboardShortcut> = useMemo(
     () => [
       // Basic Actions
-      createPlatformShortcut(
-        'a',
-        'Select All Torrents',
-        'Basic Actions',
-        selectAll,
-        { useCmd: true },
-      ),
-      createPlatformShortcut(
-        'r',
-        'Resume All Torrents',
-        'Basic Actions',
-        bulkResume,
-        { useCmd: true, shiftKey: true },
-      ),
-      createPlatformShortcut(
-        'p',
-        'Pause All Torrents',
-        'Basic Actions',
-        bulkPause,
-        { useCmd: true, shiftKey: true },
-      ),
+      createPlatformShortcut('a', 'Select All Torrents', 'Basic Actions', selectAll, {
+        useCmd: true,
+      }),
+      createPlatformShortcut('r', 'Resume All Torrents', 'Basic Actions', bulkResume, {
+        useCmd: true,
+        shiftKey: true,
+      }),
+      createPlatformShortcut('p', 'Pause All Torrents', 'Basic Actions', bulkPause, {
+        useCmd: true,
+        shiftKey: true,
+      }),
 
       // Selection & Filtering
-      createPlatformShortcut(
-        'i',
-        'Invert Selection',
-        'Selection & Filtering',
-        invertSelection,
-        { useCmd: true },
-      ),
+      createPlatformShortcut('i', 'Invert Selection', 'Selection & Filtering', invertSelection, {
+        useCmd: true,
+      }),
       createPlatformShortcut(
         'a',
         'Select All Finished',
@@ -197,22 +162,14 @@ export function useTorrentSelection(options: UseTorrentSelectionOptions = {}) {
         selectAllDownloading,
         { useCmd: true },
       ),
-      createPlatformShortcut(
-        's',
-        'Select All Seeding',
-        'Selection & Filtering',
-        selectAllSeeding,
-        { useCmd: true },
-      ),
+      createPlatformShortcut('s', 'Select All Seeding', 'Selection & Filtering', selectAllSeeding, {
+        useCmd: true,
+      }),
 
       // Navigation & Interface
-      createPlatformShortcut(
-        'f',
-        'Focus Search Box',
-        'Navigation & Interface',
-        focusSearch,
-        { useCmd: true },
-      ),
+      createPlatformShortcut('f', 'Focus Search Box', 'Navigation & Interface', focusSearch, {
+        useCmd: true,
+      }),
       {
         key: '/',
         action: focusSearch,

@@ -27,9 +27,7 @@ export function formatSpeed(bytesPerSecond: number, decimals = 1): string {
 
   const i = Math.floor(Math.log(bytesPerSecond) / Math.log(k));
 
-  return (
-    parseFloat((bytesPerSecond / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
-  );
+  return parseFloat((bytesPerSecond / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
 /**

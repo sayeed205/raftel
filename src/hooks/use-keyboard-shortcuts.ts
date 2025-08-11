@@ -124,10 +124,8 @@ export function useKeyboardShortcuts(
 
       if (matchingShortcut) {
         // Handle preventDefault and stopPropagation
-        const shouldPreventDefault =
-          matchingShortcut.preventDefault ?? opts.preventDefault;
-        const shouldStopPropagation =
-          matchingShortcut.stopPropagation ?? opts.stopPropagation;
+        const shouldPreventDefault = matchingShortcut.preventDefault ?? opts.preventDefault;
+        const shouldStopPropagation = matchingShortcut.stopPropagation ?? opts.stopPropagation;
 
         if (shouldPreventDefault) {
           keyboardEvent.preventDefault();

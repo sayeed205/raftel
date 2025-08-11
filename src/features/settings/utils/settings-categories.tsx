@@ -1,11 +1,4 @@
-import {
-  Download,
-  Gauge,
-  Globe,
-  Monitor,
-  Settings,
-  Share2,
-} from 'lucide-react';
+import { Download, Gauge, Globe, Monitor, Settings, Share2 } from 'lucide-react';
 
 import type { SettingsCategory } from '@/features/settings';
 import {

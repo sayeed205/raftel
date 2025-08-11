@@ -1,5 +1,7 @@
 'use client';
 
+import * as React from 'react';
+
 import {
   Command as CommandIcon,
   HelpCircle,
@@ -11,8 +13,9 @@ import {
   Search,
   Settings,
 } from 'lucide-react';
-import * as React from 'react';
-import type {KeyboardShortcut} from '@/hooks/use-keyboard-shortcuts';
+
+import type { KeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+
 import { Button } from '@/components/ui/button';
 import {
   CommandDialog,
@@ -24,11 +27,11 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from '@/components/ui/command';
+
 import {
-  
   formatShortcutKey,
   getPlatform,
-  groupShortcutsByCategory
+  groupShortcutsByCategory,
 } from '@/hooks/use-keyboard-shortcuts';
 
 interface KeyboardShortcutsHelpProps {

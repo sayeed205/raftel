@@ -52,8 +52,7 @@ export const ConnectionStatus = {
   DISCONNECTED: 'disconnected',
 } as const;
 
-export type ConnectionStatus =
-  (typeof ConnectionStatus)[keyof typeof ConnectionStatus];
+export type ConnectionStatus = (typeof ConnectionStatus)[keyof typeof ConnectionStatus];
 
 // Proxy Types
 export const ProxyType = {
@@ -91,8 +90,7 @@ export const ShareLimitAction = {
   ENABLE_SUPER_SEEDING: 3,
 } as const;
 
-export type ShareLimitAction =
-  (typeof ShareLimitAction)[keyof typeof ShareLimitAction];
+export type ShareLimitAction = (typeof ShareLimitAction)[keyof typeof ShareLimitAction];
 
 // Stop Condition
 export const StopCondition = {
@@ -110,8 +108,7 @@ export const BitTorrentProtocol = {
   UTP: 2,
 } as const;
 
-export type BitTorrentProtocol =
-  (typeof BitTorrentProtocol)[keyof typeof BitTorrentProtocol];
+export type BitTorrentProtocol = (typeof BitTorrentProtocol)[keyof typeof BitTorrentProtocol];
 
 // Upload Choking Algorithm
 export const UploadChokingAlgorithm = {
@@ -129,8 +126,7 @@ export const UploadSlotsBehavior = {
   UPLOAD_RATE_BASED: 1,
 } as const;
 
-export type UploadSlotsBehavior =
-  (typeof UploadSlotsBehavior)[keyof typeof UploadSlotsBehavior];
+export type UploadSlotsBehavior = (typeof UploadSlotsBehavior)[keyof typeof UploadSlotsBehavior];
 
 // UTP TCP Mixed Mode
 export const UtpTcpMixedMode = {
@@ -138,8 +134,7 @@ export const UtpTcpMixedMode = {
   PEER_PROPORTIONAL: 1,
 } as const;
 
-export type UtpTcpMixedMode =
-  (typeof UtpTcpMixedMode)[keyof typeof UtpTcpMixedMode];
+export type UtpTcpMixedMode = (typeof UtpTcpMixedMode)[keyof typeof UtpTcpMixedMode];
 
 // Disk IO Mode
 export const DiskIOMode = {
@@ -166,8 +161,7 @@ export const AutoDeleteMode = {
   IF_RATIO_OR_TIME_REACHED: 2,
 } as const;
 
-export type AutoDeleteMode =
-  (typeof AutoDeleteMode)[keyof typeof AutoDeleteMode];
+export type AutoDeleteMode = (typeof AutoDeleteMode)[keyof typeof AutoDeleteMode];
 
 // File Log Age Type
 export const FileLogAgeType = {
@@ -176,8 +170,7 @@ export const FileLogAgeType = {
   YEARS: 2,
 } as const;
 
-export type FileLogAgeType =
-  (typeof FileLogAgeType)[keyof typeof FileLogAgeType];
+export type FileLogAgeType = (typeof FileLogAgeType)[keyof typeof FileLogAgeType];
 
 // Resume Data Storage Type
 export const ResumeDataStorageType = {
@@ -247,8 +240,7 @@ export const DirectoryContentMode = {
   ALL: 2,
 } as const;
 
-export type DirectoryContentMode =
-  (typeof DirectoryContentMode)[keyof typeof DirectoryContentMode];
+export type DirectoryContentMode = (typeof DirectoryContentMode)[keyof typeof DirectoryContentMode];
 
 // Torrent Creator Task Status
 export const TorrentCreatorTaskStatus = {
@@ -298,5 +290,4 @@ export const TorrentOperatingMode = {
   AUTO_MANAGED: 'AutoManaged',
   FORCED: 'Forced',
 };
-export type TorrentOperatingMode =
-  (typeof TorrentOperatingMode)[keyof typeof TorrentOperatingMode];
+export type TorrentOperatingMode = (typeof TorrentOperatingMode)[keyof typeof TorrentOperatingMode];

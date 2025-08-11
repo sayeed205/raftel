@@ -1,5 +1,7 @@
 import type { Category, ServerState } from '@/types/api';
+
 import type { SearchResult } from '../search';
+
 import type { RawTorrent, TorrentPeer } from './torrent';
 
 interface FullUpdate {
@@ -97,8 +99,6 @@ export interface PeerLogResponse {
   reason: string;
 }
 
-export function isFullUpdate(
-  response: MainDataResponse,
-): response is FullUpdate {
+export function isFullUpdate(response: MainDataResponse): response is FullUpdate {
   return 'full_update' in response && response.full_update;
 }

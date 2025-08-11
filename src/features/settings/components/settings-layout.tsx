@@ -1,18 +1,9 @@
-import { useNavigate } from '@tanstack/react-router';
-import {
-  AlertCircle,
-  Download,
-  RotateCcw,
-  Save,
-  Search,
-  Upload,
-} from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
-import {
-  searchSettings,
-  settingsCategories,
-} from '../utils/settings-categories';
+import { useNavigate } from '@tanstack/react-router';
+import { AlertCircle, Download, RotateCcw, Save, Search, Upload } from 'lucide-react';
+
+import { searchSettings, settingsCategories } from '../utils/settings-categories';
 import { SettingsExportDialog } from './settings-export-dialog';
 import { SettingsImportDialog } from './settings-import-dialog';
 import { SettingsNavigation } from './settings-navigation';
@@ -22,28 +13,20 @@ import { SettingsValidationDisplay } from './settings-validation-display';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
-
 import { useSettings, useSettingsActions } from '@/stores/settings-store';
+
+
 
 interface SettingsLayoutProps {
   children?: React.ReactNode;
   currentSection?: string;
 }
 
-export function SettingsLayout({
-  children,
-  currentSection,
-}: SettingsLayoutProps) {
+export function SettingsLayout({ children, currentSection }: SettingsLayoutProps) {
   const navigate = useNavigate();
 
   const {
@@ -212,9 +195,7 @@ export function SettingsLayout({
                 <h1 className='text-2xl font-bold'>Settings</h1>
                 {currentSectionInfo && (
                   <div className='mt-1 flex items-center gap-2'>
-                    <Badge variant='secondary'>
-                      {currentSectionInfo.category.title}
-                    </Badge>
+                    <Badge variant='secondary'>{currentSectionInfo.category.title}</Badge>
                     <span className='text-muted-foreground text-sm'>
                       {currentSectionInfo.section.title}
                     </span>
@@ -235,12 +216,7 @@ export function SettingsLayout({
                     <Upload className='mr-1 h-4 w-4' />
                     Import
                   </Button>
-                  <Button
-                    variant='outline'
-                    size='sm'
-                    onClick={handleExport}
-                    disabled={isLoading}
-                  >
+                  <Button variant='outline' size='sm' onClick={handleExport} disabled={isLoading}>
                     <Download className='mr-1 h-4 w-4' />
                     Export
                   </Button>
@@ -251,12 +227,7 @@ export function SettingsLayout({
                 {/* Save/Discard */}
                 {isDirty && (
                   <>
-                    <Button
-                      variant='outline'
-                      size='sm'
-                      onClick={handleDiscard}
-                      disabled={isSaving}
-                    >
+                    <Button variant='outline' size='sm' onClick={handleDiscard} disabled={isSaving}>
                       <RotateCcw className='mr-1 h-4 w-4' />
                       Discard
                     </Button>
@@ -337,9 +308,8 @@ export function SettingsLayout({
                     <CardHeader>
                       <CardTitle>Welcome to Settings</CardTitle>
                       <CardDescription>
-                        Configure qBittorrent and customize your experience. Use
-                        the navigation on the left to explore different settings
-                        categories.
+                        Configure qBittorrent and customize your experience. Use the navigation on
+                        the left to explore different settings categories.
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -350,12 +320,8 @@ export function SettingsLayout({
                             className='hover:bg-muted/50 cursor-pointer transition-colors'
                           >
                             <CardHeader className='pb-3'>
-                              <CardTitle className='text-lg'>
-                                {category.title}
-                              </CardTitle>
-                              <CardDescription>
-                                {category.description}
-                              </CardDescription>
+                              <CardTitle className='text-lg'>{category.title}</CardTitle>
+                              <CardDescription>{category.description}</CardDescription>
                             </CardHeader>
                             <CardContent>
                               <div className='space-y-1'>

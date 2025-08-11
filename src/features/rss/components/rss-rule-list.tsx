@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
   EditIcon,
   MoreHorizontalIcon,
@@ -6,18 +8,11 @@ import {
   PlusIcon,
   TrashIcon,
 } from 'lucide-react';
-import { useState } from 'react';
 
 import { RSSRuleDialog } from './rss-rule-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,14 +32,8 @@ export function RSSRuleList({
   dashboardView?: boolean;
   maxItems?: number;
 }) {
-  const {
-    rules,
-    isRulesLoading,
-    removeRule,
-    toggleRule,
-    setSelectedRule,
-    selectedRule,
-  } = useRSSStore();
+  const { rules, isRulesLoading, removeRule, toggleRule, setSelectedRule, selectedRule } =
+    useRSSStore();
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingRule, setEditingRule] = useState<string | null>(null);
@@ -147,156 +136,134 @@ export function RSSRuleList({
         <div
           className={`grid gap-4 ${dashboardView ? 'grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-3'}`}
         >
-          {rules
-            .slice(0, maxItems > 0 ? maxItems : rules.length)
-            .map((rule) => (
-              <Card
-                key={rule.name}
-                className={`hover:bg-muted/50 cursor-pointer transition-colors ${
-                  selectedRule === rule.name ? 'ring-primary ring-2' : ''
-                } ${dashboardView ? 'mb-0' : ''}`}
-                onClick={() => !dashboardView && handleRuleClick(rule.name)}
-              >
-                <CardHeader className='pb-3'>
-                  <div className='flex items-start justify-between'>
-                    <div className='min-w-0 flex-1 space-y-1'>
-                      <CardTitle className='truncate text-base'>
-                        {rule.name}
-                      </CardTitle>
-                      <CardDescription className='text-xs'>
-                        {rule.affectedFeeds.length} feed(s) •{' '}
-                        {rule.mustContain || 'No filter'}
-                      </CardDescription>
-                    </div>
-                    {!dashboardView ? (
-                      <div className='ml-2 flex items-center gap-2'>
-                        <Switch
-                          checked={rule.enabled}
-                          onCheckedChange={() => {
-                            handleToggleRule(rule.name);
-                          }}
-                          onClick={(e) => e.stopPropagation()}
-                        />
-                        <DropdownMenu>
-                          <DropdownMenuTrigger
-                            asChild
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <Button
-                              variant='ghost'
-                              size='sm'
-                              className='h-8 w-8 p-0'
-                            >
-                              <MoreHorizontalIcon className='h-4 w-4' />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align='end'>
-                            <DropdownMenuItem
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleToggleRule(rule.name);
-                              }}
-                            >
-                              {rule.enabled ? (
-                                <>
-                                  <PauseIcon className='mr-2 h-4 w-4' />
-                                  Disable
-                                </>
-                              ) : (
-                                <>
-                                  <PlayIcon className='mr-2 h-4 w-4' />
-                                  Enable
-                                </>
-                              )}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setEditingRule(rule.name);
-                              }}
-                            >
-                              <EditIcon className='mr-2 h-4 w-4' />
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteRule(rule.name);
-                              }}
-                              className='text-destructive'
-                            >
-                              <TrashIcon className='mr-2 h-4 w-4' />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    ) : (
-                      <div className='ml-2'>
-                        <Badge variant={rule.enabled ? 'default' : 'secondary'}>
-                          {rule.enabled ? 'Active' : 'Disabled'}
-                        </Badge>
-                      </div>
-                    )}
+          {rules.slice(0, maxItems > 0 ? maxItems : rules.length).map((rule) => (
+            <Card
+              key={rule.name}
+              className={`hover:bg-muted/50 cursor-pointer transition-colors ${
+                selectedRule === rule.name ? 'ring-primary ring-2' : ''
+              } ${dashboardView ? 'mb-0' : ''}`}
+              onClick={() => !dashboardView && handleRuleClick(rule.name)}
+            >
+              <CardHeader className='pb-3'>
+                <div className='flex items-start justify-between'>
+                  <div className='min-w-0 flex-1 space-y-1'>
+                    <CardTitle className='truncate text-base'>{rule.name}</CardTitle>
+                    <CardDescription className='text-xs'>
+                      {rule.affectedFeeds.length} feed(s) • {rule.mustContain || 'No filter'}
+                    </CardDescription>
                   </div>
-                </CardHeader>
-                <CardContent className='pt-0'>
-                  <div className='space-y-2 text-sm'>
-                    <div className='flex items-center justify-between'>
-                      <span className='text-muted-foreground'>Priority:</span>
-                      {getPriorityBadge(rule.priority)}
+                  {!dashboardView ? (
+                    <div className='ml-2 flex items-center gap-2'>
+                      <Switch
+                        checked={rule.enabled}
+                        onCheckedChange={() => {
+                          handleToggleRule(rule.name);
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                          <Button variant='ghost' size='sm' className='h-8 w-8 p-0'>
+                            <MoreHorizontalIcon className='h-4 w-4' />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align='end'>
+                          <DropdownMenuItem
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleToggleRule(rule.name);
+                            }}
+                          >
+                            {rule.enabled ? (
+                              <>
+                                <PauseIcon className='mr-2 h-4 w-4' />
+                                Disable
+                              </>
+                            ) : (
+                              <>
+                                <PlayIcon className='mr-2 h-4 w-4' />
+                                Enable
+                              </>
+                            )}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEditingRule(rule.name);
+                            }}
+                          >
+                            <EditIcon className='mr-2 h-4 w-4' />
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteRule(rule.name);
+                            }}
+                            className='text-destructive'
+                          >
+                            <TrashIcon className='mr-2 h-4 w-4' />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
-                    <div className='flex items-center justify-between'>
-                      <span className='text-muted-foreground'>Status:</span>
+                  ) : (
+                    <div className='ml-2'>
                       <Badge variant={rule.enabled ? 'default' : 'secondary'}>
                         {rule.enabled ? 'Active' : 'Disabled'}
                       </Badge>
                     </div>
-                    {rule.smartFilter && (
-                      <div className='flex items-center justify-between'>
-                        <span className='text-muted-foreground'>
-                          Smart Filter:
-                        </span>
-                        <Badge variant='outline'>Enabled</Badge>
-                      </div>
-                    )}
-                    <div className='text-muted-foreground text-xs'>
-                      Last match: {formatDate(rule.lastMatch)}
-                    </div>
-                    {rule.mustContain && !dashboardView && (
-                      <div className='text-xs'>
-                        <span className='text-muted-foreground'>
-                          Must contain:
-                        </span>
-                        <div className='bg-muted mt-1 truncate rounded px-2 py-1 font-mono'>
-                          {rule.mustContain}
-                        </div>
-                      </div>
-                    )}
-                    {rule.mustNotContain && !dashboardView && (
-                      <div className='text-xs'>
-                        <span className='text-muted-foreground'>
-                          Must not contain:
-                        </span>
-                        <div className='bg-muted mt-1 truncate rounded px-2 py-1 font-mono'>
-                          {rule.mustNotContain}
-                        </div>
-                      </div>
-                    )}
+                  )}
+                </div>
+              </CardHeader>
+              <CardContent className='pt-0'>
+                <div className='space-y-2 text-sm'>
+                  <div className='flex items-center justify-between'>
+                    <span className='text-muted-foreground'>Priority:</span>
+                    {getPriorityBadge(rule.priority)}
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+                  <div className='flex items-center justify-between'>
+                    <span className='text-muted-foreground'>Status:</span>
+                    <Badge variant={rule.enabled ? 'default' : 'secondary'}>
+                      {rule.enabled ? 'Active' : 'Disabled'}
+                    </Badge>
+                  </div>
+                  {rule.smartFilter && (
+                    <div className='flex items-center justify-between'>
+                      <span className='text-muted-foreground'>Smart Filter:</span>
+                      <Badge variant='outline'>Enabled</Badge>
+                    </div>
+                  )}
+                  <div className='text-muted-foreground text-xs'>
+                    Last match: {formatDate(rule.lastMatch)}
+                  </div>
+                  {rule.mustContain && !dashboardView && (
+                    <div className='text-xs'>
+                      <span className='text-muted-foreground'>Must contain:</span>
+                      <div className='bg-muted mt-1 truncate rounded px-2 py-1 font-mono'>
+                        {rule.mustContain}
+                      </div>
+                    </div>
+                  )}
+                  {rule.mustNotContain && !dashboardView && (
+                    <div className='text-xs'>
+                      <span className='text-muted-foreground'>Must not contain:</span>
+                      <div className='bg-muted mt-1 truncate rounded px-2 py-1 font-mono'>
+                        {rule.mustNotContain}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       )}
 
       {!dashboardView && (
         <>
-          <RSSRuleDialog
-            open={isAddDialogOpen}
-            onOpenChange={setIsAddDialogOpen}
-            mode='add'
-          />
+          <RSSRuleDialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen} mode='add' />
 
           {editingRule && (
             <RSSRuleDialog

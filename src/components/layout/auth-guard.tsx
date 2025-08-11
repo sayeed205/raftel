@@ -1,6 +1,8 @@
-import { Navigate, useLocation } from '@tanstack/react-router';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+
+import { Navigate, useLocation } from '@tanstack/react-router';
+
 import useAuthCheck from '@/hooks/use-auth.ts';
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {

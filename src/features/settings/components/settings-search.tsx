@@ -1,5 +1,6 @@
-import { Search, X } from 'lucide-react';
 import React from 'react';
+
+import { Search, X } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -29,12 +30,7 @@ interface SettingsSearchProps {
   onClose: () => void;
 }
 
-export function SettingsSearch({
-  query,
-  results,
-  onSelect,
-  onClose,
-}: SettingsSearchProps) {
+export function SettingsSearch({ query, results, onSelect, onClose }: SettingsSearchProps) {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   // Handle keyboard navigation
@@ -89,15 +85,9 @@ export function SettingsSearch({
       <CardContent className='p-2'>
         <div className='mb-2 flex items-center justify-between px-2'>
           <span className='text-muted-foreground text-sm'>
-            {results.length} result{results.length !== 1 ? 's' : ''} for "
-            {query}"
+            {results.length} result{results.length !== 1 ? 's' : ''} for "{query}"
           </span>
-          <Button
-            variant='ghost'
-            size='sm'
-            onClick={onClose}
-            className='h-6 w-6 p-0'
-          >
+          <Button variant='ghost' size='sm' onClick={onClose} className='h-6 w-6 p-0'>
             <X className='h-4 w-4' />
           </Button>
         </div>
@@ -113,19 +103,14 @@ export function SettingsSearch({
               <Button
                 key={`${result.section.id}-${index}`}
                 variant='ghost'
-                className={cn(
-                  'h-auto w-full justify-start p-2',
-                  isSelected && 'bg-muted',
-                )}
+                className={cn('h-auto w-full justify-start p-2', isSelected && 'bg-muted')}
                 onClick={() => onSelect(result.section.id)}
               >
                 <div className='flex w-full items-start gap-3'>
                   <Icon className='mt-0.5 h-4 w-4 flex-shrink-0' />
                   <div className='flex-1 text-left'>
                     <div className='mb-1 flex items-center gap-2'>
-                      <span className='font-medium'>
-                        {result.section.title}
-                      </span>
+                      <span className='font-medium'>{result.section.title}</span>
                       <Badge variant='secondary' className='text-xs'>
                         {result.category.title}
                       </Badge>

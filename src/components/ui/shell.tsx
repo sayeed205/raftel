@@ -1,6 +1,7 @@
-import {  cva } from 'class-variance-authority';
 import * as React from 'react';
-import type {VariantProps} from 'class-variance-authority';
+
+import { cva } from 'class-variance-authority';
+import type { VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
 
@@ -24,15 +25,8 @@ interface ShellProps
   as?: React.ElementType;
 }
 
-function Shell({
-  className,
-  as: Comp = 'section',
-  variant,
-  ...props
-}: ShellProps) {
-  return (
-    <Comp className={cn(shellVariants({ variant }), className)} {...props} />
-  );
+function Shell({ className, as: Comp = 'section', variant, ...props }: ShellProps) {
+  return <Comp className={cn(shellVariants({ variant }), className)} {...props} />;
 }
 
 export { Shell, shellVariants };

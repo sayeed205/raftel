@@ -1,7 +1,8 @@
 'use client';
 
-import { Plus, X } from 'lucide-react';
 import { useState } from 'react';
+
+import { Plus, X } from 'lucide-react';
 import { AddTorrentModal } from '../add-torrent-modal';
 import { DataTableFacetedFilter } from './data-table-faceted-filter';
 import { DataTableViewOptions } from './data-table-view-options';
@@ -12,15 +13,14 @@ import { Input } from '@/components/ui/input';
 import { getStateText } from '@/lib/utils';
 import { useTorrentStore } from '@/stores/torrent-store';
 
+
+
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   data: Array<TData>;
 }
 
-export function DataTableToolbar<TData>({
-  table,
-  data,
-}: DataTableToolbarProps<TData>) {
+export function DataTableToolbar<TData>({ table, data }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
   const [addModalOpen, setAddModalOpen] = useState(false);
 
@@ -44,9 +44,7 @@ export function DataTableToolbar<TData>({
         <Input
           placeholder='Filter torrents...'
           value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('name')?.setFilterValue(event.target.value)
-          }
+          onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
           className='h-8 w-[150px] lg:w-[250px]'
         />
         {table.getColumn('state') && (

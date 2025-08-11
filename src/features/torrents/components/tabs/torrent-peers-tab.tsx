@@ -1,5 +1,6 @@
-import { Search, Users } from 'lucide-react';
 import { useMemo, useState } from 'react';
+
+import { Search, Users } from 'lucide-react';
 
 import type { TorrentPeer } from '@/types/qbit/torrent.ts';
 import { Badge } from '@/components/ui/badge';
@@ -14,7 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-
 import { formatBytes, formatProgress, formatSpeed } from '@/lib/utils';
 
 interface TorrentPeersTabProps {
@@ -59,12 +59,9 @@ const getFlagDescription = (flags: string, flagsDesc: string): string => {
   if (flags.includes('K')) descriptions.push('Peer is unchoking us');
   if (flags.includes('?')) descriptions.push('Peer is choked');
   if (flags.includes('X'))
-    descriptions.push(
-      'Peer was included in peerlists obtained through Peer Exchange (PEX)',
-    );
+    descriptions.push('Peer was included in peerlists obtained through Peer Exchange (PEX)');
   if (flags.includes('H')) descriptions.push('Peer was obtained through DHT');
-  if (flags.includes('E'))
-    descriptions.push('Peer is using Protocol Encryption');
+  if (flags.includes('E')) descriptions.push('Peer is using Protocol Encryption');
   if (flags.includes('L')) descriptions.push('Peer is local');
 
   return descriptions.length > 0 ? descriptions.join(', ') : flags;
@@ -195,9 +192,7 @@ export function TorrentPeersTab({ peers }: TorrentPeersTabProps) {
         <CardContent>
           {filteredPeers.length === 0 ? (
             <div className='text-muted-foreground py-8 text-center'>
-              {peersList.length === 0
-                ? 'No peers connected'
-                : 'No peers match your search'}
+              {peersList.length === 0 ? 'No peers connected' : 'No peers match your search'}
             </div>
           ) : (
             <div className='rounded-md border'>
@@ -231,9 +226,7 @@ export function TorrentPeersTab({ peers }: TorrentPeersTabProps) {
                               {peer.country_code.toUpperCase()}
                             </span>
                           )}
-                          <span className='text-sm'>
-                            {peer.country || 'Unknown'}
-                          </span>
+                          <span className='text-sm'>{peer.country || 'Unknown'}</span>
                         </div>
                       </TableCell>
                       <TableCell>
@@ -241,10 +234,7 @@ export function TorrentPeersTab({ peers }: TorrentPeersTabProps) {
                       </TableCell>
                       <TableCell>
                         <div className='flex min-w-[120px] items-center space-x-2'>
-                          <Progress
-                            value={peer.progress * 100}
-                            className='flex-1'
-                          />
+                          <Progress value={peer.progress * 100} className='flex-1' />
                           <span className='w-12 text-right text-xs'>
                             {formatProgress(peer.progress)}
                           </span>
@@ -273,14 +263,10 @@ export function TorrentPeersTab({ peers }: TorrentPeersTabProps) {
                         </span>
                       </TableCell>
                       <TableCell>
-                        <span className='text-sm'>
-                          {formatBytes(peer.downloaded)}
-                        </span>
+                        <span className='text-sm'>{formatBytes(peer.downloaded)}</span>
                       </TableCell>
                       <TableCell>
-                        <span className='text-sm'>
-                          {formatBytes(peer.uploaded)}
-                        </span>
+                        <span className='text-sm'>{formatBytes(peer.uploaded)}</span>
                       </TableCell>
                       <TableCell>
                         <Badge
@@ -298,10 +284,7 @@ export function TorrentPeersTab({ peers }: TorrentPeersTabProps) {
                           <Badge
                             variant='outline'
                             className='text-xs'
-                            title={getFlagDescription(
-                              peer.flags,
-                              peer.flags_desc,
-                            )}
+                            title={getFlagDescription(peer.flags, peer.flags_desc)}
                           >
                             {peer.flags}
                           </Badge>

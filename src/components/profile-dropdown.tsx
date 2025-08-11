@@ -1,5 +1,5 @@
-import { User } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
+import { User } from 'lucide-react';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -20,9 +20,7 @@ export function ProfileDropdown() {
       <DropdownMenuTrigger asChild>
         <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
           <Avatar className='h-8 w-8'>
-            <AvatarFallback>
-              {username ? username.at(0)?.toUpperCase() : <User />}
-            </AvatarFallback>
+            <AvatarFallback>{username ? username.at(0)?.toUpperCase() : <User />}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>

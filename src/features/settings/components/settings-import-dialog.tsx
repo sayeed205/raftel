@@ -1,5 +1,6 @@
-import { AlertCircle, CheckCircle, Upload } from 'lucide-react';
 import React, { useState } from 'react';
+
+import { AlertCircle, CheckCircle, Upload } from 'lucide-react';
 
 import type { WebUISettings } from '@/stores/settings-store';
 import type { QBittorrentPreferences } from '@/types/api';
@@ -19,7 +20,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-
 
 interface ImportData {
   preferences?: Partial<QBittorrentPreferences>;
@@ -90,9 +90,7 @@ export function SettingsImportDialog({
   }, [open]);
 
   // Handle file selection
-  const handleFileSelect = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (!selectedFile) return;
 
@@ -106,16 +104,12 @@ export function SettingsImportDialog({
 
       // Validate import data structure
       if (!data.preferences && !data.webUISettings) {
-        throw new Error(
-          'Invalid settings file: No preferences or WebUI settings found',
-        );
+        throw new Error('Invalid settings file: No preferences or WebUI settings found');
       }
 
       // Check version compatibility
       if (data.version && data.version !== '1.0') {
-        console.warn(
-          `Settings file version ${data.version} may not be fully compatible`,
-        );
+        console.warn(`Settings file version ${data.version} may not be fully compatible`);
       }
 
       setImportData(data);
@@ -126,8 +120,7 @@ export function SettingsImportDialog({
 
       setStep(detectedConflicts.length > 0 ? 'conflicts' : 'review');
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : 'Failed to parse settings file';
+      const message = err instanceof Error ? err.message : 'Failed to parse settings file';
       setError(message);
     } finally {
       setIsLoading(false);
@@ -141,8 +134,7 @@ export function SettingsImportDialog({
     // Check preferences conflicts
     if (data.preferences && currentPreferences) {
       Object.entries(data.preferences).forEach(([key, value]) => {
-        const currentValue =
-          currentPreferences[key as keyof QBittorrentPreferences];
+        const currentValue = currentPreferences[key as keyof QBittorrentPreferences];
         if (currentValue !== undefined && currentValue !== value) {
           conflicts.push({
             key,
@@ -189,10 +181,7 @@ export function SettingsImportDialog({
       lsd: 'Local Service Discovery enabled',
       // Add more as needed
     };
-    return (
-      descriptions[key] ||
-      key.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
-    );
+    return descriptions[key] || key.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
   };
 
   // Get human-readable description for WebUI setting keys
@@ -207,8 +196,7 @@ export function SettingsImportDialog({
       // Add more as needed
     };
     return (
-      descriptions[key] ||
-      key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())
+      descriptions[key] || key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())
     );
   };
 
@@ -241,13 +229,10 @@ export function SettingsImportDialog({
           conflicts
             .filter(
               (c) =>
-                c.section === 'preferences' &&
-                !importOptions.selectedConflicts.includes(c.key),
+                c.section === 'preferences' && !importOptions.selectedConflicts.includes(c.key),
             )
             .forEach((c) => {
-              delete filteredData.preferences![
-                c.key as keyof QBittorrentPreferences
-              ];
+              delete filteredData.preferences![c.key as keyof QBittorrentPreferences];
             });
         }
       }
@@ -260,8 +245,7 @@ export function SettingsImportDialog({
           conflicts
             .filter(
               (c) =>
-                c.section === 'webUISettings' &&
-                !importOptions.selectedConflicts.includes(c.key),
+                c.section === 'webUISettings' && !importOptions.selectedConflicts.includes(c.key),
             )
             .forEach((c) => {
               delete filteredData.webUISettings![c.key as keyof WebUISettings];
@@ -272,8 +256,7 @@ export function SettingsImportDialog({
       await onImport(filteredData, importOptions);
       onOpenChange(false);
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : 'Failed to import settings';
+      const message = err instanceof Error ? err.message : 'Failed to import settings';
       setError(message);
     } finally {
       setIsLoading(false);
@@ -335,9 +318,7 @@ export function SettingsImportDialog({
           <div className='space-y-4'>
             <div className='flex items-center gap-2'>
               <CheckCircle className='h-5 w-5 text-green-500' />
-              <span className='font-medium'>
-                Settings file loaded successfully
-              </span>
+              <span className='font-medium'>Settings file loaded successfully</span>
             </div>
 
             {importData.exportedAt && (
@@ -402,8 +383,7 @@ export function SettingsImportDialog({
             </div>
 
             <div className='text-muted-foreground text-sm'>
-              The following settings have different values. Choose which ones to
-              overwrite:
+              The following settings have different values. Choose which ones to overwrite:
             </div>
 
             <div className='space-y-3'>
@@ -415,9 +395,7 @@ export function SettingsImportDialog({
                     setImportOptions((prev) => ({
                       ...prev,
                       overwriteConflicts: !!checked,
-                      selectedConflicts: checked
-                        ? conflicts.map((c) => c.key)
-                        : [],
+                      selectedConflicts: checked ? conflicts.map((c) => c.key) : [],
                     }))
                   }
                 />
@@ -437,25 +415,18 @@ export function SettingsImportDialog({
                           id={`conflict-${conflict.key}`}
                           checked={
                             importOptions.overwriteConflicts ||
-                            importOptions.selectedConflicts.includes(
-                              conflict.key,
-                            )
+                            importOptions.selectedConflicts.includes(conflict.key)
                           }
                           onCheckedChange={(checked) =>
                             handleConflictToggle(conflict.key, !!checked)
                           }
                           disabled={importOptions.overwriteConflicts}
                         />
-                        <Label
-                          htmlFor={`conflict-${conflict.key}`}
-                          className='font-medium'
-                        >
+                        <Label htmlFor={`conflict-${conflict.key}`} className='font-medium'>
                           {conflict.description}
                         </Label>
                         <Badge variant='outline' className='text-xs'>
-                          {conflict.section === 'preferences'
-                            ? 'qBittorrent'
-                            : 'WebUI'}
+                          {conflict.section === 'preferences' ? 'qBittorrent' : 'WebUI'}
                         </Badge>
                       </div>
 
@@ -487,9 +458,7 @@ export function SettingsImportDialog({
           </Button>
 
           {step === 'select' && (
-            <Button disabled={!file || isLoading}>
-              {isLoading ? 'Loading...' : 'Next'}
-            </Button>
+            <Button disabled={!file || isLoading}>{isLoading ? 'Loading...' : 'Next'}</Button>
           )}
 
           {(step === 'review' || step === 'conflicts') && (
@@ -497,8 +466,7 @@ export function SettingsImportDialog({
               onClick={handleImport}
               disabled={
                 isLoading ||
-                (!importOptions.importPreferences &&
-                  !importOptions.importWebUISettings)
+                (!importOptions.importPreferences && !importOptions.importWebUISettings)
               }
             >
               {isLoading ? 'Importing...' : 'Import Settings'}

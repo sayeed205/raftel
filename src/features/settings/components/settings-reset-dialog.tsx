@@ -1,5 +1,6 @@
-import { AlertTriangle, RotateCcw, Settings } from 'lucide-react';
 import React, { useState } from 'react';
+
+import { AlertTriangle, RotateCcw, Settings } from 'lucide-react';
 
 import type { WebUISettings } from '@/stores/settings-store';
 import type { QBittorrentPreferences } from '@/types/api';
@@ -18,7 +19,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-
 
 interface SettingsResetDialogProps {
   open: boolean;
@@ -103,8 +103,7 @@ export function SettingsResetDialog({
       await onReset(resetOptions);
       onOpenChange(false);
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : 'Failed to reset settings';
+      const message = err instanceof Error ? err.message : 'Failed to reset settings';
       setError(message);
     } finally {
       setIsLoading(false);
@@ -132,8 +131,8 @@ export function SettingsResetDialog({
             Reset Settings
           </DialogTitle>
           <DialogDescription>
-            This action will permanently reset your settings to their default
-            values. This cannot be undone.
+            This action will permanently reset your settings to their default values. This cannot be
+            undone.
           </DialogDescription>
         </DialogHeader>
 
@@ -149,8 +148,8 @@ export function SettingsResetDialog({
           <Alert variant='destructive'>
             <AlertTriangle className='h-4 w-4' />
             <AlertDescription>
-              <strong>Warning:</strong> This action is irreversible. All your
-              custom settings will be lost and restored to their default values.
+              <strong>Warning:</strong> This action is irreversible. All your custom settings will
+              be lost and restored to their default values.
             </AlertDescription>
           </Alert>
 
@@ -171,16 +170,11 @@ export function SettingsResetDialog({
                   }
                   disabled={!preferences}
                 />
-                <Label
-                  htmlFor='reset-preferences'
-                  className='flex items-center gap-2'
-                >
+                <Label htmlFor='reset-preferences' className='flex items-center gap-2'>
                   <Settings className='h-4 w-4' />
                   qBittorrent Preferences
                   {preferences && (
-                    <Badge variant='destructive'>
-                      {Object.keys(preferences).length} settings
-                    </Badge>
+                    <Badge variant='destructive'>{Object.keys(preferences).length} settings</Badge>
                   )}
                 </Label>
               </div>
@@ -196,15 +190,10 @@ export function SettingsResetDialog({
                     }))
                   }
                 />
-                <Label
-                  htmlFor='reset-webui'
-                  className='flex items-center gap-2'
-                >
+                <Label htmlFor='reset-webui' className='flex items-center gap-2'>
                   <RotateCcw className='h-4 w-4' />
                   WebUI Settings
-                  <Badge variant='destructive'>
-                    {Object.keys(webUISettings).length} settings
-                  </Badge>
+                  <Badge variant='destructive'>{Object.keys(webUISettings).length} settings</Badge>
                 </Label>
               </div>
             </div>
@@ -225,9 +214,7 @@ export function SettingsResetDialog({
                   }))
                 }
               />
-              <Label htmlFor='create-backup'>
-                Create backup before resetting
-              </Label>
+              <Label htmlFor='create-backup'>Create backup before resetting</Label>
             </div>
 
             {resetOptions.createBackup && (
@@ -245,9 +232,7 @@ export function SettingsResetDialog({
               Confirmation
             </Label>
             <div className='text-muted-foreground text-sm'>
-              Type{' '}
-              <code className='bg-muted rounded px-1'>{CONFIRMATION_TEXT}</code>{' '}
-              to confirm:
+              Type <code className='bg-muted rounded px-1'>{CONFIRMATION_TEXT}</code> to confirm:
             </div>
             <Input
               id='confirmation'
@@ -259,18 +244,12 @@ export function SettingsResetDialog({
           </div>
 
           {/* Summary */}
-          {(resetOptions.resetPreferences ||
-            resetOptions.resetWebUISettings) && (
+          {(resetOptions.resetPreferences || resetOptions.resetWebUISettings) && (
             <div className='bg-destructive/10 border-destructive/20 rounded-lg border p-4'>
               <div className='space-y-1 text-sm'>
-                <div className='text-destructive font-medium'>
-                  Reset Summary
-                </div>
+                <div className='text-destructive font-medium'>Reset Summary</div>
                 <div>Settings to reset: {getResetCount()}</div>
-                <div>
-                  Backup will be created:{' '}
-                  {resetOptions.createBackup ? 'Yes' : 'No'}
-                </div>
+                <div>Backup will be created: {resetOptions.createBackup ? 'Yes' : 'No'}</div>
               </div>
             </div>
           )}
@@ -286,8 +265,7 @@ export function SettingsResetDialog({
             disabled={
               !isConfirmationValid ||
               isLoading ||
-              (!resetOptions.resetPreferences &&
-                !resetOptions.resetWebUISettings)
+              (!resetOptions.resetPreferences && !resetOptions.resetWebUISettings)
             }
           >
             {isLoading ? 'Resetting...' : 'Reset Settings'}

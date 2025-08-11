@@ -1,10 +1,12 @@
 import * as React from 'react';
+
 import {
   BulkActionConfirmationDialog,
   ConfirmationDialog,
   DeleteConfirmationDialog,
 } from './confirmation-dialog';
 import { useConfirmationDialog } from '@/hooks/use-confirmation-dialog';
+
 
 interface ConfirmationDialogProviderProps {
   children: React.ReactNode;
@@ -14,9 +16,7 @@ interface ConfirmationDialogProviderProps {
  * Provider component that renders confirmation dialogs based on hook state
  * Use this with the useConfirmationDialog hook for a complete confirmation system
  */
-export function ConfirmationDialogProvider({
-  children,
-}: ConfirmationDialogProviderProps) {
+export function ConfirmationDialogProvider({ children }: ConfirmationDialogProviderProps) {
   const {
     isOpen,
     isLoading,

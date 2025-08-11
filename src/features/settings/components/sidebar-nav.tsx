@@ -1,7 +1,7 @@
-import { Link, useLocation, useNavigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
-
+import { Link, useLocation, useNavigate } from '@tanstack/react-router';
 import type { JSX } from 'react';
+
 
 import { buttonVariants } from '@/components/ui/button';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
@@ -22,11 +22,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   }>;
 }
 
-export default function SidebarNav({
-  className,
-  items,
-  ...props
-}: SidebarNavProps) {
+export default function SidebarNav({ className, items, ...props }: SidebarNavProps) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [val, setVal] = useState(pathname);
@@ -62,10 +58,7 @@ export default function SidebarNav({
         className='bg-background hidden w-full min-w-40 md:block'
       >
         <nav
-          className={cn(
-            'flex space-x-2 py-1 lg:flex-col lg:space-y-1 lg:space-x-0',
-            className,
-          )}
+          className={cn('flex space-x-2 py-1 lg:flex-col lg:space-y-1 lg:space-x-0', className)}
           {...props}
         >
           {items.map((item) => (

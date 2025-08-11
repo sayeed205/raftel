@@ -33,9 +33,7 @@ export interface TorrentStatistics {
   completedCount: number;
 }
 
-export function calculateCategoryStats(
-  torrents: Array<TorrentInfo>,
-): Array<CategoryStats> {
+export function calculateCategoryStats(torrents: Array<TorrentInfo>): Array<CategoryStats> {
   const categoryMap = new Map<
     string,
     {
@@ -87,17 +85,14 @@ export function calculateCategoryStats(
       downloadedSize: stats.downloadedSize,
       uploadedSize: stats.uploadedSize,
       averageProgress:
-        stats.torrents.reduce((sum, t) => sum + t.progress, 0) /
-        stats.torrents.length,
+        stats.torrents.reduce((sum, t) => sum + t.progress, 0) / stats.torrents.length,
       activeCount: stats.activeCount,
       completedCount: stats.completedCount,
     }))
     .sort((a, b) => b.count - a.count);
 }
 
-export function calculateTagStats(
-  torrents: Array<TorrentInfo>,
-): Array<TagStats> {
+export function calculateTagStats(torrents: Array<TorrentInfo>): Array<TagStats> {
   const tagMap = new Map<
     string,
     {
@@ -156,26 +151,21 @@ export function calculateTagStats(
       downloadedSize: stats.downloadedSize,
       uploadedSize: stats.uploadedSize,
       averageProgress:
-        stats.torrents.reduce((sum, t) => sum + t.progress, 0) /
-        stats.torrents.length,
+        stats.torrents.reduce((sum, t) => sum + t.progress, 0) / stats.torrents.length,
       activeCount: stats.activeCount,
       completedCount: stats.completedCount,
     }))
     .sort((a, b) => b.count - a.count);
 }
 
-export function calculateTorrentStatistics(
-  torrents: Array<TorrentInfo>,
-): TorrentStatistics {
+export function calculateTorrentStatistics(torrents: Array<TorrentInfo>): TorrentStatistics {
   const categories = calculateCategoryStats(torrents);
   const tags = calculateTagStats(torrents);
 
   const totalSize = torrents.reduce((sum, t) => sum + t.size, 0);
   const totalDownloaded = torrents.reduce((sum, t) => sum + t.downloaded, 0);
   const totalUploaded = torrents.reduce((sum, t) => sum + t.uploaded, 0);
-  const activeCount = torrents.filter(
-    (t) => t.dlspeed > 0 || t.upspeed > 0,
-  ).length;
+  const activeCount = torrents.filter((t) => t.dlspeed > 0 || t.upspeed > 0).length;
   const completedCount = torrents.filter((t) => t.progress >= 1).length;
 
   return {

@@ -4,11 +4,7 @@ interface ContentSectionProps {
   children: React.JSX.Element;
 }
 
-export default function ContentSection({
-  title,
-  desc,
-  children,
-}: ContentSectionProps) {
+export default function ContentSection({ title, desc, children }: ContentSectionProps) {
   return (
     <div className='flex flex-1 flex-col'>
       <div className='mb-4 flex-none'>

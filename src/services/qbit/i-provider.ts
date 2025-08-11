@@ -25,12 +25,7 @@ import type {
   SearchResultsResponse,
   TorrentPeersResponse,
 } from '@/types/qbit/responses';
-import type {
-  Torrent,
-  TorrentFile,
-  TorrentProperties,
-  TorrentTracker,
-} from '@/types/qbit/torrent';
+import type { Torrent, TorrentFile, TorrentProperties, TorrentTracker } from '@/types/qbit/torrent';
 import type {
   BuildInfo,
   Cookie,
@@ -218,9 +213,7 @@ export default interface IProvider {
    * Get the articles matching a rule
    * @param ruleName Rule name
    */
-  getMatchingArticles: (
-    ruleName: string,
-  ) => Promise<Record<string, Array<string>>>;
+  getMatchingArticles: (ruleName: string) => Promise<Record<string, Array<string>>>;
 
   // ---------- SearchController ---------- //
 
@@ -230,11 +223,7 @@ export default interface IProvider {
    * @param category Category to search in
    * @param plugins Plugins to use
    */
-  startSearch: (
-    pattern: string,
-    category: string,
-    plugins: Array<string>,
-  ) => Promise<SearchJob>;
+  startSearch: (pattern: string, category: string, plugins: Array<string>) => Promise<SearchJob>;
 
   /**
    * Stop a running search
@@ -254,11 +243,7 @@ export default interface IProvider {
    * @param offset Offset to start from
    * @param limit Limit the number of results
    */
-  getSearchResults: (
-    id: number,
-    offset?: number,
-    limit?: number,
-  ) => Promise<SearchResultsResponse>;
+  getSearchResults: (id: number, offset?: number, limit?: number) => Promise<SearchResultsResponse>;
 
   /**
    * Delete a search engine
@@ -300,10 +285,7 @@ export default interface IProvider {
    * @param torrentUrl URL of torrent to download, can be a magnet link
    * @param pluginName name of the plugin which will be in charge of downloading the torrent
    */
-  downloadTorrentWithSearchPlugin: (
-    torrentUrl: string,
-    pluginName: string,
-  ) => Promise<void>;
+  downloadTorrentWithSearchPlugin: (torrentUrl: string, pluginName: string) => Promise<void>;
 
   // -------- SyncController -------- //
 
@@ -318,10 +300,7 @@ export default interface IProvider {
    * @param hash Torrent hash
    * @param rid Request ID
    */
-  syncTorrentPeers: (
-    hash: string,
-    rid?: number,
-  ) => Promise<TorrentPeersResponse>;
+  syncTorrentPeers: (hash: string, rid?: number) => Promise<TorrentPeersResponse>;
 
   // -------- TorrentCreatorController -------- //
 
@@ -337,9 +316,7 @@ export default interface IProvider {
    * If not specified, will return all registered tasks
    * @param taskID
    */
-  getTorrentCreatorStatus: (
-    taskID?: string,
-  ) => Promise<Array<TorrentCreatorTask>>;
+  getTorrentCreatorStatus: (taskID?: string) => Promise<Array<TorrentCreatorTask>>;
 
   /**
    * Retrieves the generated torrent file
@@ -386,10 +363,7 @@ export default interface IProvider {
    * @param hash Torrent hash
    * @param indexes File indexes to include
    */
-  getTorrentFiles: (
-    hash: string,
-    indexes?: Array<number>,
-  ) => Promise<Array<TorrentFile>>;
+  getTorrentFiles: (hash: string, indexes?: Array<number>) => Promise<Array<TorrentFile>>;
 
   /**
    * Get all the tags
@@ -408,11 +382,7 @@ export default interface IProvider {
    * @param urls Torrent URLs
    * @param params Torrent add parameters
    */
-  addTorrents: (
-    torrents: Array<File>,
-    urls: string,
-    params?: AddTorrentPayload,
-  ) => Promise<void>;
+  addTorrents: (torrents: Array<File>, urls: string, params?: AddTorrentPayload) => Promise<void>;
 
   /**
    * Set the torrent file priority
@@ -431,10 +401,7 @@ export default interface IProvider {
    * @param hashes Torrent hashes
    * @param deleteFiles Whether to delete the files with the torrents
    */
-  deleteTorrents: (
-    hashes: Array<string>,
-    deleteFiles: boolean,
-  ) => Promise<void>;
+  deleteTorrents: (hashes: Array<string>, deleteFiles: boolean) => Promise<void>;
 
   /**
    * Pause torrents
@@ -546,10 +513,7 @@ export default interface IProvider {
    * @param hashes Torrent hashes
    * @param path Download location
    */
-  setTorrentDownloadPath: (
-    hashes: Array<string>,
-    path: string,
-  ) => Promise<void>;
+  setTorrentDownloadPath: (hashes: Array<string>, path: string) => Promise<void>;
 
   /**
    * Set the torrent save location
@@ -576,11 +540,7 @@ export default interface IProvider {
    * @throws 409 "New tracker URL already exists"
    * @throws 409 "Tracker not found"
    */
-  editTorrentTracker: (
-    hash: string,
-    origUrl: string,
-    newUrl: string,
-  ) => Promise<void>;
+  editTorrentTracker: (hash: string, origUrl: string, newUrl: string) => Promise<void>;
 
   /**
    * Remove trackers from torrents
@@ -588,20 +548,14 @@ export default interface IProvider {
    * @param trackers Trackers to remove
    * @throws 404 if hash doesn't exist
    */
-  removeTorrentTrackers: (
-    hash: string,
-    trackers: Array<string>,
-  ) => Promise<void>;
+  removeTorrentTrackers: (hash: string, trackers: Array<string>) => Promise<void>;
 
   /**
    * Add peers to torrents
    * @param hashes Torrent hashes
    * @param peers Peers to add
    */
-  addTorrentPeers: (
-    hashes: Array<string>,
-    peers: Array<string>,
-  ) => Promise<void>;
+  addTorrentPeers: (hashes: Array<string>, peers: Array<string>) => Promise<void>;
 
   /**
    * Rename a file
@@ -617,11 +571,7 @@ export default interface IProvider {
    * @param oldPath Old folder path
    * @param newPath New folder path
    */
-  renameFolder: (
-    hash: string,
-    oldPath: string,
-    newPath: string,
-  ) => Promise<void>;
+  renameFolder: (hash: string, oldPath: string, newPath: string) => Promise<void>;
 
   /**
    * Set the torrent priority
@@ -645,10 +595,7 @@ export default interface IProvider {
    * @param hashes Torrent hashes
    * @param tags Tags to remove. If not provided, all tags will be removed
    */
-  removeTorrentTag: (
-    hashes: Array<string>,
-    tags?: Array<string>,
-  ) => Promise<void>;
+  removeTorrentTag: (hashes: Array<string>, tags?: Array<string>) => Promise<void>;
 
   /**
    * Create a new tag

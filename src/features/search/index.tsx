@@ -11,8 +11,7 @@ import { useSearchStore } from '@/stores/search-store';
 
 
 export default function SearchPage() {
-  const { fetchEngines, engines, activeSearch, searchResults } =
-    useSearchStore();
+  const { fetchEngines, engines, activeSearch, searchResults } = useSearchStore();
 
   useEffect(() => {
     // Initial data fetch
@@ -31,8 +30,7 @@ export default function SearchPage() {
             <TabsList>
               <TabsTrigger value='search'>Search</TabsTrigger>
               <TabsTrigger value='engines'>
-                Engines ({engines.filter((e) => e.enabled).length}/
-                {engines.length})
+                Engines ({engines.filter((e) => e.enabled).length}/{engines.length})
               </TabsTrigger>
               <TabsTrigger value='history'>History</TabsTrigger>
             </TabsList>

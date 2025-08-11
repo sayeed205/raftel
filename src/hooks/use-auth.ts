@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import { useAuthStore } from '@/stores/auth-store.ts';
 
 export default function useAuthCheck() {

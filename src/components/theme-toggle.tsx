@@ -1,8 +1,11 @@
+import * as React from 'react';
+
 import { Moon, Sun } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import * as React from 'react';
+
 import { useTheme } from './theme-provider';
 import { Button } from '@/components/ui/button';
+
 
 export function ThemeToggle() {
   const { setTheme, theme } = useTheme();
@@ -32,8 +35,7 @@ export function ThemeToggle() {
 
   const isDark =
     theme === 'dark' ||
-    (theme === 'system' &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches);
+    (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
   return (
     <Button

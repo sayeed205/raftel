@@ -1,27 +1,19 @@
 import { useEffect, useState } from 'react';
-import {
-  DownloadIcon,
-  PauseIcon,
-  PlayIcon,
-  PlusIcon,
-  TrashIcon,
-} from 'lucide-react';
+
+import { DownloadIcon, PauseIcon, PlayIcon, PlusIcon, TrashIcon } from 'lucide-react';
+
 import { RSSRuleEditor } from './rss-rule-editor';
 import type { FeedRule } from '@/types/qbit/rss';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { useSettings } from '@/stores/settings-store';
 import { useRSSStore } from '@/stores/rss-store';
+import { useSettings } from '@/stores/settings-store';
+
 
 interface RSSRulesManagerProps {
   open: boolean;
@@ -30,25 +22,16 @@ interface RSSRulesManagerProps {
 
 export function RSSRulesManager({ open, onOpenChange }: RSSRulesManagerProps) {
   const { preferences } = useSettings();
-  const {
-    rules,
-    feeds,
-    isRulesLoading,
-    removeRule,
-    toggleRule,
-    getMatchingArticles,
-  } = useRSSStore();
+  const { rules, feeds, isRulesLoading, removeRule, toggleRule, getMatchingArticles } =
+    useRSSStore();
 
   const [selectedRule, setSelectedRule] = useState<FeedRule | null>(null);
-  const [matchingArticles, setMatchingArticles] = useState<
-    Record<string, Array<string>>
-  >({});
+  const [matchingArticles, setMatchingArticles] = useState<Record<string, Array<string>>>({});
   const [isLoadingArticles, setIsLoadingArticles] = useState(false);
   const [articleError, setArticleError] = useState<string | null>(null);
 
   // Check if RSS auto downloading is enabled
-  const isAutoDownloadEnabled =
-    preferences?.rss_auto_downloading_enabled ?? false;
+  const isAutoDownloadEnabled = preferences?.rss_auto_downloading_enabled ?? false;
 
   // Load matching articles when a rule is selected
   useEffect(() => {
@@ -65,10 +48,7 @@ export function RSSRulesManager({ open, onOpenChange }: RSSRulesManagerProps) {
         const articles = await getMatchingArticles(selectedRule.name);
         setMatchingArticles(articles);
       } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : 'Failed to load matching articles';
+        const message = error instanceof Error ? error.message : 'Failed to load matching articles';
         setArticleError(message);
         setMatchingArticles({});
       } finally {
@@ -156,9 +136,7 @@ export function RSSRulesManager({ open, onOpenChange }: RSSRulesManagerProps) {
                 {isRulesLoading ? (
                   <div className='p-4 text-center'>Loading rules...</div>
                 ) : rules.length === 0 ? (
-                  <div className='text-muted-foreground p-4 text-center'>
-                    No rules configured
-                  </div>
+                  <div className='text-muted-foreground p-4 text-center'>No rules configured</div>
                 ) : (
                   <div className='space-y-2'>
                     {rules.map((rule) => (
@@ -173,9 +151,7 @@ export function RSSRulesManager({ open, onOpenChange }: RSSRulesManagerProps) {
                       >
                         <CardHeader className='p-3'>
                           <div className='flex items-start justify-between'>
-                            <CardTitle className='truncate text-sm'>
-                              {rule.name}
-                            </CardTitle>
+                            <CardTitle className='truncate text-sm'>{rule.name}</CardTitle>
                             <div className='flex items-center gap-1'>
                               <Button
                                 variant='ghost'
@@ -215,9 +191,7 @@ export function RSSRulesManager({ open, onOpenChange }: RSSRulesManagerProps) {
                             </div>
                             <div className='mt-1 flex items-center justify-between'>
                               <span>Status:</span>
-                              <Badge
-                                variant={rule.enabled ? 'default' : 'secondary'}
-                              >
+                              <Badge variant={rule.enabled ? 'default' : 'secondary'}>
                                 {rule.enabled ? 'Active' : 'Disabled'}
                               </Badge>
                             </div>
@@ -237,8 +211,8 @@ export function RSSRulesManager({ open, onOpenChange }: RSSRulesManagerProps) {
               <Alert variant='destructive' className='m-4'>
                 <AlertTitle>Auto Download Disabled</AlertTitle>
                 <AlertDescription>
-                  RSS auto downloading is currently disabled. Enable it in the
-                  RSS settings to use these rules.
+                  RSS auto downloading is currently disabled. Enable it in the RSS settings to use
+                  these rules.
                 </AlertDescription>
               </Alert>
             )}
@@ -248,9 +222,7 @@ export function RSSRulesManager({ open, onOpenChange }: RSSRulesManagerProps) {
                 {selectedRule ? (
                   <div className='space-y-6'>
                     <div>
-                      <h3 className='text-lg font-semibold'>
-                        Edit Rule: {selectedRule.name}
-                      </h3>
+                      <h3 className='text-lg font-semibold'>Edit Rule: {selectedRule.name}</h3>
                       <p className='text-muted-foreground text-sm'>
                         Last match: {formatDate(selectedRule.lastMatch)}
                       </p>
@@ -265,54 +237,42 @@ export function RSSRulesManager({ open, onOpenChange }: RSSRulesManagerProps) {
                     <Separator />
 
                     <div>
-                      <h3 className='mb-3 text-lg font-semibold'>
-                        Matching Articles
-                      </h3>
+                      <h3 className='mb-3 text-lg font-semibold'>Matching Articles</h3>
 
                       {isLoadingArticles ? (
-                        <div className='text-center'>
-                          Loading matching articles...
-                        </div>
+                        <div className='text-center'>Loading matching articles...</div>
                       ) : articleError ? (
                         <Alert variant='destructive'>
                           <AlertDescription>{articleError}</AlertDescription>
                         </Alert>
                       ) : Object.keys(matchingArticles).length === 0 ? (
-                        <p className='text-muted-foreground'>
-                          No matching articles found
-                        </p>
+                        <p className='text-muted-foreground'>No matching articles found</p>
                       ) : (
                         <div className='space-y-4'>
-                          {Object.entries(matchingArticles).map(
-                            ([feedName, articles]) => (
-                              <Card key={feedName}>
-                                <CardHeader className='p-3'>
-                                  <CardTitle className='text-sm'>
-                                    {feeds.find((f) => f.name === feedName)
-                                      ?.title || feedName}
-                                  </CardTitle>
-                                </CardHeader>
-                                <CardContent className='p-3 pt-0'>
-                                  {articles.length === 0 ? (
-                                    <p className='text-muted-foreground text-sm'>
-                                      No matching articles
-                                    </p>
-                                  ) : (
-                                    <ul className='space-y-1'>
-                                      {articles.map((article, index) => (
-                                        <li
-                                          key={index}
-                                          className='truncate text-sm'
-                                        >
-                                          {article}
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  )}
-                                </CardContent>
-                              </Card>
-                            ),
-                          )}
+                          {Object.entries(matchingArticles).map(([feedName, articles]) => (
+                            <Card key={feedName}>
+                              <CardHeader className='p-3'>
+                                <CardTitle className='text-sm'>
+                                  {feeds.find((f) => f.name === feedName)?.title || feedName}
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent className='p-3 pt-0'>
+                                {articles.length === 0 ? (
+                                  <p className='text-muted-foreground text-sm'>
+                                    No matching articles
+                                  </p>
+                                ) : (
+                                  <ul className='space-y-1'>
+                                    {articles.map((article, index) => (
+                                      <li key={index} className='truncate text-sm'>
+                                        {article}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </CardContent>
+                            </Card>
+                          ))}
                         </div>
                       )}
                     </div>
@@ -322,12 +282,9 @@ export function RSSRulesManager({ open, onOpenChange }: RSSRulesManagerProps) {
                     <div className='bg-muted mb-4 rounded-full p-4'>
                       <DownloadIcon className='text-muted-foreground h-8 w-8' />
                     </div>
-                    <h3 className='mb-2 text-xl font-semibold'>
-                      RSS Download Rules
-                    </h3>
+                    <h3 className='mb-2 text-xl font-semibold'>RSS Download Rules</h3>
                     <p className='text-muted-foreground mb-4'>
-                      Select a rule from the left to edit it, or create a new
-                      rule.
+                      Select a rule from the left to edit it, or create a new rule.
                     </p>
                     <Button onClick={() => setSelectedRule(null)}>
                       <PlusIcon className='mr-2 h-4 w-4' />

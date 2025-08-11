@@ -1,6 +1,7 @@
+import { useState } from 'react';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusIcon } from 'lucide-react';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -29,10 +30,7 @@ interface SearchEngineDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function SearchEngineDialog({
-  open,
-  onOpenChange,
-}: SearchEngineDialogProps) {
+export function SearchEngineDialog({ open, onOpenChange }: SearchEngineDialogProps) {
   const { installEngine } = useSearchStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -63,10 +61,7 @@ export function SearchEngineDialog({
       reset();
       onOpenChange(false);
     } catch (error) {
-      const message =
-        error instanceof Error
-          ? error.message
-          : 'Failed to install search engine';
+      const message = error instanceof Error ? error.message : 'Failed to install search engine';
       setError(message);
     } finally {
       setIsSubmitting(false);
@@ -109,14 +104,9 @@ https://raw.githubusercontent.com/qbittorrent/search-plugins/master/nova3/engine
               className='min-h-[120px] font-mono text-sm'
               {...register('sources')}
             />
-            {errors.sources && (
-              <p className='text-destructive text-sm'>
-                {errors.sources.message}
-              </p>
-            )}
+            {errors.sources && <p className='text-destructive text-sm'>{errors.sources.message}</p>}
             <p className='text-muted-foreground text-sm'>
-              Enter plugin URLs or file paths, one per line. You can find
-              official plugins at{' '}
+              Enter plugin URLs or file paths, one per line. You can find official plugins at{' '}
               <a
                 href='https://github.com/qbittorrent/search-plugins'
                 target='_blank'

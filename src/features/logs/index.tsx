@@ -1,3 +1,4 @@
+
 import { LogControls } from './components/log-controls';
 import { LogViewer } from './components/log-viewer';
 import { PeerLogViewer } from './components/peer-log-viewer';
@@ -29,11 +30,7 @@ export function LogsPage() {
             </TabsContent>
 
             <TabsContent value='peer-logs' className='space-y-4'>
-              <PeerLogViewer
-                height={600}
-                showControls={false}
-                autoRefresh={true}
-              />
+              <PeerLogViewer height={600} showControls={false} autoRefresh={true} />
             </TabsContent>
           </Tabs>
         </div>

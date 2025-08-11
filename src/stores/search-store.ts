@@ -56,19 +56,11 @@ interface SearchActions {
   startSearch: (query: SearchQuery) => Promise<void>;
   stopSearch: () => Promise<void>;
   getSearchStatus: (id?: number) => Promise<void>;
-  getSearchResults: (
-    id: number,
-    offset?: number,
-    limit?: number,
-  ) => Promise<void>;
+  getSearchResults: (id: number, offset?: number, limit?: number) => Promise<void>;
   deleteSearch: (id: number) => Promise<void>;
 
   // Search history and saved searches
-  addToHistory: (
-    query: SearchQuery,
-    resultsCount: number,
-    duration?: number,
-  ) => void;
+  addToHistory: (query: SearchQuery, resultsCount: number, duration?: number) => void;
   clearHistory: () => void;
   removeFromHistory: (index: number) => void;
   saveSearch: (name: string, query: SearchQuery) => void;
@@ -80,10 +72,7 @@ interface SearchActions {
   copyMagnetLink: (result: SearchResult) => void;
 
   // Filtering and sorting
-  setSortBy: (
-    sortBy: SearchState['sortBy'],
-    order?: SearchState['sortOrder'],
-  ) => void;
+  setSortBy: (sortBy: SearchState['sortBy'], order?: SearchState['sortOrder']) => void;
   setFilterEngine: (engine: string | null) => void;
   setFilterCategory: (category: string | null) => void;
   setMinSeeds: (seeds: number) => void;
@@ -131,27 +120,22 @@ export const useSearchStore = create<SearchStore>()(
         const plugins = await qbit.getSearchPlugins();
 
         // Convert SearchPlugin to SearchEngine format
-        const engines: Array<SearchEngine> = plugins.map(
-          (plugin: SearchPlugin) => ({
-            id: plugin.name,
-            name: plugin.name,
-            url: plugin.url,
-            enabled: plugin.enabled,
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            categories: (plugin.supportedCategories || []).map((cat) =>
-              typeof cat === 'string' ? cat : cat.id,
-            ),
-            version: plugin.version,
-            fullName: plugin.fullName,
-          }),
-        );
+        const engines: Array<SearchEngine> = plugins.map((plugin: SearchPlugin) => ({
+          id: plugin.name,
+          name: plugin.name,
+          url: plugin.url,
+          enabled: plugin.enabled,
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+          categories: (plugin.supportedCategories || []).map((cat) =>
+            typeof cat === 'string' ? cat : cat.id,
+          ),
+          version: plugin.version,
+          fullName: plugin.fullName,
+        }));
 
         set({ engines, isLoadingEngines: false });
       } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : 'Failed to fetch search engines';
+        const message = error instanceof Error ? error.message : 'Failed to fetch search engines';
         set({ error: message, isLoadingEngines: false });
         throw error;
       }
@@ -162,10 +146,7 @@ export const useSearchStore = create<SearchStore>()(
         await qbit.enableSearchPlugin([engineName], true);
         await get().fetchEngines();
       } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : 'Failed to enable search engine';
+        const message = error instanceof Error ? error.message : 'Failed to enable search engine';
         set({ error: message });
         throw error;
       }
@@ -176,10 +157,7 @@ export const useSearchStore = create<SearchStore>()(
         await qbit.enableSearchPlugin([engineName], false);
         await get().fetchEngines();
       } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : 'Failed to disable search engine';
+        const message = error instanceof Error ? error.message : 'Failed to disable search engine';
         set({ error: message });
         throw error;
       }
@@ -190,10 +168,7 @@ export const useSearchStore = create<SearchStore>()(
         await qbit.installSearchPlugin(sources);
         await get().fetchEngines();
       } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : 'Failed to install search engine';
+        const message = error instanceof Error ? error.message : 'Failed to install search engine';
         set({ error: message });
         throw error;
       }
@@ -205,9 +180,7 @@ export const useSearchStore = create<SearchStore>()(
         await get().fetchEngines();
       } catch (error) {
         const message =
-          error instanceof Error
-            ? error.message
-            : 'Failed to uninstall search engine';
+          error instanceof Error ? error.message : 'Failed to uninstall search engine';
         set({ error: message });
         throw error;
       }
@@ -218,10 +191,7 @@ export const useSearchStore = create<SearchStore>()(
         await qbit.updateSearchPlugins();
         await get().fetchEngines();
       } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : 'Failed to update search engines';
+        const message = error instanceof Error ? error.message : 'Failed to update search engines';
         set({ error: message });
         throw error;
       }
@@ -245,11 +215,7 @@ export const useSearchStore = create<SearchStore>()(
             .map((e) => e.name);
         const category = query.category || 'all';
 
-        const searchJob = await qbit.startSearch(
-          query.pattern,
-          category,
-          plugins,
-        );
+        const searchJob = await qbit.startSearch(query.pattern, category, plugins);
 
         set({
           activeSearch: searchJob,
@@ -264,10 +230,7 @@ export const useSearchStore = create<SearchStore>()(
               const currentStatus = status[0];
               set({ searchStatus: currentStatus });
 
-              if (
-                currentStatus.status === 'Stopped' ||
-                currentStatus.total > 0
-              ) {
+              if (currentStatus.status === 'Stopped' || currentStatus.total > 0) {
                 await get().getSearchResults(searchJob.id);
 
                 if (currentStatus.status === 'Stopped') {
@@ -290,8 +253,7 @@ export const useSearchStore = create<SearchStore>()(
         // Start polling after a short delay
         setTimeout(pollResults, 1000);
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : 'Failed to start search';
+        const message = error instanceof Error ? error.message : 'Failed to start search';
         set({ error: message, isSearching: false });
         throw error;
       }
@@ -306,13 +268,10 @@ export const useSearchStore = create<SearchStore>()(
         set({
           isSearching: false,
           // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-          searchStatus: activeSearch
-            ? { ...get().searchStatus!, status: 'Stopped' }
-            : null,
+          searchStatus: activeSearch ? { ...get().searchStatus!, status: 'Stopped' } : null,
         });
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : 'Failed to stop search';
+        const message = error instanceof Error ? error.message : 'Failed to stop search';
         set({ error: message });
         throw error;
       }
@@ -325,10 +284,7 @@ export const useSearchStore = create<SearchStore>()(
           set({ searchStatus: statuses[0] });
         }
       } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : 'Failed to get search status';
+        const message = error instanceof Error ? error.message : 'Failed to get search status';
         set({ error: message });
         throw error;
       }
@@ -347,23 +303,17 @@ export const useSearchStore = create<SearchStore>()(
         const response = await qbit.getSearchResults(id, offset, limit);
 
         // Convert API response to SearchResult format
-        const results: Array<SearchResult> = response.results.map(
-          (result: SearchResult) => ({
-            ...result,
-            name: result.fileName,
-            size: result.fileSize,
-            seeds: result.nbSeeders,
-            peers: result.nbLeechers,
-            engine: result.siteUrl || 'unknown',
-            magnetLink: result.fileUrl.startsWith('magnet:')
-              ? result.fileUrl
-              : undefined,
-            downloadUrl: !result.fileUrl.startsWith('magnet:')
-              ? result.fileUrl
-              : undefined,
-            descrLink: result.descrLink,
-          }),
-        );
+        const results: Array<SearchResult> = response.results.map((result: SearchResult) => ({
+          ...result,
+          name: result.fileName,
+          size: result.fileSize,
+          seeds: result.nbSeeders,
+          peers: result.nbLeechers,
+          engine: result.siteUrl || 'unknown',
+          magnetLink: result.fileUrl.startsWith('magnet:') ? result.fileUrl : undefined,
+          downloadUrl: !result.fileUrl.startsWith('magnet:') ? result.fileUrl : undefined,
+          descrLink: result.descrLink,
+        }));
 
         // Cache results
         resultCache.set(id, results);
@@ -374,10 +324,7 @@ export const useSearchStore = create<SearchStore>()(
           resultCache,
         });
       } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : 'Failed to get search results';
+        const message = error instanceof Error ? error.message : 'Failed to get search results';
         set({ error: message });
         throw error;
       }
@@ -390,19 +337,14 @@ export const useSearchStore = create<SearchStore>()(
         resultCache.delete(id);
         set({ resultCache });
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : 'Failed to delete search';
+        const message = error instanceof Error ? error.message : 'Failed to delete search';
         set({ error: message });
         throw error;
       }
     },
 
     // Search history and saved searches
-    addToHistory: (
-      query: SearchQuery,
-      resultsCount: number,
-      duration?: number,
-    ) => {
+    addToHistory: (query: SearchQuery, resultsCount: number, duration?: number) => {
       const { searchHistory } = get();
       const historyItem: SearchHistoryItem = {
         query,
@@ -457,8 +399,7 @@ export const useSearchStore = create<SearchStore>()(
 
         await qbit.addTorrents([], url);
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : 'Failed to download torrent';
+        const message = error instanceof Error ? error.message : 'Failed to download torrent';
         set({ error: message });
         throw error;
       }
@@ -472,17 +413,11 @@ export const useSearchStore = create<SearchStore>()(
     },
 
     // Filtering and sorting
-    setSortBy: (
-      sortBy: SearchState['sortBy'],
-      order?: SearchState['sortOrder'],
-    ) => {
+    setSortBy: (sortBy: SearchState['sortBy'], order?: SearchState['sortOrder']) => {
       set({
         sortBy,
         sortOrder:
-          order ||
-          (get().sortBy === sortBy && get().sortOrder === 'desc'
-            ? 'asc'
-            : 'desc'),
+          order || (get().sortBy === sortBy && get().sortOrder === 'desc' ? 'asc' : 'desc'),
       });
     },
 
@@ -538,13 +473,7 @@ export const useSearchStore = create<SearchStore>()(
 
 // Selector hooks for convenience
 export const useSearchEngines = () => {
-  const {
-    engines,
-    isLoadingEngines,
-    fetchEngines,
-    enableEngine,
-    disableEngine,
-  } = useSearchStore();
+  const { engines, isLoadingEngines, fetchEngines, enableEngine, disableEngine } = useSearchStore();
   return {
     engines,
     isLoadingEngines,

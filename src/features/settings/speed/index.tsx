@@ -1,13 +1,7 @@
 import { Calendar, Clock, Download, Gauge, Upload } from 'lucide-react';
-import ContentSection from '../components/content-section';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import ContentSection from '../components/content-section';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,8 +13,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-
 import { useSettings, useSettingsActions } from '@/stores/settings-store';
+
 
 export default function SettingsSpeed() {
   const { preferences, pendingChanges, validationErrors } = useSettings();
@@ -38,9 +32,7 @@ export default function SettingsSpeed() {
 
   // Get current values (pending changes take precedence)
   const getValue = (key: keyof typeof preferences) => {
-    return pendingChanges[key] !== undefined
-      ? pendingChanges[key]
-      : preferences[key];
+    return pendingChanges[key] !== undefined ? pendingChanges[key] : preferences[key];
   };
 
   // Get validation error for a field
@@ -60,10 +52,7 @@ export default function SettingsSpeed() {
   };
 
   return (
-    <ContentSection
-      title='Speed'
-      desc='Update your speed limits and scheduling configuration.'
-    >
+    <ContentSection title='Speed' desc='Update your speed limits and scheduling configuration.'>
       <div className='space-y-6'>
         {/* Global Speed Limits */}
         <Card>
@@ -73,8 +62,7 @@ export default function SettingsSpeed() {
               Global Speed Limits
             </CardTitle>
             <CardDescription>
-              Set global download and upload speed limits. Leave empty for
-              unlimited.
+              Set global download and upload speed limits. Leave empty for unlimited.
             </CardDescription>
           </CardHeader>
           <CardContent className='space-y-4'>
@@ -88,24 +76,13 @@ export default function SettingsSpeed() {
                   id='dl_limit'
                   type='number'
                   min='0'
-                  value={formatSpeedLimit(
-                    (getValue('dl_limit') as number) || 0,
-                  )}
-                  onChange={(e) =>
-                    setPendingChange(
-                      'dl_limit',
-                      parseSpeedLimit(e.target.value),
-                    )
-                  }
+                  value={formatSpeedLimit((getValue('dl_limit') as number) || 0)}
+                  onChange={(e) => setPendingChange('dl_limit', parseSpeedLimit(e.target.value))}
                   placeholder='Unlimited'
-                  className={
-                    getFieldError('dl_limit') ? 'border-destructive' : ''
-                  }
+                  className={getFieldError('dl_limit') ? 'border-destructive' : ''}
                 />
                 {getFieldError('dl_limit') && (
-                  <p className='text-destructive text-sm'>
-                    {getFieldError('dl_limit')}
-                  </p>
+                  <p className='text-destructive text-sm'>{getFieldError('dl_limit')}</p>
                 )}
               </div>
 
@@ -118,30 +95,19 @@ export default function SettingsSpeed() {
                   id='up_limit'
                   type='number'
                   min='0'
-                  value={formatSpeedLimit(
-                    (getValue('up_limit') as number) || 0,
-                  )}
-                  onChange={(e) =>
-                    setPendingChange(
-                      'up_limit',
-                      parseSpeedLimit(e.target.value),
-                    )
-                  }
+                  value={formatSpeedLimit((getValue('up_limit') as number) || 0)}
+                  onChange={(e) => setPendingChange('up_limit', parseSpeedLimit(e.target.value))}
                   placeholder='Unlimited'
-                  className={
-                    getFieldError('up_limit') ? 'border-destructive' : ''
-                  }
+                  className={getFieldError('up_limit') ? 'border-destructive' : ''}
                 />
                 {getFieldError('up_limit') && (
-                  <p className='text-destructive text-sm'>
-                    {getFieldError('up_limit')}
-                  </p>
+                  <p className='text-destructive text-sm'>{getFieldError('up_limit')}</p>
                 )}
               </div>
             </div>
             <p className='text-muted-foreground text-sm'>
-              Global speed limits apply to all torrents. Set to 0 or leave empty
-              for unlimited speed.
+              Global speed limits apply to all torrents. Set to 0 or leave empty for unlimited
+              speed.
             </p>
           </CardContent>
         </Card>
@@ -154,17 +120,13 @@ export default function SettingsSpeed() {
               Alternative Speed Limits
             </CardTitle>
             <CardDescription>
-              Configure alternative speed limits for scheduled times or manual
-              activation.
+              Configure alternative speed limits for scheduled times or manual activation.
             </CardDescription>
           </CardHeader>
           <CardContent className='space-y-4'>
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
               <div className='space-y-2'>
-                <Label
-                  htmlFor='alt_dl_limit'
-                  className='flex items-center gap-2'
-                >
+                <Label htmlFor='alt_dl_limit' className='flex items-center gap-2'>
                   <Download className='h-4 w-4' />
                   Alternative Download Limit (KiB/s)
                 </Label>
@@ -172,24 +134,16 @@ export default function SettingsSpeed() {
                   id='alt_dl_limit'
                   type='number'
                   min='0'
-                  value={formatSpeedLimit(
-                    (getValue('alt_dl_limit') as number) || 0,
-                  )}
+                  value={formatSpeedLimit((getValue('alt_dl_limit') as number) || 0)}
                   onChange={(e) =>
-                    setPendingChange(
-                      'alt_dl_limit',
-                      parseSpeedLimit(e.target.value),
-                    )
+                    setPendingChange('alt_dl_limit', parseSpeedLimit(e.target.value))
                   }
                   placeholder='Unlimited'
                 />
               </div>
 
               <div className='space-y-2'>
-                <Label
-                  htmlFor='alt_up_limit'
-                  className='flex items-center gap-2'
-                >
+                <Label htmlFor='alt_up_limit' className='flex items-center gap-2'>
                   <Upload className='h-4 w-4' />
                   Alternative Upload Limit (KiB/s)
                 </Label>
@@ -197,14 +151,9 @@ export default function SettingsSpeed() {
                   id='alt_up_limit'
                   type='number'
                   min='0'
-                  value={formatSpeedLimit(
-                    (getValue('alt_up_limit') as number) || 0,
-                  )}
+                  value={formatSpeedLimit((getValue('alt_up_limit') as number) || 0)}
                   onChange={(e) =>
-                    setPendingChange(
-                      'alt_up_limit',
-                      parseSpeedLimit(e.target.value),
-                    )
+                    setPendingChange('alt_up_limit', parseSpeedLimit(e.target.value))
                   }
                   placeholder='Unlimited'
                 />
@@ -219,13 +168,9 @@ export default function SettingsSpeed() {
                 <Checkbox
                   id='scheduler_enabled'
                   checked={(getValue('scheduler_enabled') as boolean) || false}
-                  onCheckedChange={(checked) =>
-                    setPendingChange('scheduler_enabled', checked)
-                  }
+                  onCheckedChange={(checked) => setPendingChange('scheduler_enabled', checked)}
                 />
-                <Label htmlFor='scheduler_enabled'>
-                  Enable alternative speed limits scheduler
-                </Label>
+                <Label htmlFor='scheduler_enabled'>Enable alternative speed limits scheduler</Label>
               </div>
 
               {(getValue('scheduler_enabled') as boolean) && (
@@ -234,16 +179,9 @@ export default function SettingsSpeed() {
                     <div className='space-y-2'>
                       <Label htmlFor='schedule_from_hour'>From Hour</Label>
                       <Select
-                        value={
-                          (
-                            getValue('schedule_from_hour') as number
-                          )?.toString() || '0'
-                        }
+                        value={(getValue('schedule_from_hour') as number)?.toString() || '0'}
                         onValueChange={(value) =>
-                          setPendingChange(
-                            'schedule_from_hour',
-                            parseInt(value),
-                          )
+                          setPendingChange('schedule_from_hour', parseInt(value))
                         }
                       >
                         <SelectTrigger>
@@ -262,11 +200,7 @@ export default function SettingsSpeed() {
                     <div className='space-y-2'>
                       <Label htmlFor='schedule_from_min'>From Minute</Label>
                       <Select
-                        value={
-                          (
-                            getValue('schedule_from_min') as number
-                          )?.toString() || '0'
-                        }
+                        value={(getValue('schedule_from_min') as number)?.toString() || '0'}
                         onValueChange={(value) =>
                           setPendingChange('schedule_from_min', parseInt(value))
                         }
@@ -287,11 +221,7 @@ export default function SettingsSpeed() {
                     <div className='space-y-2'>
                       <Label htmlFor='schedule_to_hour'>To Hour</Label>
                       <Select
-                        value={
-                          (
-                            getValue('schedule_to_hour') as number
-                          )?.toString() || '0'
-                        }
+                        value={(getValue('schedule_to_hour') as number)?.toString() || '0'}
                         onValueChange={(value) =>
                           setPendingChange('schedule_to_hour', parseInt(value))
                         }
@@ -312,10 +242,7 @@ export default function SettingsSpeed() {
                     <div className='space-y-2'>
                       <Label htmlFor='schedule_to_min'>To Minute</Label>
                       <Select
-                        value={
-                          (getValue('schedule_to_min') as number)?.toString() ||
-                          '0'
-                        }
+                        value={(getValue('schedule_to_min') as number)?.toString() || '0'}
                         onValueChange={(value) =>
                           setPendingChange('schedule_to_min', parseInt(value))
                         }
@@ -340,13 +267,8 @@ export default function SettingsSpeed() {
                       Schedule Days
                     </Label>
                     <Select
-                      value={
-                        (getValue('scheduler_days') as number)?.toString() ||
-                        '0'
-                      }
-                      onValueChange={(value) =>
-                        setPendingChange('scheduler_days', parseInt(value))
-                      }
+                      value={(getValue('scheduler_days') as number)?.toString() || '0'}
+                      onValueChange={(value) => setPendingChange('scheduler_days', parseInt(value))}
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -367,8 +289,8 @@ export default function SettingsSpeed() {
                   </div>
 
                   <p className='text-muted-foreground text-sm'>
-                    Alternative speed limits will be automatically activated
-                    during the scheduled time period.
+                    Alternative speed limits will be automatically activated during the scheduled
+                    time period.
                   </p>
                 </div>
               )}
@@ -381,8 +303,7 @@ export default function SettingsSpeed() {
           <CardHeader>
             <CardTitle>Rate Limits Settings</CardTitle>
             <CardDescription>
-              Configure how rate limits are applied to different types of
-              connections.
+              Configure how rate limits are applied to different types of connections.
             </CardDescription>
           </CardHeader>
           <CardContent className='space-y-4'>
@@ -391,39 +312,27 @@ export default function SettingsSpeed() {
                 <Checkbox
                   id='limit_utp_rate'
                   checked={(getValue('limit_utp_rate') as boolean) || false}
-                  onCheckedChange={(checked) =>
-                    setPendingChange('limit_utp_rate', checked)
-                  }
+                  onCheckedChange={(checked) => setPendingChange('limit_utp_rate', checked)}
                 />
-                <Label htmlFor='limit_utp_rate'>
-                  Apply rate limit to µTP protocol
-                </Label>
+                <Label htmlFor='limit_utp_rate'>Apply rate limit to µTP protocol</Label>
               </div>
 
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='limit_tcp_overhead'
                   checked={(getValue('limit_tcp_overhead') as boolean) || false}
-                  onCheckedChange={(checked) =>
-                    setPendingChange('limit_tcp_overhead', checked)
-                  }
+                  onCheckedChange={(checked) => setPendingChange('limit_tcp_overhead', checked)}
                 />
-                <Label htmlFor='limit_tcp_overhead'>
-                  Apply rate limit to transport overhead
-                </Label>
+                <Label htmlFor='limit_tcp_overhead'>Apply rate limit to transport overhead</Label>
               </div>
 
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='limit_lan_peers'
                   checked={(getValue('limit_lan_peers') as boolean) || false}
-                  onCheckedChange={(checked) =>
-                    setPendingChange('limit_lan_peers', checked)
-                  }
+                  onCheckedChange={(checked) => setPendingChange('limit_lan_peers', checked)}
                 />
-                <Label htmlFor='limit_lan_peers'>
-                  Apply rate limit to peers on LAN
-                </Label>
+                <Label htmlFor='limit_lan_peers'>Apply rate limit to peers on LAN</Label>
               </div>
             </div>
           </CardContent>

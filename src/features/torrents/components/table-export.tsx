@@ -1,5 +1,7 @@
-import { Download, FileText } from 'lucide-react';
 import { useCallback, useState } from 'react';
+
+import { Download, FileText } from 'lucide-react';
+
 import type { TorrentInfo } from '@/types/api';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -123,15 +125,13 @@ const DEFAULT_EXPORT_FIELDS: Array<ExportField> = [
     key: 'added_on',
     label: 'Added Date',
     selected: false,
-    formatter: (value) =>
-      value ? new Date(value * 1000).toLocaleDateString() : '',
+    formatter: (value) => (value ? new Date(value * 1000).toLocaleDateString() : ''),
   },
   {
     key: 'completed_on',
     label: 'Completed Date',
     selected: false,
-    formatter: (value) =>
-      value ? new Date(value * 1000).toLocaleDateString() : '',
+    formatter: (value) => (value ? new Date(value * 1000).toLocaleDateString() : ''),
   },
   {
     key: 'hash',
@@ -143,13 +143,9 @@ const DEFAULT_EXPORT_FIELDS: Array<ExportField> = [
 export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [format, setFormat] = useState<ExportFormat>('csv');
-  const [fields, setFields] = useState<Array<ExportField>>(
-    DEFAULT_EXPORT_FIELDS,
-  );
+  const [fields, setFields] = useState<Array<ExportField>>(DEFAULT_EXPORT_FIELDS);
   const [exportSelected, setExportSelected] = useState(false);
-  const [customTemplate, setCustomTemplate] = useState(
-    '{{name}} - {{size}} ({{progress}})',
-  );
+  const [customTemplate, setCustomTemplate] = useState('{{name}} - {{size}} ({{progress}})');
 
   const torrentsToExport =
     exportSelected && selectedTorrents.length > 0
@@ -161,9 +157,7 @@ export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
   const toggleField = useCallback((fieldKey: string) => {
     setFields((prev) =>
       prev.map((field) =>
-        field.key === fieldKey
-          ? { ...field, selected: !field.selected }
-          : field,
+        field.key === fieldKey ? { ...field, selected: !field.selected } : field,
       ),
     );
   }, []);
@@ -176,18 +170,15 @@ export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
     setFields((prev) => prev.map((field) => ({ ...field, selected: false })));
   }, []);
 
-  const getFieldValue = useCallback(
-    (torrent: TorrentInfo, field: ExportField): string => {
-      const rawValue = torrent[field.key as keyof TorrentInfo];
+  const getFieldValue = useCallback((torrent: TorrentInfo, field: ExportField): string => {
+    const rawValue = torrent[field.key as keyof TorrentInfo];
 
-      if (field.formatter) {
-        return field.formatter(rawValue, torrent);
-      }
+    if (field.formatter) {
+      return field.formatter(rawValue, torrent);
+    }
 
-      return String(rawValue || '');
-    },
-    [],
-  );
+    return String(rawValue || '');
+  }, []);
 
   const generateCSV = useCallback((): string => {
     const headers = selectedFields.map((field) => field.label);
@@ -195,11 +186,7 @@ export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
       selectedFields.map((field) => {
         const value = getFieldValue(torrent, field);
         // Escape CSV values that contain commas, quotes, or newlines
-        if (
-          value.includes(',') ||
-          value.includes('"') ||
-          value.includes('\n')
-        ) {
+        if (value.includes(',') || value.includes('"') || value.includes('\n')) {
           return `"${value.replace(/"/g, '""')}"`;
         }
         return value;
@@ -343,10 +330,7 @@ export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
           <div className='grid grid-cols-2 gap-4'>
             <div>
               <Label className='text-sm font-medium'>Export Format</Label>
-              <Select
-                value={format}
-                onValueChange={(value: ExportFormat) => setFormat(value)}
-              >
+              <Select value={format} onValueChange={(value: ExportFormat) => setFormat(value)}>
                 <SelectTrigger className='mt-2'>
                   <SelectValue />
                 </SelectTrigger>
@@ -367,9 +351,7 @@ export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
                     checked={!exportSelected}
                     onCheckedChange={() => setExportSelected(false)}
                   />
-                  <span className='text-sm'>
-                    All torrents ({torrents.length})
-                  </span>
+                  <span className='text-sm'>All torrents ({torrents.length})</span>
                 </div>
                 <div className='flex items-center space-x-2'>
                   <Checkbox
@@ -377,9 +359,7 @@ export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
                     onCheckedChange={() => setExportSelected(true)}
                     disabled={selectedTorrents.length === 0}
                   />
-                  <span className='text-sm'>
-                    Selected torrents ({selectedTorrents.length})
-                  </span>
+                  <span className='text-sm'>Selected torrents ({selectedTorrents.length})</span>
                 </div>
               </div>
             </div>
@@ -398,8 +378,7 @@ export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
                 className='mt-2 h-20'
               />
               <div className='text-muted-foreground mt-1 text-xs'>
-                Available placeholders:{' '}
-                {fields.map((f) => `{{${f.key}}}`).join(', ')}
+                Available placeholders: {fields.map((f) => `{{${f.key}}}`).join(', ')}
               </div>
             </div>
           )}
@@ -440,8 +419,8 @@ export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
             <Label className='text-sm font-medium'>Preview</Label>
             <div className='bg-muted mt-2 rounded-md p-3'>
               <div className='text-muted-foreground mb-2 text-xs'>
-                {torrentsToExport.length} torrents • {selectedFields.length}{' '}
-                fields • {format.toUpperCase()} format
+                {torrentsToExport.length} torrents • {selectedFields.length} fields •{' '}
+                {format.toUpperCase()} format
               </div>
               <pre className='max-h-32 overflow-x-auto overflow-y-auto text-xs whitespace-pre-wrap'>
                 {generateExport().split('\n').slice(0, 5).join('\n')}

@@ -28,21 +28,18 @@ export interface BulkActionConfirmationOptions {
 export function useConfirmationDialog() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [confirmAction, setConfirmAction] = useState<
-    (() => void | Promise<void>) | null
-  >(null);
+  const [confirmAction, setConfirmAction] = useState<(() => void | Promise<void>) | null>(null);
 
   // Generic confirmation dialog state
-  const [confirmationOptions, setConfirmationOptions] =
-    useState<ConfirmationOptions | null>(null);
+  const [confirmationOptions, setConfirmationOptions] = useState<ConfirmationOptions | null>(null);
 
   // Delete confirmation dialog state
-  const [deleteOptions, setDeleteOptions] =
-    useState<DeleteConfirmationOptions | null>(null);
+  const [deleteOptions, setDeleteOptions] = useState<DeleteConfirmationOptions | null>(null);
 
   // Bulk action confirmation dialog state
-  const [bulkActionOptions, setBulkActionOptions] =
-    useState<BulkActionConfirmationOptions | null>(null);
+  const [bulkActionOptions, setBulkActionOptions] = useState<BulkActionConfirmationOptions | null>(
+    null,
+  );
 
   // Open generic confirmation dialog
   const openConfirmation = useCallback(
@@ -58,10 +55,7 @@ export function useConfirmationDialog() {
 
   // Open delete confirmation dialog
   const openDeleteConfirmation = useCallback(
-    (
-      options: DeleteConfirmationOptions,
-      onConfirm: () => void | Promise<void>,
-    ) => {
+    (options: DeleteConfirmationOptions, onConfirm: () => void | Promise<void>) => {
       setDeleteOptions(options);
       setConfirmAction(() => onConfirm);
       setConfirmationOptions(null);
@@ -73,10 +67,7 @@ export function useConfirmationDialog() {
 
   // Open bulk action confirmation dialog
   const openBulkActionConfirmation = useCallback(
-    (
-      options: BulkActionConfirmationOptions,
-      onConfirm: () => void | Promise<void>,
-    ) => {
+    (options: BulkActionConfirmationOptions, onConfirm: () => void | Promise<void>) => {
       setBulkActionOptions(options);
       setConfirmAction(() => onConfirm);
       setConfirmationOptions(null);
@@ -140,25 +131,15 @@ export function useConfirmationDialog() {
     reset,
 
     // Convenience methods for common actions
-    confirmDelete: (
-      itemName: string,
-      onConfirm: () => void | Promise<void>,
-    ) => {
+    confirmDelete: (itemName: string, onConfirm: () => void | Promise<void>) => {
       openDeleteConfirmation({ itemName, itemCount: 1 }, onConfirm);
     },
 
-    confirmBulkDelete: (
-      itemCount: number,
-      onConfirm: () => void | Promise<void>,
-    ) => {
+    confirmBulkDelete: (itemCount: number, onConfirm: () => void | Promise<void>) => {
       openDeleteConfirmation({ itemCount }, onConfirm);
     },
 
-    confirmAction: (
-      action: string,
-      description: string,
-      onConfirm: () => void | Promise<void>,
-    ) => {
+    confirmAction: (action: string, description: string, onConfirm: () => void | Promise<void>) => {
       openConfirmation(
         {
           title: `${action}?`,

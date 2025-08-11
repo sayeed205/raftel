@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
   DownloadIcon,
   MoreHorizontalIcon,
@@ -6,19 +8,12 @@ import {
   SettingsIcon,
   TrashIcon,
 } from 'lucide-react';
-import { useState } from 'react';
 
 import { SearchEngineDialog } from './search-engine-dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,9 +39,7 @@ export function SearchEngineList() {
 
   const [isInstallDialogOpen, setIsInstallDialogOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [togglingEngines, setTogglingEngines] = useState<
-    Record<string, boolean>
-  >({});
+  const [togglingEngines, setTogglingEngines] = useState<Record<string, boolean>>({});
 
   const { confirmDestructiveAction } = useConfirmationDialog();
 
@@ -135,23 +128,13 @@ export function SearchEngineList() {
       <div className='flex items-center justify-between'>
         <div>
           <h3 className='text-lg font-medium'>
-            Search Engines ({engines.filter((e) => e.enabled).length}/
-            {engines.length} enabled)
+            Search Engines ({engines.filter((e) => e.enabled).length}/{engines.length} enabled)
           </h3>
-          <p className='text-muted-foreground text-sm'>
-            Manage your search engines and plugins
-          </p>
+          <p className='text-muted-foreground text-sm'>Manage your search engines and plugins</p>
         </div>
         <div className='flex gap-2'>
-          <Button
-            variant='outline'
-            size='sm'
-            onClick={handleUpdateEngines}
-            disabled={isUpdating}
-          >
-            <RefreshCwIcon
-              className={`mr-2 h-4 w-4 ${isUpdating ? 'animate-spin' : ''}`}
-            />
+          <Button variant='outline' size='sm' onClick={handleUpdateEngines} disabled={isUpdating}>
+            <RefreshCwIcon className={`mr-2 h-4 w-4 ${isUpdating ? 'animate-spin' : ''}`} />
             Update All
           </Button>
           <Button size='sm' onClick={() => setIsInstallDialogOpen(true)}>
@@ -171,9 +154,7 @@ export function SearchEngineList() {
         <Card>
           <CardContent className='flex flex-col items-center justify-center py-12'>
             <div className='space-y-2 text-center'>
-              <h3 className='text-lg font-medium'>
-                No search engines installed
-              </h3>
+              <h3 className='text-lg font-medium'>No search engines installed</h3>
               <p className='text-muted-foreground'>
                 Install search engine plugins to start searching for torrents.
               </p>
@@ -187,29 +168,20 @@ export function SearchEngineList() {
       ) : (
         <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
           {engines.map((engine) => (
-            <Card
-              key={engine.id}
-              className='hover:bg-muted/50 transition-colors'
-            >
+            <Card key={engine.id} className='hover:bg-muted/50 transition-colors'>
               <CardHeader className='pb-3'>
                 <div className='flex items-start justify-between'>
                   <div className='min-w-0 flex-1 space-y-1'>
                     <CardTitle className='truncate text-base'>
                       {engine.fullName || engine.name}
                     </CardTitle>
-                    <CardDescription className='truncate text-xs'>
-                      {engine.url}
-                    </CardDescription>
+                    <CardDescription className='truncate text-xs'>{engine.url}</CardDescription>
                   </div>
                   <div className='ml-2 flex items-center gap-2'>
                     {getStatusBadge(engine)}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button
-                          variant='ghost'
-                          size='sm'
-                          className='h-8 w-8 p-0'
-                        >
+                        <Button variant='ghost' size='sm' className='h-8 w-8 p-0'>
                           <MoreHorizontalIcon className='h-4 w-4' />
                         </Button>
                       </DropdownMenuTrigger>
@@ -236,9 +208,7 @@ export function SearchEngineList() {
                     <span className='text-sm font-medium'>Enable Engine</span>
                     <Switch
                       checked={engine.enabled}
-                      onCheckedChange={(checked) =>
-                        handleToggleEngine(engine.name, checked)
-                      }
+                      onCheckedChange={(checked) => handleToggleEngine(engine.name, checked)}
                       disabled={togglingEngines[engine.name]}
                     />
                   </div>
@@ -249,11 +219,7 @@ export function SearchEngineList() {
                     {engine.categories.length > 0 && (
                       <div className='mt-2 flex flex-wrap gap-1'>
                         {engine.categories.slice(0, 3).map((category) => (
-                          <Badge
-                            key={category}
-                            variant='secondary'
-                            className='text-xs'
-                          >
+                          <Badge key={category} variant='secondary' className='text-xs'>
                             {category}
                           </Badge>
                         ))}
@@ -272,10 +238,7 @@ export function SearchEngineList() {
         </div>
       )}
 
-      <SearchEngineDialog
-        open={isInstallDialogOpen}
-        onOpenChange={setIsInstallDialogOpen}
-      />
+      <SearchEngineDialog open={isInstallDialogOpen} onOpenChange={setIsInstallDialogOpen} />
     </div>
   );
 }

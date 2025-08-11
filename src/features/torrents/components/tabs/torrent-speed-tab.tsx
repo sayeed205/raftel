@@ -1,7 +1,8 @@
-import { Save, Settings, TrendingDown, TrendingUp } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
+import { Save, Settings, TrendingDown, TrendingUp } from 'lucide-react';
 import { toast } from 'sonner';
+
 import type { TorrentInfo } from '@/types/api';
 import type { TorrentProperties } from '@/types/qbit/torrent.ts';
 import { Button } from '@/components/ui/button';
@@ -25,11 +26,7 @@ interface SpeedDataPoint {
   uploadSpeed: number;
 }
 
-export function TorrentSpeedTab({
-  torrent,
-  properties,
-  onRefresh,
-}: TorrentSpeedTabProps) {
+export function TorrentSpeedTab({ torrent, properties, onRefresh }: TorrentSpeedTabProps) {
   const [speedHistory, setSpeedHistory] = useState<Array<SpeedDataPoint>>([]);
   const [downloadLimit, setDownloadLimit] = useState<string>('');
   const [uploadLimit, setUploadLimit] = useState<string>('');
@@ -39,12 +36,8 @@ export function TorrentSpeedTab({
 
   // Initialize speed limits from torrent data
   useEffect(() => {
-    setDownloadLimit(
-      torrent.dl_limit > 0 ? (torrent.dl_limit / 1024).toString() : '',
-    );
-    setUploadLimit(
-      torrent.up_limit > 0 ? (torrent.up_limit / 1024).toString() : '',
-    );
+    setDownloadLimit(torrent.dl_limit > 0 ? (torrent.dl_limit / 1024).toString() : '');
+    setUploadLimit(torrent.up_limit > 0 ? (torrent.up_limit / 1024).toString() : '');
     setIsUnlimitedDownload(torrent.dl_limit <= 0);
     setIsUnlimitedUpload(torrent.up_limit <= 0);
   }, [torrent]);
@@ -78,12 +71,8 @@ export function TorrentSpeedTab({
     try {
       setIsLoading(true);
 
-      const dlLimitBytes = isUnlimitedDownload
-        ? 0
-        : Math.max(0, parseInt(downloadLimit) * 1024);
-      const upLimitBytes = isUnlimitedUpload
-        ? 0
-        : Math.max(0, parseInt(uploadLimit) * 1024);
+      const dlLimitBytes = isUnlimitedDownload ? 0 : Math.max(0, parseInt(downloadLimit) * 1024);
+      const upLimitBytes = isUnlimitedUpload ? 0 : Math.max(0, parseInt(uploadLimit) * 1024);
 
       await Promise.all([
         qbit.setDownloadLimit([torrent.hash], dlLimitBytes),
@@ -108,8 +97,7 @@ export function TorrentSpeedTab({
 
     return {
       maxDownload: Math.max(...downloadSpeeds),
-      avgDownload:
-        downloadSpeeds.reduce((a, b) => a + b, 0) / downloadSpeeds.length,
+      avgDownload: downloadSpeeds.reduce((a, b) => a + b, 0) / downloadSpeeds.length,
       maxUpload: Math.max(...uploadSpeeds),
       avgUpload: uploadSpeeds.reduce((a, b) => a + b, 0) / uploadSpeeds.length,
     };
@@ -125,9 +113,7 @@ export function TorrentSpeedTab({
       );
     }
 
-    const maxSpeed = Math.max(
-      ...speedHistory.map((p) => Math.max(p.downloadSpeed, p.uploadSpeed)),
-    );
+    const maxSpeed = Math.max(...speedHistory.map((p) => Math.max(p.downloadSpeed, p.uploadSpeed)));
 
     if (maxSpeed === 0) {
       return (
@@ -145,10 +131,7 @@ export function TorrentSpeedTab({
             const uploadHeight = (point.uploadSpeed / maxSpeed) * 100;
 
             return (
-              <div
-                key={index}
-                className='flex flex-1 flex-col items-center space-y-1'
-              >
+              <div key={index} className='flex flex-1 flex-col items-center space-y-1'>
                 <div className='flex w-full flex-col items-center space-y-0.5'>
                   {/* Upload bar */}
                   <div
@@ -197,9 +180,7 @@ export function TorrentSpeedTab({
             <div className='flex items-center space-x-2'>
               <TrendingDown className='h-4 w-4 text-green-500' />
               <div>
-                <p className='text-2xl font-bold'>
-                  {formatSpeed(torrent.dlspeed)}
-                </p>
+                <p className='text-2xl font-bold'>{formatSpeed(torrent.dlspeed)}</p>
                 <p className='text-muted-foreground text-xs'>Download Speed</p>
               </div>
             </div>
@@ -211,9 +192,7 @@ export function TorrentSpeedTab({
             <div className='flex items-center space-x-2'>
               <TrendingUp className='h-4 w-4 text-blue-500' />
               <div>
-                <p className='text-2xl font-bold'>
-                  {formatSpeed(torrent.upspeed)}
-                </p>
+                <p className='text-2xl font-bold'>{formatSpeed(torrent.upspeed)}</p>
                 <p className='text-muted-foreground text-xs'>Upload Speed</p>
               </div>
             </div>
@@ -225,9 +204,7 @@ export function TorrentSpeedTab({
             <Card>
               <CardContent className='p-4'>
                 <div>
-                  <p className='text-lg font-bold'>
-                    {formatSpeed(speedStats.avgDownload)}
-                  </p>
+                  <p className='text-lg font-bold'>{formatSpeed(speedStats.avgDownload)}</p>
                   <p className='text-muted-foreground text-xs'>Avg Download</p>
                   <p className='text-muted-foreground text-xs'>
                     Max: {formatSpeed(speedStats.maxDownload)}
@@ -239,9 +216,7 @@ export function TorrentSpeedTab({
             <Card>
               <CardContent className='p-4'>
                 <div>
-                  <p className='text-lg font-bold'>
-                    {formatSpeed(speedStats.avgUpload)}
-                  </p>
+                  <p className='text-lg font-bold'>{formatSpeed(speedStats.avgUpload)}</p>
                   <p className='text-muted-foreground text-xs'>Avg Upload</p>
                   <p className='text-muted-foreground text-xs'>
                     Max: {formatSpeed(speedStats.maxUpload)}
@@ -302,10 +277,7 @@ export function TorrentSpeedTab({
             </div>
 
             <div className='text-muted-foreground text-xs'>
-              Current:{' '}
-              {torrent.dl_limit > 0
-                ? formatSpeed(torrent.dl_limit)
-                : 'Unlimited'}
+              Current: {torrent.dl_limit > 0 ? formatSpeed(torrent.dl_limit) : 'Unlimited'}
             </div>
           </div>
 
@@ -343,10 +315,7 @@ export function TorrentSpeedTab({
             </div>
 
             <div className='text-muted-foreground text-xs'>
-              Current:{' '}
-              {torrent.up_limit > 0
-                ? formatSpeed(torrent.up_limit)
-                : 'Unlimited'}
+              Current: {torrent.up_limit > 0 ? formatSpeed(torrent.up_limit) : 'Unlimited'}
             </div>
           </div>
 
@@ -372,55 +341,37 @@ export function TorrentSpeedTab({
             <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
               <div className='space-y-2'>
                 <div className='flex justify-between'>
-                  <span className='text-muted-foreground text-sm'>
-                    Total Downloaded:
-                  </span>
+                  <span className='text-muted-foreground text-sm'>Total Downloaded:</span>
                   <span className='font-mono text-sm'>
                     {formatBytes(properties.total_downloaded)}
                   </span>
                 </div>
                 <div className='flex justify-between'>
-                  <span className='text-muted-foreground text-sm'>
-                    Session Downloaded:
-                  </span>
+                  <span className='text-muted-foreground text-sm'>Session Downloaded:</span>
                   <span className='font-mono text-sm'>
                     {formatBytes(torrent.downloaded_session)}
                   </span>
                 </div>
                 <div className='flex justify-between'>
-                  <span className='text-muted-foreground text-sm'>
-                    Average Download Speed:
-                  </span>
-                  <span className='font-mono text-sm'>
-                    {formatSpeed(properties.dl_speed_avg)}
-                  </span>
+                  <span className='text-muted-foreground text-sm'>Average Download Speed:</span>
+                  <span className='font-mono text-sm'>{formatSpeed(properties.dl_speed_avg)}</span>
                 </div>
               </div>
 
               <div className='space-y-2'>
                 <div className='flex justify-between'>
-                  <span className='text-muted-foreground text-sm'>
-                    Total Uploaded:
-                  </span>
+                  <span className='text-muted-foreground text-sm'>Total Uploaded:</span>
                   <span className='font-mono text-sm'>
                     {formatBytes(properties.total_uploaded)}
                   </span>
                 </div>
                 <div className='flex justify-between'>
-                  <span className='text-muted-foreground text-sm'>
-                    Session Uploaded:
-                  </span>
-                  <span className='font-mono text-sm'>
-                    {formatBytes(torrent.uploaded_session)}
-                  </span>
+                  <span className='text-muted-foreground text-sm'>Session Uploaded:</span>
+                  <span className='font-mono text-sm'>{formatBytes(torrent.uploaded_session)}</span>
                 </div>
                 <div className='flex justify-between'>
-                  <span className='text-muted-foreground text-sm'>
-                    Average Upload Speed:
-                  </span>
-                  <span className='font-mono text-sm'>
-                    {formatSpeed(properties.up_speed_avg)}
-                  </span>
+                  <span className='text-muted-foreground text-sm'>Average Upload Speed:</span>
+                  <span className='font-mono text-sm'>{formatSpeed(properties.up_speed_avg)}</span>
                 </div>
               </div>
             </div>

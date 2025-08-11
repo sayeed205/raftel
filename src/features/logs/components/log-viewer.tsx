@@ -1,3 +1,5 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import {
   AlertCircle,
   AlertTriangle,
@@ -9,7 +11,6 @@ import {
   Trash2,
   XCircle,
 } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FixedSizeList as List } from 'react-window';
 
 import type { Log } from '@/types/logs';
@@ -20,11 +21,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { useLogActions, useLogFilter, useLogs } from '@/stores/log-store';
 import { LogType as LogTypeEnum } from '@/types/qbit/constants';
@@ -58,16 +55,11 @@ const LOG_TYPE_LABELS: Record<LogType, string> = {
 };
 
 const LOG_TYPE_COLORS: Record<LogType, string> = {
-  [LogTypeEnum.NORMAL]:
-    'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-  [LogTypeEnum.INFO]:
-    'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-  [LogTypeEnum.WARNING]:
-    'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-  [LogTypeEnum.CRITICAL]:
-    'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
-  [LogTypeEnum.ALL]:
-    'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200',
+  [LogTypeEnum.NORMAL]: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+  [LogTypeEnum.INFO]: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+  [LogTypeEnum.WARNING]: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+  [LogTypeEnum.CRITICAL]: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+  [LogTypeEnum.ALL]: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200',
 };
 
 function LogItem({ index, style, data }: LogItemProps) {
@@ -75,10 +67,7 @@ function LogItem({ index, style, data }: LogItemProps) {
   const timestamp = new Date(log.timestamp * 1000);
 
   return (
-    <div
-      style={style}
-      className='border-border/50 hover:bg-muted/50 border-b px-4 py-2'
-    >
+    <div style={style} className='border-border/50 hover:bg-muted/50 border-b px-4 py-2'>
       <div className='flex items-start gap-3'>
         <div className='mt-0.5 flex-shrink-0'>
           {LOG_TYPE_ICONS[log.type] || LOG_TYPE_ICONS[LogTypeEnum.NORMAL]}
@@ -93,9 +82,7 @@ function LogItem({ index, style, data }: LogItemProps) {
               {LOG_TYPE_LABELS[log.type] || 'Unknown'}
             </Badge>
 
-            <span className='text-muted-foreground text-xs'>
-              {timestamp.toLocaleString()}
-            </span>
+            <span className='text-muted-foreground text-xs'>{timestamp.toLocaleString()}</span>
 
             <span className='text-muted-foreground text-xs'>ID: {log.id}</span>
           </div>
@@ -127,9 +114,7 @@ export function LogViewer({
     // Apply search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      result = result.filter((log) =>
-        log.message.toLowerCase().includes(query),
-      );
+      result = result.filter((log) => log.message.toLowerCase().includes(query));
     }
 
     // Apply level filtering
@@ -234,15 +219,8 @@ export function LogViewer({
 
           {showControls && (
             <div className='flex items-center gap-2'>
-              <Button
-                variant='outline'
-                size='sm'
-                onClick={handleRefresh}
-                disabled={isLoading}
-              >
-                <RefreshCw
-                  className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
-                />
+              <Button variant='outline' size='sm' onClick={handleRefresh} disabled={isLoading}>
+                <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
                 Refresh
               </Button>
 
@@ -330,31 +308,20 @@ export function LogViewer({
 
                 <div className='flex items-center gap-4'>
                   {logLevels.map((level) => (
-                    <div
-                      key={level.value}
-                      className='flex items-center space-x-2'
-                    >
+                    <div key={level.value} className='flex items-center space-x-2'>
                       <Checkbox
                         id={`level-${level.value}`}
                         checked={selectedLevels.includes(level.value)}
                         onCheckedChange={() => toggleLevel(level.value)}
                       />
-                      <Label
-                        htmlFor={`level-${level.value}`}
-                        className='cursor-pointer text-sm'
-                      >
+                      <Label htmlFor={`level-${level.value}`} className='cursor-pointer text-sm'>
                         {level.label} ({level.count})
                       </Label>
                     </div>
                   ))}
                 </div>
 
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  onClick={clearAllFilters}
-                  className='ml-auto'
-                >
+                <Button variant='ghost' size='sm' onClick={clearAllFilters} className='ml-auto'>
                   Clear Filters
                 </Button>
               </div>

@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -6,7 +8,6 @@ import {
   ExternalLinkIcon,
   FilterIcon,
 } from 'lucide-react';
-import { useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -57,10 +58,7 @@ export function SearchResults() {
   // Pagination
   const totalPages = Math.ceil(filteredResults.length / resultsPerPage);
   const startIndex = (currentPage - 1) * resultsPerPage;
-  const paginatedResults = filteredResults.slice(
-    startIndex,
-    startIndex + resultsPerPage,
-  );
+  const paginatedResults = filteredResults.slice(startIndex, startIndex + resultsPerPage);
 
   const handleSort = (column: typeof sortBy) => {
     setSortBy(column);
@@ -141,11 +139,7 @@ export function SearchResults() {
             )}
           </CardTitle>
           <div className='flex items-center gap-2'>
-            <Button
-              variant='outline'
-              size='sm'
-              onClick={() => setShowFilters(!showFilters)}
-            >
+            <Button variant='outline' size='sm' onClick={() => setShowFilters(!showFilters)}>
               <FilterIcon className='mr-2 h-4 w-4' />
               Filters
             </Button>
@@ -159,22 +153,20 @@ export function SearchResults() {
               <Label>Filter by Engine</Label>
               <Select
                 value={filterEngine || 'all'}
-                onValueChange={(value) =>
-                  setFilterEngine(value === 'all' ? null : value)
-                }
+                onValueChange={(value) => setFilterEngine(value === 'all' ? null : value)}
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value='all'>All Engines</SelectItem>
-                  {Array.from(
-                    new Set(searchResults.map((r) => r.engineName ?? '')),
-                  ).map((engine) => (
-                    <SelectItem key={engine} value={engine}>
-                      {getEngineDisplayName(engine)}
-                    </SelectItem>
-                  ))}
+                  {Array.from(new Set(searchResults.map((r) => r.engineName ?? ''))).map(
+                    (engine) => (
+                      <SelectItem key={engine} value={engine}>
+                        {getEngineDisplayName(engine)}
+                      </SelectItem>
+                    ),
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -247,16 +239,12 @@ export function SearchResults() {
                     {result.fileSize > 0 ? formatBytes(result.fileSize) : 'N/A'}
                   </TableCell>
                   <TableCell>
-                    <Badge
-                      variant={result.nbSeeders > 0 ? 'default' : 'secondary'}
-                    >
+                    <Badge variant={result.nbSeeders > 0 ? 'default' : 'secondary'}>
                       {formatSeeds(result.nbSeeders)}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge variant='outline'>
-                      {formatPeers(result.nbLeechers)}
-                    </Badge>
+                    <Badge variant='outline'>{formatPeers(result.nbLeechers)}</Badge>
                   </TableCell>
                   <TableCell>
                     {result.engineName && (
@@ -278,29 +266,19 @@ export function SearchResults() {
                       >
                         <DownloadIcon className='h-4 w-4' />
                       </Button>
-                      {result.fileUrl &&
-                        result.fileUrl.startsWith('magnet:') && (
-                          <Button
-                            variant='ghost'
-                            size='sm'
-                            onClick={() => handleCopyMagnet(result)}
-                            title='Copy magnet link'
-                          >
-                            <CopyIcon className='h-4 w-4' />
-                          </Button>
-                        )}
-                      {result.descrLink && (
+                      {result.fileUrl && result.fileUrl.startsWith('magnet:') && (
                         <Button
                           variant='ghost'
                           size='sm'
-                          asChild
-                          title='View details'
+                          onClick={() => handleCopyMagnet(result)}
+                          title='Copy magnet link'
                         >
-                          <a
-                            href={result.descrLink}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                          >
+                          <CopyIcon className='h-4 w-4' />
+                        </Button>
+                      )}
+                      {result.descrLink && (
+                        <Button variant='ghost' size='sm' asChild title='View details'>
+                          <a href={result.descrLink} target='_blank' rel='noopener noreferrer'>
                             <ExternalLinkIcon className='h-4 w-4' />
                           </a>
                         </Button>

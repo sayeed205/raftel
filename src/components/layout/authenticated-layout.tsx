@@ -1,6 +1,7 @@
+import * as React from 'react';
+
 import { Outlet } from '@tanstack/react-router';
 import Cookies from 'js-cookie';
-import * as React from 'react';
 
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import SkipToMain from '@/components/skip-to-main';

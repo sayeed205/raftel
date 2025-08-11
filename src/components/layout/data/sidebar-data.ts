@@ -1,11 +1,5 @@
-import {
-  Download,
-  FileText,
-  LayoutDashboard,
-  Rss,
-  Search,
-  Settings,
-} from 'lucide-react';
+import { Download, FileText, LayoutDashboard, Rss, Search, Settings } from 'lucide-react';
+
 import type { SidebarData } from '@/components/layout/types';
 
 export const sidebarData: SidebarData = {

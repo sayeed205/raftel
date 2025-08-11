@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { Link, useNavigate } from '@tanstack/react-router';
 import {
   Activity,
@@ -14,7 +16,6 @@ import {
   Users,
   Wifi,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
 
 import { Header } from '@/components/layout/header.tsx';
 import { Main } from '@/components/layout/main.tsx';
@@ -24,13 +25,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { AddTorrentModal } from '@/features/torrents/components/add-torrent-modal.tsx';
 import { useIsMobile } from '@/hooks/use-mobile';
-import {
-  formatBytes,
-  formatProgress,
-  formatSpeed,
-  getStateColor,
-  getStateText,
-} from '@/lib/utils';
+import { formatBytes, formatProgress, formatSpeed, getStateColor, getStateText } from '@/lib/utils';
 import { useTorrentStore } from '@/stores/torrent-store';
 
 export default function DashboardPage() {
@@ -80,9 +75,7 @@ export default function DashboardPage() {
 
   // Calculate statistics
   const totalTorrents = torrents.length;
-  const activeTorrents = torrents.filter(
-    (t) => t.dlspeed > 0 || t.upspeed > 0,
-  ).length;
+  const activeTorrents = torrents.filter((t) => t.dlspeed > 0 || t.upspeed > 0).length;
   const stalledTorrents = torrents.filter((t) =>
     ['stalledDL', 'stalledUP'].includes(t.state),
   ).length;
@@ -93,9 +86,7 @@ export default function DashboardPage() {
     ['downloading', 'metaDL', 'stalledDL', 'queuedDL'].includes(t.state),
   ).length;
   const completedTorrents = torrents.filter((t) => t.progress === 1).length;
-  const pausedTorrents = torrents.filter((t) =>
-    ['pausedDL', 'pausedUP'].includes(t.state),
-  ).length;
+  const pausedTorrents = torrents.filter((t) => ['pausedDL', 'pausedUP'].includes(t.state)).length;
 
   // Calculate speeds
   const totalDownloadSpeed = torrents.reduce((sum, t) => sum + t.dlspeed, 0);
@@ -121,9 +112,7 @@ export default function DashboardPage() {
   return (
     <>
       <Header fixed>
-        <h3 className={isMobile ? 'text-lg font-semibold' : 'text-2xl'}>
-          Dashboard
-        </h3>
+        <h3 className={isMobile ? 'text-lg font-semibold' : 'text-2xl'}>Dashboard</h3>
       </Header>
       <Main>
         <div className={isMobile ? 'space-y-4' : 'space-y-6'}>
@@ -141,32 +130,16 @@ export default function DashboardPage() {
                   isMobile ? 'pb-1' : 'pb-2'
                 }`}
               >
-                <CardTitle
-                  className={
-                    isMobile ? 'text-xs font-medium' : 'text-sm font-medium'
-                  }
-                >
+                <CardTitle className={isMobile ? 'text-xs font-medium' : 'text-sm font-medium'}>
                   {isMobile ? 'Torrents' : 'Total Torrents'}
                 </CardTitle>
-                <Download
-                  className={`text-muted-foreground ${
-                    isMobile ? 'h-3 w-3' : 'h-4 w-4'
-                  }`}
-                />
+                <Download className={`text-muted-foreground ${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`} />
               </CardHeader>
               <CardContent>
-                <div
-                  className={
-                    isMobile ? 'text-lg font-bold' : 'text-2xl font-bold'
-                  }
-                >
+                <div className={isMobile ? 'text-lg font-bold' : 'text-2xl font-bold'}>
                   {totalTorrents}
                 </div>
-                <p
-                  className={`text-muted-foreground ${
-                    isMobile ? 'text-xs' : 'text-xs'
-                  }`}
-                >
+                <p className={`text-muted-foreground ${isMobile ? 'text-xs' : 'text-xs'}`}>
                   {activeTorrents} active
                 </p>
               </CardContent>
@@ -178,30 +151,18 @@ export default function DashboardPage() {
                   isMobile ? 'pb-1' : 'pb-2'
                 }`}
               >
-                <CardTitle
-                  className={
-                    isMobile ? 'text-xs font-medium' : 'text-sm font-medium'
-                  }
-                >
+                <CardTitle className={isMobile ? 'text-xs font-medium' : 'text-sm font-medium'}>
                   {isMobile ? 'Down' : 'Download Speed'}
                 </CardTitle>
                 <TrendingDown
-                  className={`text-muted-foreground ${
-                    isMobile ? 'h-3 w-3' : 'h-4 w-4'
-                  }`}
+                  className={`text-muted-foreground ${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`}
                 />
               </CardHeader>
               <CardContent>
-                <div
-                  className={
-                    isMobile ? 'text-lg font-bold' : 'text-2xl font-bold'
-                  }
-                >
+                <div className={isMobile ? 'text-lg font-bold' : 'text-2xl font-bold'}>
                   {formatSpeed(totalDownloadSpeed)}
                 </div>
-                <p className='text-muted-foreground text-xs'>
-                  {downloadingTorrents} downloading
-                </p>
+                <p className='text-muted-foreground text-xs'>{downloadingTorrents} downloading</p>
               </CardContent>
             </Card>
 
@@ -211,30 +172,18 @@ export default function DashboardPage() {
                   isMobile ? 'pb-1' : 'pb-2'
                 }`}
               >
-                <CardTitle
-                  className={
-                    isMobile ? 'text-xs font-medium' : 'text-sm font-medium'
-                  }
-                >
+                <CardTitle className={isMobile ? 'text-xs font-medium' : 'text-sm font-medium'}>
                   {isMobile ? 'Up' : 'Upload Speed'}
                 </CardTitle>
                 <TrendingUp
-                  className={`text-muted-foreground ${
-                    isMobile ? 'h-3 w-3' : 'h-4 w-4'
-                  }`}
+                  className={`text-muted-foreground ${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`}
                 />
               </CardHeader>
               <CardContent>
-                <div
-                  className={
-                    isMobile ? 'text-lg font-bold' : 'text-2xl font-bold'
-                  }
-                >
+                <div className={isMobile ? 'text-lg font-bold' : 'text-2xl font-bold'}>
                   {formatSpeed(totalUploadSpeed)}
                 </div>
-                <p className='text-muted-foreground text-xs'>
-                  {seedingTorrents} seeding
-                </p>
+                <p className='text-muted-foreground text-xs'>{seedingTorrents} seeding</p>
               </CardContent>
             </Card>
 
@@ -244,25 +193,15 @@ export default function DashboardPage() {
                   isMobile ? 'pb-1' : 'pb-2'
                 }`}
               >
-                <CardTitle
-                  className={
-                    isMobile ? 'text-xs font-medium' : 'text-sm font-medium'
-                  }
-                >
+                <CardTitle className={isMobile ? 'text-xs font-medium' : 'text-sm font-medium'}>
                   {isMobile ? 'Space' : 'Free Space'}
                 </CardTitle>
                 <HardDrive
-                  className={`text-muted-foreground ${
-                    isMobile ? 'h-3 w-3' : 'h-4 w-4'
-                  }`}
+                  className={`text-muted-foreground ${isMobile ? 'h-3 w-3' : 'h-4 w-4'}`}
                 />
               </CardHeader>
               <CardContent>
-                <div
-                  className={
-                    isMobile ? 'text-lg font-bold' : 'text-2xl font-bold'
-                  }
-                >
+                <div className={isMobile ? 'text-lg font-bold' : 'text-2xl font-bold'}>
                   {formatBytes(serverState?.free_space_on_disk || 0)}
                 </div>
                 <p className='text-muted-foreground text-xs'>
@@ -338,11 +277,7 @@ export default function DashboardPage() {
               <CardHeader>
                 <CardTitle className='flex items-center justify-between'>
                   Server Status
-                  <Button
-                    variant='ghost'
-                    size='sm'
-                    onClick={handleViewStatistics}
-                  >
+                  <Button variant='ghost' size='sm' onClick={handleViewStatistics}>
                     Statistics
                     <BarChart3 className='ml-1 h-4 w-4' />
                   </Button>
@@ -357,9 +292,7 @@ export default function DashboardPage() {
                     </span>
                     <Badge
                       variant={
-                        serverState?.connection_status === 'connected'
-                          ? 'default'
-                          : 'destructive'
+                        serverState?.connection_status === 'connected' ? 'default' : 'destructive'
                       }
                     >
                       {serverState?.connection_status || 'Unknown'}
@@ -382,9 +315,7 @@ export default function DashboardPage() {
                       <Users className='h-4 w-4' />
                       DHT Nodes
                     </span>
-                    <span className='font-mono text-sm'>
-                      {serverState?.dht_nodes || 0}
-                    </span>
+                    <span className='font-mono text-sm'>{serverState?.dht_nodes || 0}</span>
                   </div>
                 </div>
               </CardContent>
@@ -396,11 +327,7 @@ export default function DashboardPage() {
             <CardHeader>
               <CardTitle className='flex items-center justify-between'>
                 Recent Activity
-                <Button
-                  variant='ghost'
-                  size='sm'
-                  onClick={handleViewAllTorrents}
-                >
+                <Button variant='ghost' size='sm' onClick={handleViewAllTorrents}>
                   View All Torrents
                   <ArrowRight className='ml-1 h-4 w-4' />
                 </Button>
@@ -411,23 +338,15 @@ export default function DashboardPage() {
                 <div className='flex h-32 items-center justify-center'>
                   <div className='text-center'>
                     <RefreshCw className='mx-auto mb-2 h-6 w-6 animate-spin' />
-                    <p className='text-muted-foreground text-sm'>
-                      Loading torrents...
-                    </p>
+                    <p className='text-muted-foreground text-sm'>Loading torrents...</p>
                   </div>
                 </div>
               ) : recentTorrents.length === 0 ? (
                 <div className='flex h-32 items-center justify-center'>
                   <div className='text-center'>
                     <Download className='text-muted-foreground mx-auto mb-2 h-8 w-8' />
-                    <p className='text-muted-foreground text-sm'>
-                      No torrents yet
-                    </p>
-                    <Button
-                      size='sm'
-                      className='mt-2'
-                      onClick={handleAddTorrentClick}
-                    >
+                    <p className='text-muted-foreground text-sm'>No torrents yet</p>
+                    <Button size='sm' className='mt-2' onClick={handleAddTorrentClick}>
                       Add your first torrent
                     </Button>
                   </div>
@@ -448,14 +367,10 @@ export default function DashboardPage() {
                     >
                       <div className='min-w-0 flex-1'>
                         <div className='flex items-center gap-2'>
-                          <h4 className='truncate font-medium'>
-                            {torrent.name}
-                          </h4>
+                          <h4 className='truncate font-medium'>{torrent.name}</h4>
                           <Badge
                             variant='secondary'
-                            className={`${getStateColor(
-                              torrent.state,
-                            )} text-xs text-white`}
+                            className={`${getStateColor(torrent.state)} text-xs text-white`}
                           >
                             {getStateText(torrent.state)}
                           </Badge>
@@ -464,22 +379,15 @@ export default function DashboardPage() {
                           <span>{formatBytes(torrent.size)}</span>
                           <span>{formatProgress(torrent.progress)}</span>
                           {torrent.dlspeed > 0 && (
-                            <span className='text-blue-600'>
-                              ↓ {formatSpeed(torrent.dlspeed)}
-                            </span>
+                            <span className='text-blue-600'>↓ {formatSpeed(torrent.dlspeed)}</span>
                           )}
                           {torrent.upspeed > 0 && (
-                            <span className='text-green-600'>
-                              ↑ {formatSpeed(torrent.upspeed)}
-                            </span>
+                            <span className='text-green-600'>↑ {formatSpeed(torrent.upspeed)}</span>
                           )}
                         </div>
                       </div>
                       <div className='w-24 flex-shrink-0'>
-                        <Progress
-                          value={torrent.progress * 100}
-                          className='h-2'
-                        />
+                        <Progress value={torrent.progress * 100} className='h-2' />
                       </div>
                     </div>
                   ))}
@@ -501,11 +409,7 @@ export default function DashboardPage() {
                     <div>Add Torrent</div>
                   </div>
                 </Button>
-                <Button
-                  variant='outline'
-                  onClick={handleViewAllTorrents}
-                  className='h-16'
-                >
+                <Button variant='outline' onClick={handleViewAllTorrents} className='h-16'>
                   <div className='text-center'>
                     <Download className='mx-auto mb-1 h-6 w-6' />
                     <div>Manage Torrents</div>

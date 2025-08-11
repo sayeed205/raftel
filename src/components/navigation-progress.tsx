@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+
 import { useRouterState } from '@tanstack/react-router';
 import LoadingBar from 'react-top-loading-bar';
 import type { LoadingBarRef } from 'react-top-loading-bar';
@@ -15,7 +16,5 @@ export function NavigationProgress() {
     }
   }, [state.status]);
 
-  return (
-    <LoadingBar color='var(--primary)' ref={ref} shadow={true} height={2} />
-  );
+  return <LoadingBar color='var(--primary)' ref={ref} shadow={true} height={2} />;
 }

@@ -1,16 +1,19 @@
-import { Magnet } from 'lucide-react';
 import * as React from 'react';
 
+import { Magnet } from 'lucide-react';
+
 import { sidebarData } from './data/sidebar-data';
+import { NavGroup } from '@/components/layout/nav-group';
+import { NavUser } from '@/components/layout/nav-user';
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail, useSidebar 
+  SidebarRail,
+  useSidebar,
 } from '@/components/ui/sidebar';
-import { NavGroup } from '@/components/layout/nav-group';
-import { NavUser } from '@/components/layout/nav-user';
+
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { state } = useSidebar();

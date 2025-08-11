@@ -1,11 +1,6 @@
-import {
-  BookmarkIcon,
-  ClockIcon,
-  MoreHorizontalIcon,
-  SearchIcon,
-  TrashIcon,
-} from 'lucide-react';
 import { useState } from 'react';
+
+import { BookmarkIcon, ClockIcon, MoreHorizontalIcon, SearchIcon, TrashIcon } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -145,8 +140,7 @@ export function SearchHistoryPanel() {
                   <ClockIcon className='text-muted-foreground mx-auto h-12 w-12' />
                   <h3 className='text-lg font-medium'>No search history</h3>
                   <p className='text-muted-foreground'>
-                    Your search history will appear here after you perform
-                    searches.
+                    Your search history will appear here after you perform searches.
                   </p>
                 </div>
               </CardContent>
@@ -154,24 +148,15 @@ export function SearchHistoryPanel() {
           ) : (
             <div className='space-y-2'>
               {searchHistory.map((item, index) => (
-                <Card
-                  key={index}
-                  className='hover:bg-muted/50 transition-colors'
-                >
+                <Card key={index} className='hover:bg-muted/50 transition-colors'>
                   <CardContent className='p-4'>
                     <div className='flex items-start justify-between'>
                       <div className='min-w-0 flex-1 space-y-2'>
                         <div className='flex items-center gap-2'>
-                          <h4 className='truncate font-medium'>
-                            {item.query.pattern}
-                          </h4>
-                          <Badge variant='secondary'>
-                            {item.resultsCount} results
-                          </Badge>
+                          <h4 className='truncate font-medium'>{item.query.pattern}</h4>
+                          <Badge variant='secondary'>{item.resultsCount} results</Badge>
                           {item.duration && (
-                            <Badge variant='outline'>
-                              {(item.duration / 1000).toFixed(1)}s
-                            </Badge>
+                            <Badge variant='outline'>{(item.duration / 1000).toFixed(1)}s</Badge>
                           )}
                         </div>
                         <p className='text-muted-foreground truncate text-sm'>
@@ -197,9 +182,7 @@ export function SearchHistoryPanel() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align='end'>
-                            <DropdownMenuItem
-                              onClick={() => handleSaveSearch(item)}
-                            >
+                            <DropdownMenuItem onClick={() => handleSaveSearch(item)}>
                               <BookmarkIcon className='mr-2 h-4 w-4' />
                               Save Search
                             </DropdownMenuItem>
@@ -241,10 +224,7 @@ export function SearchHistoryPanel() {
           ) : (
             <div className='space-y-2'>
               {savedSearches.map((saved) => (
-                <Card
-                  key={saved.id}
-                  className='hover:bg-muted/50 transition-colors'
-                >
+                <Card key={saved.id} className='hover:bg-muted/50 transition-colors'>
                   <CardContent className='p-4'>
                     <div className='flex items-start justify-between'>
                       <div className='min-w-0 flex-1 space-y-2'>
@@ -265,9 +245,7 @@ export function SearchHistoryPanel() {
                         <Button
                           variant='ghost'
                           size='sm'
-                          onClick={() =>
-                            handleDeleteSavedSearch(saved.id, saved.name)
-                          }
+                          onClick={() => handleDeleteSavedSearch(saved.id, saved.name)}
                           title='Delete saved search'
                         >
                           <TrashIcon className='h-4 w-4' />
@@ -310,10 +288,7 @@ export function SearchHistoryPanel() {
             )}
           </div>
           <DialogFooter>
-            <Button
-              variant='outline'
-              onClick={() => setIsSaveDialogOpen(false)}
-            >
+            <Button variant='outline' onClick={() => setIsSaveDialogOpen(false)}>
               Cancel
             </Button>
             <Button onClick={handleConfirmSave} disabled={!saveName.trim()}>

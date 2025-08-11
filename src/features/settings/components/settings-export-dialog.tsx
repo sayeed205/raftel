@@ -1,5 +1,6 @@
-import { Download, FileText, Settings } from 'lucide-react';
 import React, { useState } from 'react';
+
+import { Download, FileText, Settings } from 'lucide-react';
 
 import type { WebUISettings } from '@/stores/settings-store';
 import type { QBittorrentPreferences } from '@/types/api';
@@ -18,7 +19,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
-
 
 interface SettingsExportDialogProps {
   open: boolean;
@@ -148,8 +148,7 @@ export function SettingsExportDialog({
             Export Settings
           </DialogTitle>
           <DialogDescription>
-            Export your qBittorrent preferences and WebUI settings to a JSON
-            file.
+            Export your qBittorrent preferences and WebUI settings to a JSON file.
           </DialogDescription>
         </DialogHeader>
 
@@ -172,16 +171,11 @@ export function SettingsExportDialog({
                     }
                     disabled={!preferences}
                   />
-                  <Label
-                    htmlFor='include-preferences'
-                    className='flex items-center gap-2'
-                  >
+                  <Label htmlFor='include-preferences' className='flex items-center gap-2'>
                     <Settings className='h-4 w-4' />
                     qBittorrent Preferences
                     {preferences && (
-                      <Badge variant='secondary'>
-                        {Object.keys(preferences).length} settings
-                      </Badge>
+                      <Badge variant='secondary'>{Object.keys(preferences).length} settings</Badge>
                     )}
                   </Label>
                 </div>
@@ -197,15 +191,10 @@ export function SettingsExportDialog({
                       }))
                     }
                   />
-                  <Label
-                    htmlFor='include-webui'
-                    className='flex items-center gap-2'
-                  >
+                  <Label htmlFor='include-webui' className='flex items-center gap-2'>
                     <FileText className='h-4 w-4' />
                     WebUI Settings
-                    <Badge variant='secondary'>
-                      {Object.keys(webUISettings).length} settings
-                    </Badge>
+                    <Badge variant='secondary'>{Object.keys(webUISettings).length} settings</Badge>
                   </Label>
                 </div>
 
@@ -220,9 +209,7 @@ export function SettingsExportDialog({
                       }))
                     }
                   />
-                  <Label htmlFor='include-metadata'>
-                    Include metadata (export date, version)
-                  </Label>
+                  <Label htmlFor='include-metadata'>Include metadata (export date, version)</Label>
                 </div>
               </div>
             </div>
@@ -256,9 +243,7 @@ export function SettingsExportDialog({
                     id='format-copy'
                     name='format'
                     checked={exportOptions.format === 'copy'}
-                    onChange={() =>
-                      setExportOptions((prev) => ({ ...prev, format: 'copy' }))
-                    }
+                    onChange={() => setExportOptions((prev) => ({ ...prev, format: 'copy' }))}
                   />
                   <Label htmlFor='format-copy'>Copy to clipboard</Label>
                 </div>
@@ -318,8 +303,8 @@ export function SettingsExportDialog({
             />
 
             <div className='text-muted-foreground text-xs'>
-              This is a preview of the data that will be exported. You can
-              review it before proceeding.
+              This is a preview of the data that will be exported. You can review it before
+              proceeding.
             </div>
           </div>
         )}
@@ -334,19 +319,13 @@ export function SettingsExportDialog({
               <Button
                 variant='outline'
                 onClick={handlePreview}
-                disabled={
-                  !exportOptions.includePreferences &&
-                  !exportOptions.includeWebUISettings
-                }
+                disabled={!exportOptions.includePreferences && !exportOptions.includeWebUISettings}
               >
                 Preview
               </Button>
               <Button
                 onClick={handleExport}
-                disabled={
-                  !exportOptions.includePreferences &&
-                  !exportOptions.includeWebUISettings
-                }
+                disabled={!exportOptions.includePreferences && !exportOptions.includeWebUISettings}
               >
                 {exportOptions.format === 'download' ? 'Download' : 'Copy'}
               </Button>

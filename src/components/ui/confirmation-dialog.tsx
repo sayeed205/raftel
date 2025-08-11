@@ -1,5 +1,6 @@
-import { AlertTriangle, Trash2 } from 'lucide-react';
 import * as React from 'react';
+
+import { AlertTriangle, Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -61,9 +62,7 @@ export function ConfirmationDialog({
 
   // Default icon based on variant
   const defaultIcon =
-    variant === 'destructive' ? (
-      <AlertTriangle className='text-destructive h-6 w-6' />
-    ) : null;
+    variant === 'destructive' ? <AlertTriangle className='text-destructive h-6 w-6' /> : null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -71,25 +70,17 @@ export function ConfirmationDialog({
         <DialogHeader>
           <div className='flex items-center gap-3'>
             {icon || defaultIcon}
-            <DialogTitle
-              className={cn(variant === 'destructive' && 'text-destructive')}
-            >
+            <DialogTitle className={cn(variant === 'destructive' && 'text-destructive')}>
               {title}
             </DialogTitle>
           </div>
-          <DialogDescription className='text-left'>
-            {description}
-          </DialogDescription>
+          <DialogDescription className='text-left'>{description}</DialogDescription>
         </DialogHeader>
 
         {children && <div className='py-4'>{children}</div>}
 
         <DialogFooter className='flex-col-reverse gap-2 sm:flex-row sm:justify-end'>
-          <Button
-            variant='outline'
-            onClick={handleCancel}
-            disabled={isConfirming}
-          >
+          <Button variant='outline' onClick={handleCancel} disabled={isConfirming}>
             {cancelText}
           </Button>
           <Button
@@ -195,11 +186,7 @@ export function BulkActionConfirmationDialog({
       confirmText={action}
       cancelText='Cancel'
       variant={isDestructive ? 'destructive' : 'default'}
-      icon={
-        isDestructive ? (
-          <AlertTriangle className='text-destructive h-6 w-6' />
-        ) : undefined
-      }
+      icon={isDestructive ? <AlertTriangle className='text-destructive h-6 w-6' /> : undefined}
       onConfirm={onConfirm}
       isLoading={isLoading}
     />

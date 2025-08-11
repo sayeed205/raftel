@@ -1,13 +1,12 @@
-import { useNavigate } from '@tanstack/react-router';
 import { useCallback, useMemo } from 'react';
-import {
-  
-  createPlatformShortcut,
-  useKeyboardShortcuts
-} from './use-keyboard-shortcuts';
-import type {KeyboardShortcut} from './use-keyboard-shortcuts';
-import { useTorrentStore } from '@/stores/torrent-store';
+
+import { useNavigate } from '@tanstack/react-router';
+
+import { createPlatformShortcut, useKeyboardShortcuts } from './use-keyboard-shortcuts';
+import type { KeyboardShortcut } from './use-keyboard-shortcuts';
 import { torrentToast } from '@/lib/utils/toast';
+import { useTorrentStore } from '@/stores/torrent-store';
+
 
 interface UseTorrentActionsOptions {
   enabled?: boolean;
@@ -27,12 +26,8 @@ export function useTorrentActions(options: UseTorrentActionsOptions = {}) {
 
   // Toggle pause/resume for selected torrent
   const togglePauseResume = useCallback(async () => {
-    const {
-      selectedTorrents,
-      pauseTorrents,
-      resumeTorrents,
-      getTorrentByHash,
-    } = useTorrentStore.getState();
+    const { selectedTorrents, pauseTorrents, resumeTorrents, getTorrentByHash } =
+      useTorrentStore.getState();
     if (selectedTorrents.length === 0) return;
 
     try {
@@ -56,10 +51,7 @@ export function useTorrentActions(options: UseTorrentActionsOptions = {}) {
       )
         ? 'resume'
         : 'pause';
-      torrentToast.actionError(
-        action,
-        error instanceof Error ? error.message : 'Unknown error',
-      );
+      torrentToast.actionError(action, error instanceof Error ? error.message : 'Unknown error');
     }
   }, []);
 
@@ -85,9 +77,8 @@ export function useTorrentActions(options: UseTorrentActionsOptions = {}) {
       }
       torrentToast.syncSuccess();
     } catch (error) {
-      torrentToast.syncError(
-        error instanceof Error ? error.message : 'Unknown error',
-        () => refreshTorrents(),
+      torrentToast.syncError(error instanceof Error ? error.message : 'Unknown error', () =>
+        refreshTorrents(),
       );
     }
   }, [fetchTorrents, onRefresh]);
@@ -108,10 +99,7 @@ export function useTorrentActions(options: UseTorrentActionsOptions = {}) {
       await recheckTorrents(selectedTorrents);
       torrentToast.actionSuccess('recheck', selectedTorrents.length);
     } catch (error) {
-      torrentToast.actionError(
-        'recheck',
-        error instanceof Error ? error.message : 'Unknown error',
-      );
+      torrentToast.actionError('recheck', error instanceof Error ? error.message : 'Unknown error');
     }
   }, []);
 
@@ -144,13 +132,9 @@ export function useTorrentActions(options: UseTorrentActionsOptions = {}) {
         togglePauseResume,
         { useCmd: true },
       ),
-      createPlatformShortcut(
-        'n',
-        'Add New Torrent',
-        'Torrent Management',
-        addNewTorrent,
-        { useCmd: true },
-      ),
+      createPlatformShortcut('n', 'Add New Torrent', 'Torrent Management', addNewTorrent, {
+        useCmd: true,
+      }),
       {
         key: 'Delete',
         action: deleteSelectedTorrents,
@@ -158,29 +142,19 @@ export function useTorrentActions(options: UseTorrentActionsOptions = {}) {
         category: 'Torrent Management',
         preventDefault: true,
       },
-      createPlatformShortcut(
-        'k',
-        'Force Recheck',
-        'Torrent Management',
-        forceRecheck,
-        { useCmd: true, shiftKey: true },
-      ),
-      createPlatformShortcut(
-        'f',
-        'Force Start',
-        'Torrent Management',
-        forceStart,
-        { useCmd: true, shiftKey: true },
-      ),
+      createPlatformShortcut('k', 'Force Recheck', 'Torrent Management', forceRecheck, {
+        useCmd: true,
+        shiftKey: true,
+      }),
+      createPlatformShortcut('f', 'Force Start', 'Torrent Management', forceStart, {
+        useCmd: true,
+        shiftKey: true,
+      }),
 
       // Navigation & Interface
-      createPlatformShortcut(
-        'r',
-        'Refresh/Reload',
-        'Navigation & Interface',
-        refreshTorrents,
-        { useCmd: true },
-      ),
+      createPlatformShortcut('r', 'Refresh/Reload', 'Navigation & Interface', refreshTorrents, {
+        useCmd: true,
+      }),
       {
         key: 'F5',
         action: refreshTorrents,
@@ -188,13 +162,9 @@ export function useTorrentActions(options: UseTorrentActionsOptions = {}) {
         category: 'Navigation & Interface',
         preventDefault: true,
       },
-      createPlatformShortcut(
-        ',',
-        'Preferences/Settings',
-        'Navigation & Interface',
-        openSettings,
-        { useCmd: true },
-      ),
+      createPlatformShortcut(',', 'Preferences/Settings', 'Navigation & Interface', openSettings, {
+        useCmd: true,
+      }),
     ],
     [
       togglePauseResume,

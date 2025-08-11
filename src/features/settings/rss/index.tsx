@@ -1,20 +1,15 @@
-import { DownloadIcon, FilterIcon, RssIcon } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
-import ContentSection from '../components/content-section';
+import { DownloadIcon, FilterIcon, RssIcon } from 'lucide-react';
 
+import ContentSection from '../components/content-section';
 import type { QBittorrentPreferences } from '@/types/qbit/preferences';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useSettings, useSettingsActions } from '@/stores/settings-store';
+
 
 export default function SettingsRss() {
   const { preferences, pendingChanges } = useSettings();
@@ -32,9 +27,7 @@ export default function SettingsRss() {
   }
 
   const getValue = (key: keyof QBittorrentPreferences) => {
-    return pendingChanges[key] !== undefined
-      ? pendingChanges[key]
-      : preferences[key];
+    return pendingChanges[key] !== undefined ? pendingChanges[key] : preferences[key];
   };
 
   const handleEditRules = () => {
@@ -61,33 +54,22 @@ export default function SettingsRss() {
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='rss_processing_enabled'
-                  checked={
-                    (getValue('rss_processing_enabled') as boolean) || false
-                  }
-                  onCheckedChange={(checked) =>
-                    setPendingChange('rss_processing_enabled', checked)
-                  }
+                  checked={(getValue('rss_processing_enabled') as boolean) || false}
+                  onCheckedChange={(checked) => setPendingChange('rss_processing_enabled', checked)}
                 />
-                <Label htmlFor='rss_processing_enabled'>
-                  Enable fetching RSS feeds
-                </Label>
+                <Label htmlFor='rss_processing_enabled'>Enable fetching RSS feeds</Label>
               </div>
 
               <div className='grid grid-cols-2 gap-4'>
                 <div className='space-y-2'>
-                  <Label htmlFor='rss_refresh_interval'>
-                    Feeds refresh interval:
-                  </Label>
+                  <Label htmlFor='rss_refresh_interval'>Feeds refresh interval:</Label>
                   <div className='flex items-center gap-2'>
                     <Input
                       id='rss_refresh_interval'
                       type='number'
                       value={(getValue('rss_refresh_interval') as number) || 30}
                       onChange={(e) =>
-                        setPendingChange(
-                          'rss_refresh_interval',
-                          parseInt(e.target.value),
-                        )
+                        setPendingChange('rss_refresh_interval', parseInt(e.target.value))
                       }
                       className='w-20'
                       min='1'
@@ -97,19 +79,14 @@ export default function SettingsRss() {
                 </div>
 
                 <div className='space-y-2'>
-                  <Label htmlFor='rss_fetch_delay'>
-                    Same host request delay:
-                  </Label>
+                  <Label htmlFor='rss_fetch_delay'>Same host request delay:</Label>
                   <div className='flex items-center gap-2'>
                     <Input
                       id='rss_fetch_delay'
                       type='number'
                       value={(getValue('rss_fetch_delay') as number) || 2}
                       onChange={(e) =>
-                        setPendingChange(
-                          'rss_fetch_delay',
-                          parseInt(e.target.value),
-                        )
+                        setPendingChange('rss_fetch_delay', parseInt(e.target.value))
                       }
                       className='w-20'
                       min='0'
@@ -126,14 +103,9 @@ export default function SettingsRss() {
                 <Input
                   id='rss_max_articles_per_feed'
                   type='number'
-                  value={
-                    (getValue('rss_max_articles_per_feed') as number) || 50
-                  }
+                  value={(getValue('rss_max_articles_per_feed') as number) || 50}
                   onChange={(e) =>
-                    setPendingChange(
-                      'rss_max_articles_per_feed',
-                      parseInt(e.target.value),
-                    )
+                    setPendingChange('rss_max_articles_per_feed', parseInt(e.target.value))
                   }
                   className='w-32'
                   min='1'
@@ -150,19 +122,14 @@ export default function SettingsRss() {
               <DownloadIcon className='h-5 w-5' />
               RSS Torrent Auto Downloader
             </CardTitle>
-            <CardDescription>
-              Enable auto downloading of RSS torrents
-            </CardDescription>
+            <CardDescription>Enable auto downloading of RSS torrents</CardDescription>
           </CardHeader>
           <CardContent className='space-y-4'>
             <div className='space-y-4'>
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='rss_auto_downloading_enabled'
-                  checked={
-                    (getValue('rss_auto_downloading_enabled') as boolean) ||
-                    false
-                  }
+                  checked={(getValue('rss_auto_downloading_enabled') as boolean) || false}
                   onCheckedChange={(checked) =>
                     setPendingChange('rss_auto_downloading_enabled', checked)
                   }
@@ -195,16 +162,9 @@ export default function SettingsRss() {
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='rss_download_repack_proper_episodes'
-                  checked={
-                    (getValue(
-                      'rss_download_repack_proper_episodes',
-                    ) as boolean) || false
-                  }
+                  checked={(getValue('rss_download_repack_proper_episodes') as boolean) || false}
                   onCheckedChange={(checked) =>
-                    setPendingChange(
-                      'rss_download_repack_proper_episodes',
-                      checked,
-                    )
+                    setPendingChange('rss_download_repack_proper_episodes', checked)
                   }
                 />
                 <Label htmlFor='rss_download_repack_proper_episodes'>
