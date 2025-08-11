@@ -1,15 +1,22 @@
 import { useNavigate } from '@tanstack/react-router';
 import { DownloadIcon, FilterIcon, RssIcon } from 'lucide-react';
 
-import ContentSection from '../components/content-section';
 import type { QBittorrentPreferences } from '@/types/qbit/preferences';
+
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useSettings, useSettingsActions } from '@/stores/settings-store';
 
+import ContentSection from '../components/content-section';
 
 export default function SettingsRss() {
   const { preferences, pendingChanges } = useSettings();
@@ -27,7 +34,9 @@ export default function SettingsRss() {
   }
 
   const getValue = (key: keyof QBittorrentPreferences) => {
-    return pendingChanges[key] !== undefined ? pendingChanges[key] : preferences[key];
+    return pendingChanges[key] !== undefined
+      ? pendingChanges[key]
+      : preferences[key];
   };
 
   const handleEditRules = () => {
@@ -54,22 +63,33 @@ export default function SettingsRss() {
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='rss_processing_enabled'
-                  checked={(getValue('rss_processing_enabled') as boolean) || false}
-                  onCheckedChange={(checked) => setPendingChange('rss_processing_enabled', checked)}
+                  checked={
+                    (getValue('rss_processing_enabled') as boolean) || false
+                  }
+                  onCheckedChange={(checked) =>
+                    setPendingChange('rss_processing_enabled', checked)
+                  }
                 />
-                <Label htmlFor='rss_processing_enabled'>Enable fetching RSS feeds</Label>
+                <Label htmlFor='rss_processing_enabled'>
+                  Enable fetching RSS feeds
+                </Label>
               </div>
 
               <div className='grid grid-cols-2 gap-4'>
                 <div className='space-y-2'>
-                  <Label htmlFor='rss_refresh_interval'>Feeds refresh interval:</Label>
+                  <Label htmlFor='rss_refresh_interval'>
+                    Feeds refresh interval:
+                  </Label>
                   <div className='flex items-center gap-2'>
                     <Input
                       id='rss_refresh_interval'
                       type='number'
                       value={(getValue('rss_refresh_interval') as number) || 30}
                       onChange={(e) =>
-                        setPendingChange('rss_refresh_interval', parseInt(e.target.value))
+                        setPendingChange(
+                          'rss_refresh_interval',
+                          parseInt(e.target.value),
+                        )
                       }
                       className='w-20'
                       min='1'
@@ -79,14 +99,19 @@ export default function SettingsRss() {
                 </div>
 
                 <div className='space-y-2'>
-                  <Label htmlFor='rss_fetch_delay'>Same host request delay:</Label>
+                  <Label htmlFor='rss_fetch_delay'>
+                    Same host request delay:
+                  </Label>
                   <div className='flex items-center gap-2'>
                     <Input
                       id='rss_fetch_delay'
                       type='number'
                       value={(getValue('rss_fetch_delay') as number) || 2}
                       onChange={(e) =>
-                        setPendingChange('rss_fetch_delay', parseInt(e.target.value))
+                        setPendingChange(
+                          'rss_fetch_delay',
+                          parseInt(e.target.value),
+                        )
                       }
                       className='w-20'
                       min='0'
@@ -103,9 +128,14 @@ export default function SettingsRss() {
                 <Input
                   id='rss_max_articles_per_feed'
                   type='number'
-                  value={(getValue('rss_max_articles_per_feed') as number) || 50}
+                  value={
+                    (getValue('rss_max_articles_per_feed') as number) || 50
+                  }
                   onChange={(e) =>
-                    setPendingChange('rss_max_articles_per_feed', parseInt(e.target.value))
+                    setPendingChange(
+                      'rss_max_articles_per_feed',
+                      parseInt(e.target.value),
+                    )
                   }
                   className='w-32'
                   min='1'
@@ -122,14 +152,19 @@ export default function SettingsRss() {
               <DownloadIcon className='h-5 w-5' />
               RSS Torrent Auto Downloader
             </CardTitle>
-            <CardDescription>Enable auto downloading of RSS torrents</CardDescription>
+            <CardDescription>
+              Enable auto downloading of RSS torrents
+            </CardDescription>
           </CardHeader>
           <CardContent className='space-y-4'>
             <div className='space-y-4'>
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='rss_auto_downloading_enabled'
-                  checked={(getValue('rss_auto_downloading_enabled') as boolean) || false}
+                  checked={
+                    (getValue('rss_auto_downloading_enabled') as boolean) ||
+                    false
+                  }
                   onCheckedChange={(checked) =>
                     setPendingChange('rss_auto_downloading_enabled', checked)
                   }
@@ -162,9 +197,16 @@ export default function SettingsRss() {
               <div className='flex items-center space-x-2'>
                 <Checkbox
                   id='rss_download_repack_proper_episodes'
-                  checked={(getValue('rss_download_repack_proper_episodes') as boolean) || false}
+                  checked={
+                    (getValue(
+                      'rss_download_repack_proper_episodes',
+                    ) as boolean) || false
+                  }
                   onCheckedChange={(checked) =>
-                    setPendingChange('rss_download_repack_proper_episodes', checked)
+                    setPendingChange(
+                      'rss_download_repack_proper_episodes',
+                      checked,
+                    )
                   }
                 />
                 <Label htmlFor='rss_download_repack_proper_episodes'>
@@ -173,17 +215,27 @@ export default function SettingsRss() {
               </div>
 
               <div className='space-y-2'>
-                <Label>Filters:</Label>
-                <div className='space-y-1 font-mono text-sm'>
-                  <div>s(\d+)e(\d+)</div>
-                  <div>(\d+)x(\d+)</div>
-                  <div>
-                    (\d{'{4}'}.[.\-]\d{'{1,2}'}.[.\-]\d{'{1,2}'})
-                  </div>
-                  <div>
-                    (\d{'{1,2}'}.[.\-]\d{'{1,2}'}.[.\-]\d{'{4}'})
-                  </div>
-                </div>
+                <Label htmlFor='rss_smart_episode_filters'>
+                  Filters (one per line):
+                </Label>
+                <textarea
+                  id='rss_smart_episode_filters'
+                  value={
+                    (getValue('rss_smart_episode_filters') as string) || ''
+                  }
+                  onChange={(e) =>
+                    setPendingChange(
+                      'rss_smart_episode_filters',
+                      e.target.value,
+                    )
+                  }
+                  className='border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex min-h-[120px] w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none'
+                  placeholder='Enter regex patterns, one per line'
+                />
+                <p className='text-muted-foreground text-sm'>
+                  These filters are used to identify episode numbers in RSS feed
+                  items. One pattern per line.
+                </p>
               </div>
             </div>
           </CardContent>

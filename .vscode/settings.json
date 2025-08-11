@@ -12,5 +12,6 @@
     "libtorrent",
     "qbit",
     "raftel"
-]
+],
+"typescript.tsdk": "node_modules/typescript/lib"
 }

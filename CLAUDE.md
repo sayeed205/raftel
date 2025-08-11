@@ -21,14 +21,8 @@ bun build
 # Run tests
 bun test
 
-# Lint code
-bun lint
-
 # Format code
 bun format
-
-# Check and fix code (lint + format)
-bun check
 ```
 
 ## Architecture Overview
