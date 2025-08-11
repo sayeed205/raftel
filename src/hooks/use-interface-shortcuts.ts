@@ -1,11 +1,13 @@
 import { useCallback, useMemo } from 'react';
-
 import { useNavigate } from '@tanstack/react-router';
 
-
-import { createPlatformShortcut, useKeyboardShortcuts } from './use-keyboard-shortcuts';
-import type { KeyboardShortcut } from './use-keyboard-shortcuts';
 import { useSidebar } from '@/components/ui/sidebar';
+
+import {
+  createPlatformShortcut,
+  useKeyboardShortcuts,
+} from './use-keyboard-shortcuts';
+import type { KeyboardShortcut } from './use-keyboard-shortcuts';
 
 interface UseInterfaceShortcutsOptions {
   enabled?: boolean;
@@ -16,7 +18,9 @@ interface UseInterfaceShortcutsOptions {
  * Hook for interface-related keyboard shortcuts
  * Handles sidebar toggle, settings navigation, and search focus
  */
-export function useInterfaceShortcuts(options: UseInterfaceShortcutsOptions = {}) {
+export function useInterfaceShortcuts(
+  options: UseInterfaceShortcutsOptions = {}
+) {
   const { enabled = true, onFocusSearch } = options;
   const navigate = useNavigate();
   const { toggleSidebar } = useSidebar();
@@ -38,7 +42,7 @@ export function useInterfaceShortcuts(options: UseInterfaceShortcutsOptions = {}
     } else {
       // Try to find and focus search input
       const searchInput = document.querySelector(
-        'input[placeholder*="Search"]',
+        'input[placeholder*="Search"]'
       ) as HTMLInputElement;
       if (searchInput) {
         searchInput.focus();
@@ -50,15 +54,33 @@ export function useInterfaceShortcuts(options: UseInterfaceShortcutsOptions = {}
   // Define interface shortcuts
   const interfaceShortcuts: Array<KeyboardShortcut> = useMemo(
     () => [
-      createPlatformShortcut('b', 'Toggle Sidebar', 'Navigation & Interface', handleToggleSidebar, {
-        useCmd: true,
-      }),
-      createPlatformShortcut(',', 'Preferences/Settings', 'Navigation & Interface', openSettings, {
-        useCmd: true,
-      }),
-      createPlatformShortcut('f', 'Focus Search Box', 'Navigation & Interface', focusSearch, {
-        useCmd: true,
-      }),
+      createPlatformShortcut(
+        'b',
+        'Toggle Sidebar',
+        'Navigation & Interface',
+        handleToggleSidebar,
+        {
+          useCmd: true,
+        }
+      ),
+      createPlatformShortcut(
+        ',',
+        'Preferences/Settings',
+        'Navigation & Interface',
+        openSettings,
+        {
+          useCmd: true,
+        }
+      ),
+      createPlatformShortcut(
+        'f',
+        'Focus Search Box',
+        'Navigation & Interface',
+        focusSearch,
+        {
+          useCmd: true,
+        }
+      ),
       {
         key: '/',
         action: focusSearch,
@@ -67,7 +89,7 @@ export function useInterfaceShortcuts(options: UseInterfaceShortcutsOptions = {}
         preventDefault: true,
       },
     ],
-    [handleToggleSidebar, openSettings, focusSearch],
+    [handleToggleSidebar, openSettings, focusSearch]
   );
 
   // Register shortcuts

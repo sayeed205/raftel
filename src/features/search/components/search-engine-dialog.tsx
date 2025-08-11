@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import { useSearchStore } from '@/stores/search-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -17,7 +17,6 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useSearchStore } from '@/stores/search-store';
 
 const installEngineSchema = z.object({
   sources: z.string().min(1, 'At least one source URL is required'),
@@ -30,7 +29,10 @@ interface SearchEngineDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function SearchEngineDialog({ open, onOpenChange }: SearchEngineDialogProps) {
+export function SearchEngineDialog({
+  open,
+  onOpenChange,
+}: SearchEngineDialogProps) {
   const { installEngine } = useSearchStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -61,7 +63,10 @@ export function SearchEngineDialog({ open, onOpenChange }: SearchEngineDialogPro
       reset();
       onOpenChange(false);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to install search engine';
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Failed to install search engine';
       setError(message);
     } finally {
       setIsSubmitting(false);
@@ -78,7 +83,7 @@ export function SearchEngineDialog({ open, onOpenChange }: SearchEngineDialogPro
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className='sm:max-w-[500px]'>
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Install Search Engine</DialogTitle>
           <DialogDescription>
@@ -86,32 +91,37 @@ export function SearchEngineDialog({ open, onOpenChange }: SearchEngineDialogPro
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {error && (
-            <Alert variant='destructive'>
+            <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
-          <div className='space-y-2'>
-            <Label htmlFor='sources'>Plugin Sources</Label>
+          <div className="space-y-2">
+            <Label htmlFor="sources">Plugin Sources</Label>
             <Textarea
-              id='sources'
+              id="sources"
               placeholder={`Enter plugin URLs or file paths, one per line:
 
 https://raw.githubusercontent.com/qbittorrent/search-plugins/master/nova3/engines/legittorrents.py
 https://raw.githubusercontent.com/qbittorrent/search-plugins/master/nova3/engines/piratebay.py`}
-              className='min-h-[120px] font-mono text-sm'
+              className="min-h-[120px] font-mono text-sm"
               {...register('sources')}
             />
-            {errors.sources && <p className='text-destructive text-sm'>{errors.sources.message}</p>}
-            <p className='text-muted-foreground text-sm'>
-              Enter plugin URLs or file paths, one per line. You can find official plugins at{' '}
+            {errors.sources && (
+              <p className="text-destructive text-sm">
+                {errors.sources.message}
+              </p>
+            )}
+            <p className="text-muted-foreground text-sm">
+              Enter plugin URLs or file paths, one per line. You can find
+              official plugins at{' '}
               <a
-                href='https://github.com/qbittorrent/search-plugins'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='text-primary underline'
+                href="https://github.com/qbittorrent/search-plugins"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary underline"
               >
                 qBittorrent Search Plugins
               </a>
@@ -120,19 +130,19 @@ https://raw.githubusercontent.com/qbittorrent/search-plugins/master/nova3/engine
 
           <DialogFooter>
             <Button
-              type='button'
-              variant='outline'
+              type="button"
+              variant="outline"
               onClick={() => handleOpenChange(false)}
               disabled={isSubmitting}
             >
               Cancel
             </Button>
-            <Button type='submit' disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 'Installing...'
               ) : (
                 <>
-                  <PlusIcon className='mr-2 h-4 w-4' />
+                  <PlusIcon className="mr-2 h-4 w-4" />
                   Install
                 </>
               )}

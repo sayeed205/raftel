@@ -1,5 +1,3 @@
-import { Download, Gauge, Globe, Monitor, RssIcon, Settings, Share2 } from 'lucide-react';
-
 import SettingsAdvanced from '@/features/settings/advanced';
 import BitTorrentSettings from '@/features/settings/bittorrent';
 import ConnectionSettings from '@/features/settings/connection';
@@ -7,6 +5,15 @@ import DownloadSettings from '@/features/settings/downloads';
 import SettingsRss from '@/features/settings/rss';
 import SpeedSettings from '@/features/settings/speed';
 import SettingsWebUI from '@/features/settings/webui';
+import {
+  Download,
+  Gauge,
+  Globe,
+  Monitor,
+  RssIcon,
+  Settings,
+  Share2,
+} from 'lucide-react';
 
 export interface SettingsSection {
   id: string;
@@ -1011,7 +1018,8 @@ export function searchSettings(query: string): Array<SearchResult> {
           '<mark>$1</mark>'
         );
         score += 50; // Medium score for description matches
-        if (!matchType) { // Only set if not already matched by title
+        if (!matchType) {
+          // Only set if not already matched by title
           matchType = 'description';
           matchText = section.description;
           highlightedText = highlightedDescription;
@@ -1022,10 +1030,11 @@ export function searchSettings(query: string): Array<SearchResult> {
       const matchingKeywords = section.keywords.filter((keyword) =>
         keyword.toLowerCase().includes(searchTerm)
       );
-      
+
       if (matchingKeywords.length > 0) {
         score += matchingKeywords.length * 10; // 10 points per matching keyword
-        if (!matchType) { // Only set if not already matched by title or description
+        if (!matchType) {
+          // Only set if not already matched by title or description
           matchType = 'keyword';
           matchText = matchingKeywords[0]; // Use the first matching keyword
         }

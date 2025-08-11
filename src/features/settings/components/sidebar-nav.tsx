@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from '@tanstack/react-router';
 import type { JSX } from 'react';
+import { Link, useLocation, useNavigate } from '@tanstack/react-router';
 
-
+import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import {
@@ -12,7 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { cn } from '@/lib/utils';
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: Array<{
@@ -22,7 +21,11 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   }>;
 }
 
-export default function SidebarNav({ className, items, ...props }: SidebarNavProps) {
+export default function SidebarNav({
+  className,
+  items,
+  ...props
+}: SidebarNavProps) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [val, setVal] = useState(pathname);
@@ -34,17 +37,17 @@ export default function SidebarNav({ className, items, ...props }: SidebarNavPro
 
   return (
     <>
-      <div className='p-1 md:hidden'>
+      <div className="p-1 md:hidden">
         <Select value={val} onValueChange={handleSelect}>
-          <SelectTrigger className='h-12 sm:w-48'>
-            <SelectValue placeholder='Theme' />
+          <SelectTrigger className="h-12 sm:w-48">
+            <SelectValue placeholder="Theme" />
           </SelectTrigger>
           <SelectContent>
             {items.map((item) => (
               <SelectItem key={item.href} value={item.href}>
-                <div className='flex gap-x-4 px-2 py-1'>
-                  <span className='scale-125'>{item.icon}</span>
-                  <span className='text-md'>{item.title}</span>
+                <div className="flex gap-x-4 px-2 py-1">
+                  <span className="scale-125">{item.icon}</span>
+                  <span className="text-md">{item.title}</span>
                 </div>
               </SelectItem>
             ))}
@@ -54,11 +57,14 @@ export default function SidebarNav({ className, items, ...props }: SidebarNavPro
 
       <ScrollArea
         // orientation='horizontal'
-        type='always'
-        className='bg-background hidden w-full min-w-40 md:block'
+        type="always"
+        className="bg-background hidden w-full min-w-40 md:block"
       >
         <nav
-          className={cn('flex space-x-2 py-1 lg:flex-col lg:space-y-1 lg:space-x-0', className)}
+          className={cn(
+            'flex space-x-2 py-1 lg:flex-col lg:space-y-1 lg:space-x-0',
+            className
+          )}
           {...props}
         >
           {items.map((item) => (
@@ -70,15 +76,15 @@ export default function SidebarNav({ className, items, ...props }: SidebarNavPro
                 pathname === item.href
                   ? 'bg-muted hover:bg-muted'
                   : 'hover:bg-transparent hover:underline',
-                'justify-start',
+                'justify-start'
               )}
             >
-              <span className='mr-2'>{item.icon}</span>
+              <span className="mr-2">{item.icon}</span>
               {item.title}
             </Link>
           ))}
         </nav>
-        <ScrollBar orientation='horizontal' />
+        <ScrollBar orientation="horizontal" />
       </ScrollArea>
     </>
   );

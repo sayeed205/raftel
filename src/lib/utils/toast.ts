@@ -60,7 +60,7 @@ export const showToast = {
       loading: string;
       success: string | ((data: T) => string);
       error: string | ((error: any) => string);
-    },
+    }
   ) => {
     return toast.promise(promise, {
       loading,

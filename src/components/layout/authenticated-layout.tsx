@@ -1,12 +1,11 @@
 import * as React from 'react';
-
 import { Outlet } from '@tanstack/react-router';
 import Cookies from 'js-cookie';
 
+import { cn } from '@/lib/utils';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import SkipToMain from '@/components/skip-to-main';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { cn } from '@/lib/utils';
 
 interface Props {
   children?: React.ReactNode;
@@ -19,7 +18,7 @@ export function AuthenticatedLayout({ children }: Props) {
       <SkipToMain />
       <AppSidebar />
       <div
-        id='content'
+        id="content"
         className={cn(
           'ml-auto w-full max-w-full',
           'peer-data-[state=collapsed]:w-[calc(100%-var(--sidebar-width-icon)-1rem)]',
@@ -27,7 +26,7 @@ export function AuthenticatedLayout({ children }: Props) {
           'sm:transition-[width] sm:duration-200 sm:ease-linear',
           'flex h-svh flex-col',
           'group-data-[scroll-locked=1]/body:h-full',
-          'has-[main.fixed-main]:group-data-[scroll-locked=1]/body:h-svh',
+          'has-[main.fixed-main]:group-data-[scroll-locked=1]/body:h-svh'
         )}
       >
         {children ? children : <Outlet />}

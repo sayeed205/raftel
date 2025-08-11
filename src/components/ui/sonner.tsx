@@ -1,7 +1,7 @@
 import { Toaster as Sonner } from 'sonner';
-import { useTheme } from '../theme-provider';
 import type { ToasterProps } from 'sonner';
 
+import { useTheme } from '../theme-provider';
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = 'system' } = useTheme();
@@ -9,7 +9,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
       theme={theme as ToasterProps['theme']}
-      className='toaster group'
+      className="toaster group"
       style={
         {
           '--normal-bg': 'var(--popover)',

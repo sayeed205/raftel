@@ -1,9 +1,10 @@
 import React from 'react';
 import { useSettings, useSettingsActions } from '@/stores/settings-store';
-import { Button } from '@/components/ui/button';
 import { RotateCcw, Save } from 'lucide-react';
+
 import { cn } from '@/lib/utils';
 import { torrentToast } from '@/lib/utils/toast';
+import { Button } from '@/components/ui/button';
 
 interface FloatingSaveWidgetProps {
   className?: string;
@@ -19,7 +20,9 @@ export function FloatingSaveWidget({ className }: FloatingSaveWidgetProps) {
       torrentToast.settingsSaved();
     } catch (error) {
       console.error('Failed to save settings:', error);
-      torrentToast.settingsError(error instanceof Error ? error.message : 'Unknown error');
+      torrentToast.settingsError(
+        error instanceof Error ? error.message : 'Unknown error'
+      );
     }
   };
 
@@ -34,10 +37,10 @@ export function FloatingSaveWidget({ className }: FloatingSaveWidgetProps) {
   return (
     <div
       className={cn(
-        'fixed bottom-6 right-6 z-50 flex gap-2 rounded-lg bg-background p-3 shadow-lg border',
+        'bg-background fixed right-6 bottom-6 z-50 flex gap-2 rounded-lg border p-3 shadow-lg',
         'transition-all duration-300 ease-in-out',
-        'md:bottom-8 md:right-8',
-        'lg:bottom-10 lg:right-10',
+        'md:right-8 md:bottom-8',
+        'lg:right-10 lg:bottom-10',
         className
       )}
     >

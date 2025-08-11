@@ -62,7 +62,11 @@ export function useAdaptiveLayout() {
       // Layout helpers
       containerPadding: isMobile ? 'px-3 py-4' : 'px-4 py-6',
       cardPadding: isMobile ? 'p-3' : 'p-4',
-      buttonSize: (isMobile ? 'sm' : 'default') as 'sm' | 'default' | 'lg' | 'icon',
+      buttonSize: (isMobile ? 'sm' : 'default') as
+        | 'sm'
+        | 'default'
+        | 'lg'
+        | 'icon',
       iconSize: isMobile ? 'h-4 w-4' : 'h-5 w-5',
       textSize: {
         title: isMobile ? 'text-lg' : 'text-2xl',
@@ -76,13 +80,17 @@ export function useAdaptiveLayout() {
         button: isMobile ? 'gap-1' : 'gap-2',
       },
       // Grid configurations
-      statsGrid: isMobile ? 'grid-cols-2 gap-3' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4',
-      contentGrid: isMobile ? 'grid-cols-1 gap-4' : 'grid-cols-1 lg:grid-cols-2 gap-6',
+      statsGrid: isMobile
+        ? 'grid-cols-2 gap-3'
+        : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4',
+      contentGrid: isMobile
+        ? 'grid-cols-1 gap-4'
+        : 'grid-cols-1 lg:grid-cols-2 gap-6',
       // Modal configurations
       modalWidth: isMobile ? 'w-full' : 'max-w-lg',
       modalHeight: isMobile ? 'max-h-[90vh]' : 'auto',
     }),
-    [isMobile, isTablet, width, height],
+    [isMobile, isTablet, width, height]
   );
 }
 
@@ -100,11 +108,15 @@ export function useBreakpoint() {
 }
 
 export function useOrientation() {
-  const [orientation, setOrientation] = React.useState<'portrait' | 'landscape'>('portrait');
+  const [orientation, setOrientation] = React.useState<
+    'portrait' | 'landscape'
+  >('portrait');
 
   React.useEffect(() => {
     const updateOrientation = () => {
-      setOrientation(window.innerHeight > window.innerWidth ? 'portrait' : 'landscape');
+      setOrientation(
+        window.innerHeight > window.innerWidth ? 'portrait' : 'landscape'
+      );
     };
 
     updateOrientation();

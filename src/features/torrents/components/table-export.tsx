@@ -1,8 +1,15 @@
 import { useCallback, useState } from 'react';
-
 import { Download, FileText } from 'lucide-react';
 
 import type { TorrentInfo } from '@/types/api';
+import {
+  formatBytes,
+  formatProgress,
+  formatRatio,
+  formatSpeed,
+  formatTime,
+  getStateText,
+} from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -22,14 +29,6 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  formatBytes,
-  formatProgress,
-  formatRatio,
-  formatSpeed,
-  formatTime,
-  getStateText,
-} from '@/lib/utils';
 
 interface TableExportProps {
   torrents: Array<TorrentInfo>;
@@ -125,13 +124,15 @@ const DEFAULT_EXPORT_FIELDS: Array<ExportField> = [
     key: 'added_on',
     label: 'Added Date',
     selected: false,
-    formatter: (value) => (value ? new Date(value * 1000).toLocaleDateString() : ''),
+    formatter: (value) =>
+      value ? new Date(value * 1000).toLocaleDateString() : '',
   },
   {
     key: 'completed_on',
     label: 'Completed Date',
     selected: false,
-    formatter: (value) => (value ? new Date(value * 1000).toLocaleDateString() : ''),
+    formatter: (value) =>
+      value ? new Date(value * 1000).toLocaleDateString() : '',
   },
   {
     key: 'hash',
@@ -143,9 +144,13 @@ const DEFAULT_EXPORT_FIELDS: Array<ExportField> = [
 export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [format, setFormat] = useState<ExportFormat>('csv');
-  const [fields, setFields] = useState<Array<ExportField>>(DEFAULT_EXPORT_FIELDS);
+  const [fields, setFields] = useState<Array<ExportField>>(
+    DEFAULT_EXPORT_FIELDS
+  );
   const [exportSelected, setExportSelected] = useState(false);
-  const [customTemplate, setCustomTemplate] = useState('{{name}} - {{size}} ({{progress}})');
+  const [customTemplate, setCustomTemplate] = useState(
+    '{{name}} - {{size}} ({{progress}})'
+  );
 
   const torrentsToExport =
     exportSelected && selectedTorrents.length > 0
@@ -157,8 +162,8 @@ export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
   const toggleField = useCallback((fieldKey: string) => {
     setFields((prev) =>
       prev.map((field) =>
-        field.key === fieldKey ? { ...field, selected: !field.selected } : field,
-      ),
+        field.key === fieldKey ? { ...field, selected: !field.selected } : field
+      )
     );
   }, []);
 
@@ -170,15 +175,18 @@ export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
     setFields((prev) => prev.map((field) => ({ ...field, selected: false })));
   }, []);
 
-  const getFieldValue = useCallback((torrent: TorrentInfo, field: ExportField): string => {
-    const rawValue = torrent[field.key as keyof TorrentInfo];
+  const getFieldValue = useCallback(
+    (torrent: TorrentInfo, field: ExportField): string => {
+      const rawValue = torrent[field.key as keyof TorrentInfo];
 
-    if (field.formatter) {
-      return field.formatter(rawValue, torrent);
-    }
+      if (field.formatter) {
+        return field.formatter(rawValue, torrent);
+      }
 
-    return String(rawValue || '');
-  }, []);
+      return String(rawValue || '');
+    },
+    []
+  );
 
   const generateCSV = useCallback((): string => {
     const headers = selectedFields.map((field) => field.label);
@@ -186,11 +194,15 @@ export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
       selectedFields.map((field) => {
         const value = getFieldValue(torrent, field);
         // Escape CSV values that contain commas, quotes, or newlines
-        if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+        if (
+          value.includes(',') ||
+          value.includes('"') ||
+          value.includes('\n')
+        ) {
           return `"${value.replace(/"/g, '""')}"`;
         }
         return value;
-      }),
+      })
     );
 
     return [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
@@ -315,51 +327,58 @@ export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant='outline' size='sm'>
-          <Download className='mr-2 h-4 w-4' />
+        <Button variant="outline" size="sm">
+          <Download className="mr-2 h-4 w-4" />
           Export
         </Button>
       </DialogTrigger>
-      <DialogContent className='max-h-[80vh] max-w-2xl overflow-y-auto'>
+      <DialogContent className="max-h-[80vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Export Torrent Data</DialogTitle>
         </DialogHeader>
 
-        <div className='space-y-6'>
+        <div className="space-y-6">
           {/* Export Options */}
-          <div className='grid grid-cols-2 gap-4'>
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label className='text-sm font-medium'>Export Format</Label>
-              <Select value={format} onValueChange={(value: ExportFormat) => setFormat(value)}>
-                <SelectTrigger className='mt-2'>
+              <Label className="text-sm font-medium">Export Format</Label>
+              <Select
+                value={format}
+                onValueChange={(value: ExportFormat) => setFormat(value)}
+              >
+                <SelectTrigger className="mt-2">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value='csv'>CSV (Comma Separated)</SelectItem>
-                  <SelectItem value='json'>JSON</SelectItem>
-                  <SelectItem value='txt'>Text (Pipe Separated)</SelectItem>
-                  <SelectItem value='custom'>Custom Template</SelectItem>
+                  <SelectItem value="csv">CSV (Comma Separated)</SelectItem>
+                  <SelectItem value="json">JSON</SelectItem>
+                  <SelectItem value="txt">Text (Pipe Separated)</SelectItem>
+                  <SelectItem value="custom">Custom Template</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
-              <Label className='text-sm font-medium'>Export Scope</Label>
-              <div className='mt-2 space-y-2'>
-                <div className='flex items-center space-x-2'>
+              <Label className="text-sm font-medium">Export Scope</Label>
+              <div className="mt-2 space-y-2">
+                <div className="flex items-center space-x-2">
                   <Checkbox
                     checked={!exportSelected}
                     onCheckedChange={() => setExportSelected(false)}
                   />
-                  <span className='text-sm'>All torrents ({torrents.length})</span>
+                  <span className="text-sm">
+                    All torrents ({torrents.length})
+                  </span>
                 </div>
-                <div className='flex items-center space-x-2'>
+                <div className="flex items-center space-x-2">
                   <Checkbox
                     checked={exportSelected}
                     onCheckedChange={() => setExportSelected(true)}
                     disabled={selectedTorrents.length === 0}
                   />
-                  <span className='text-sm'>Selected torrents ({selectedTorrents.length})</span>
+                  <span className="text-sm">
+                    Selected torrents ({selectedTorrents.length})
+                  </span>
                 </div>
               </div>
             </div>
@@ -370,15 +389,16 @@ export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
           {/* Custom Template */}
           {format === 'custom' && (
             <div>
-              <Label className='text-sm font-medium'>Custom Template</Label>
+              <Label className="text-sm font-medium">Custom Template</Label>
               <Textarea
                 value={customTemplate}
                 onChange={(e) => setCustomTemplate(e.target.value)}
-                placeholder='Use {{fieldName}} placeholders, e.g., {{name}} - {{size}} ({{progress}})'
-                className='mt-2 h-20'
+                placeholder="Use {{fieldName}} placeholders, e.g., {{name}} - {{size}} ({{progress}})"
+                className="mt-2 h-20"
               />
-              <div className='text-muted-foreground mt-1 text-xs'>
-                Available placeholders: {fields.map((f) => `{{${f.key}}}`).join(', ')}
+              <div className="text-muted-foreground mt-1 text-xs">
+                Available placeholders:{' '}
+                {fields.map((f) => `{{${f.key}}}`).join(', ')}
               </div>
             </div>
           )}
@@ -386,26 +406,26 @@ export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
           {/* Field Selection */}
           {format !== 'custom' && (
             <div>
-              <div className='mb-3 flex items-center justify-between'>
-                <Label className='text-sm font-medium'>Fields to Export</Label>
-                <div className='flex gap-2'>
-                  <Button variant='ghost' size='sm' onClick={selectAllFields}>
+              <div className="mb-3 flex items-center justify-between">
+                <Label className="text-sm font-medium">Fields to Export</Label>
+                <div className="flex gap-2">
+                  <Button variant="ghost" size="sm" onClick={selectAllFields}>
                     Select All
                   </Button>
-                  <Button variant='ghost' size='sm' onClick={deselectAllFields}>
+                  <Button variant="ghost" size="sm" onClick={deselectAllFields}>
                     Deselect All
                   </Button>
                 </div>
               </div>
 
-              <div className='grid max-h-60 grid-cols-2 gap-2 overflow-y-auto'>
+              <div className="grid max-h-60 grid-cols-2 gap-2 overflow-y-auto">
                 {fields.map((field) => (
-                  <div key={field.key} className='flex items-center space-x-2'>
+                  <div key={field.key} className="flex items-center space-x-2">
                     <Checkbox
                       checked={field.selected}
                       onCheckedChange={() => toggleField(field.key)}
                     />
-                    <span className='text-sm'>{field.label}</span>
+                    <span className="text-sm">{field.label}</span>
                   </div>
                 ))}
               </div>
@@ -416,13 +436,13 @@ export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
 
           {/* Preview */}
           <div>
-            <Label className='text-sm font-medium'>Preview</Label>
-            <div className='bg-muted mt-2 rounded-md p-3'>
-              <div className='text-muted-foreground mb-2 text-xs'>
-                {torrentsToExport.length} torrents • {selectedFields.length} fields •{' '}
-                {format.toUpperCase()} format
+            <Label className="text-sm font-medium">Preview</Label>
+            <div className="bg-muted mt-2 rounded-md p-3">
+              <div className="text-muted-foreground mb-2 text-xs">
+                {torrentsToExport.length} torrents • {selectedFields.length}{' '}
+                fields • {format.toUpperCase()} format
               </div>
-              <pre className='max-h-32 overflow-x-auto overflow-y-auto text-xs whitespace-pre-wrap'>
+              <pre className="max-h-32 overflow-x-auto overflow-y-auto text-xs whitespace-pre-wrap">
                 {generateExport().split('\n').slice(0, 5).join('\n')}
                 {torrentsToExport.length > 5 && '\n...'}
               </pre>
@@ -430,18 +450,18 @@ export function TableExport({ torrents, selectedTorrents }: TableExportProps) {
           </div>
 
           {/* Actions */}
-          <div className='flex justify-between'>
-            <Button variant='outline' onClick={copyToClipboard}>
-              <FileText className='mr-2 h-4 w-4' />
+          <div className="flex justify-between">
+            <Button variant="outline" onClick={copyToClipboard}>
+              <FileText className="mr-2 h-4 w-4" />
               Copy to Clipboard
             </Button>
 
-            <div className='flex gap-2'>
-              <Button variant='outline' onClick={() => setIsOpen(false)}>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setIsOpen(false)}>
                 Cancel
               </Button>
               <Button onClick={downloadExport}>
-                <Download className='mr-2 h-4 w-4' />
+                <Download className="mr-2 h-4 w-4" />
                 Download {format.toUpperCase()}
               </Button>
             </div>

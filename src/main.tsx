@@ -1,12 +1,12 @@
 import { StrictMode } from 'react';
-
-import { RouterProvider, createRouter } from '@tanstack/react-router';
+import { createRouter, RouterProvider } from '@tanstack/react-router';
 import ReactDOM from 'react-dom/client';
 
 import reportWebVitals from './reportWebVitals.ts';
 // TanStack Query removed
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
+
 import './styles.css';
 
 // Create a new router instance
@@ -32,7 +32,7 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <RouterProvider router={router} />
-    </StrictMode>,
+    </StrictMode>
   );
 }
 

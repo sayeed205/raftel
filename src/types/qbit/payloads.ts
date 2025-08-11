@@ -1,4 +1,9 @@
-import type { ContentLayout, FilterState, ShareLimitAction, StopCondition } from './constants';
+import type {
+  ContentLayout,
+  FilterState,
+  ShareLimitAction,
+  StopCondition,
+} from './constants';
 import type { QBittorrentPreferences } from './preferences';
 import type { Torrent } from './torrent';
 

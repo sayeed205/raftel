@@ -1,15 +1,9 @@
 import { useEffect, useState } from 'react';
-
+import { Route as TorrentDetailsRoute } from '@/routes/_authenticated/torrents/$hash';
+import qbit from '@/services/qbit';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
 
-import {
-  TorrentContentTab,
-  TorrentGeneralTab,
-  TorrentPeersTab,
-  TorrentSpeedTab,
-  TorrentTrackersTab,
-} from './components/tabs';
 import type { TorrentInfo } from '@/types/api.ts';
 import type {
   TorrentFile,
@@ -17,8 +11,12 @@ import type {
   TorrentProperties,
   TorrentTracker,
 } from '@/types/qbit/torrent.ts';
-import { Header } from '@/components/layout/header.tsx';
-import { Main } from '@/components/layout/main.tsx';
+import {
+  formatBytes,
+  formatProgress,
+  getStateColor,
+  getStateText,
+} from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import {
   Breadcrumb,
@@ -30,10 +28,16 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { formatBytes, formatProgress, getStateColor, getStateText } from '@/lib/utils';
-import { Route as TorrentDetailsRoute } from '@/routes/_authenticated/torrents/$hash';
-import qbit from '@/services/qbit';
+import { Header } from '@/components/layout/header.tsx';
+import { Main } from '@/components/layout/main.tsx';
 
+import {
+  TorrentContentTab,
+  TorrentGeneralTab,
+  TorrentPeersTab,
+  TorrentSpeedTab,
+  TorrentTrackersTab,
+} from './components/tabs';
 
 interface TorrentDetailsData {
   torrent: TorrentInfo | null;
@@ -87,7 +91,7 @@ export default function TorrentDetailsPage() {
         const allTorrents = await qbit.getTorrents();
         console.log(
           'All torrents:',
-          allTorrents.map((t) => ({ name: t.name, hash: t.hash })),
+          allTorrents.map((t) => ({ name: t.name, hash: t.hash }))
         );
 
         // Try to find by partial hash match (case insensitive)
@@ -95,21 +99,26 @@ export default function TorrentDetailsPage() {
           (t) =>
             t.hash.toLowerCase() === hash.toLowerCase() ||
             t.hash.toLowerCase().includes(hash.toLowerCase()) ||
-            hash.toLowerCase().includes(t.hash.toLowerCase()),
+            hash.toLowerCase().includes(t.hash.toLowerCase())
         );
 
         if (foundTorrent) {
           console.log('Found torrent by partial match:', foundTorrent);
           // Update the hash to the correct one
-          window.history.replaceState(null, '', `/torrent/${foundTorrent.hash}`);
+          window.history.replaceState(
+            null,
+            '',
+            `/torrent/${foundTorrent.hash}`
+          );
 
           // Fetch data with correct hash
-          const [properties, files, trackers, peersResponse] = await Promise.all([
-            qbit.getTorrentProperties(foundTorrent.hash),
-            qbit.getTorrentFiles(foundTorrent.hash),
-            qbit.getTorrentTrackers(foundTorrent.hash),
-            qbit.syncTorrentPeers(foundTorrent.hash),
-          ]);
+          const [properties, files, trackers, peersResponse] =
+            await Promise.all([
+              qbit.getTorrentProperties(foundTorrent.hash),
+              qbit.getTorrentFiles(foundTorrent.hash),
+              qbit.getTorrentTrackers(foundTorrent.hash),
+              qbit.syncTorrentPeers(foundTorrent.hash),
+            ]);
 
           setData({
             torrent: foundTorrent,
@@ -142,7 +151,9 @@ export default function TorrentDetailsPage() {
       });
     } catch (err) {
       console.error('Failed to fetch torrent data:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load torrent data');
+      setError(
+        err instanceof Error ? err.message : 'Failed to load torrent data'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -163,13 +174,13 @@ export default function TorrentDetailsPage() {
 
   if (!hash) {
     return (
-      <div className='flex min-h-screen items-center justify-center'>
-        <div className='text-center'>
-          <p className='text-muted-foreground text-lg'>Invalid torrent hash</p>
-          <Button className='mt-4' asChild>
-            <Link to='/dashboard'>
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <p className="text-muted-foreground text-lg">Invalid torrent hash</p>
+          <Button className="mt-4" asChild>
+            <Link to="/dashboard">
               Torrents
-              <ArrowLeft className='mr-2 h-4 w-4' />
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Dashboard
             </Link>
           </Button>
@@ -180,9 +191,9 @@ export default function TorrentDetailsPage() {
 
   if (isLoading && !data.torrent) {
     return (
-      <div className='flex min-h-screen items-center justify-center'>
-        <div className='text-center'>
-          <RefreshCw className='mx-auto mb-4 h-8 w-8 animate-spin' />
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <RefreshCw className="mx-auto mb-4 h-8 w-8 animate-spin" />
           <p>Loading torrent details...</p>
         </div>
       </div>
@@ -191,17 +202,17 @@ export default function TorrentDetailsPage() {
 
   if (error) {
     return (
-      <div className='flex min-h-screen items-center justify-center'>
-        <div className='text-center'>
-          <p className='text-destructive mb-4 text-lg'>{error}</p>
-          <div className='space-x-2'>
-            <Button onClick={fetchTorrentData} variant='outline'>
-              <RefreshCw className='mr-2 h-4 w-4' />
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <p className="text-destructive mb-4 text-lg">{error}</p>
+          <div className="space-x-2">
+            <Button onClick={fetchTorrentData} variant="outline">
+              <RefreshCw className="mr-2 h-4 w-4" />
               Retry
             </Button>
             <Button onClick={handleBack} asChild>
-              <Link to='/dashboard'>
-                <ArrowLeft className='mr-2 h-4 w-4' />
+              <Link to="/dashboard">
+                <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Dashboard
               </Link>
             </Button>
@@ -213,12 +224,12 @@ export default function TorrentDetailsPage() {
 
   if (!data.torrent) {
     return (
-      <div className='flex min-h-screen items-center justify-center'>
-        <div className='text-center'>
-          <p className='text-muted-foreground text-lg'>Torrent not found</p>
-          <Button onClick={handleBack} className='mt-4' asChild>
-            <Link to='/dashboard'>
-              <ArrowLeft className='mr-2 h-4 w-4' />
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <p className="text-muted-foreground text-lg">Torrent not found</p>
+          <Button onClick={handleBack} className="mt-4" asChild>
+            <Link to="/dashboard">
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Dashboard
             </Link>
           </Button>
@@ -230,16 +241,16 @@ export default function TorrentDetailsPage() {
   return (
     <>
       <Header fixed>
-        <Breadcrumb className='min-w-0 flex-1'>
+        <Breadcrumb className="min-w-0 flex-1">
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link to='/torrents'>Torrents</Link>
+                <Link to="/torrents">Torrents</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage className='truncate'>
+              <BreadcrumbPage className="truncate">
                 {data.torrent.name || 'Loading…'}
               </BreadcrumbPage>
             </BreadcrumbItem>
@@ -247,65 +258,75 @@ export default function TorrentDetailsPage() {
         </Breadcrumb>
       </Header>
       <Main>
-        <div className='space-y-6'>
+        <div className="space-y-6">
           {/* Torrent quick card */}
-          <section className='bg-card rounded-xl border p-4 shadow-sm'>
-            <div className='flex items-center gap-4'>
+          <section className="bg-card rounded-xl border p-4 shadow-sm">
+            <div className="flex items-center gap-4">
               <Badge
-                variant='secondary'
+                variant="secondary"
                 className={`${getStateColor(data.torrent.state)} text-white`}
               >
                 {getStateText(data.torrent.state)}
               </Badge>
-              <span className='text-muted-foreground text-sm'>
+              <span className="text-muted-foreground text-sm">
                 {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
                 {data.torrent ? (
                   <>
-                    {formatBytes(data.torrent.size)} • {formatProgress(data.torrent.progress)}
+                    {formatBytes(data.torrent.size)} •{' '}
+                    {formatProgress(data.torrent.progress)}
                   </>
                 ) : (
-                  <div className='bg-muted h-4 w-32 animate-pulse rounded' />
+                  <div className="bg-muted h-4 w-32 animate-pulse rounded" />
                 )}
               </span>
             </div>
-            <h1 className='mt-2 truncate text-xl font-bold'>
+            <h1 className="mt-2 truncate text-xl font-bold">
               {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
-              {data.torrent.name ?? <div className='bg-muted h-6 w-3/4 animate-pulse rounded' />}
+              {data.torrent.name ?? (
+                <div className="bg-muted h-6 w-3/4 animate-pulse rounded" />
+              )}
             </h1>
           </section>
 
           {/* ───────────── Tabs ───────────── */}
-          <Tabs value={activeTab} onValueChange={handleTabChange} className='w-full'>
-            <TabsList className='grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5'>
-              <TabsTrigger value='general'>General</TabsTrigger>
-              <TabsTrigger value='trackers'>Trackers</TabsTrigger>
-              <TabsTrigger value='peers'>Peers</TabsTrigger>
-              <TabsTrigger value='content'>Content</TabsTrigger>
-              <TabsTrigger value='speed'>Speed</TabsTrigger>
+          <Tabs
+            value={activeTab}
+            onValueChange={handleTabChange}
+            className="w-full"
+          >
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+              <TabsTrigger value="general">General</TabsTrigger>
+              <TabsTrigger value="trackers">Trackers</TabsTrigger>
+              <TabsTrigger value="peers">Peers</TabsTrigger>
+              <TabsTrigger value="content">Content</TabsTrigger>
+              <TabsTrigger value="speed">Speed</TabsTrigger>
             </TabsList>
 
-            <div className='mt-4'>
-              <TabsContent value='general'>
-                <TorrentGeneralTab torrent={data.torrent} properties={data.properties} />
+            <div className="mt-4">
+              <TabsContent value="general">
+                <TorrentGeneralTab
+                  torrent={data.torrent}
+                  properties={data.properties}
+                />
               </TabsContent>
-              <TabsContent value='trackers'>
+              <TabsContent value="trackers">
                 <TorrentTrackersTab
                   torrent={data.torrent}
                   trackers={data.trackers}
                   onRefresh={fetchTorrentData}
                 />
               </TabsContent>
-              <TabsContent value='peers'>
+              <TabsContent value="peers">
                 <TorrentPeersTab peers={data.peers} />
               </TabsContent>
-              <TabsContent value='content'>
+              <TabsContent value="content">
                 <TorrentContentTab
                   torrent={data.torrent}
                   files={data.files}
                   onRefresh={fetchTorrentData}
                 />
               </TabsContent>
-              <TabsContent value='speed'>
+              <TabsContent value="speed">
                 <TorrentSpeedTab
                   torrent={data.torrent}
                   properties={data.properties}

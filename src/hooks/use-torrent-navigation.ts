@@ -1,11 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-
+import { useTorrentStore } from '@/stores/torrent-store';
 import { useLocation, useNavigate } from '@tanstack/react-router';
-
 
 import { useKeyboardShortcuts } from './use-keyboard-shortcuts';
 import type { KeyboardShortcut } from './use-keyboard-shortcuts';
-import { useTorrentStore } from '@/stores/torrent-store';
 
 interface UseTorrentNavigationOptions {
   enabled?: boolean;
@@ -15,7 +13,9 @@ interface UseTorrentNavigationOptions {
  * Hook for torrent navigation shortcuts (J/K, Arrow keys, Enter, Escape)
  * Handles navigation between torrents and opening/closing details
  */
-export function useTorrentNavigation(options: UseTorrentNavigationOptions = {}) {
+export function useTorrentNavigation(
+  options: UseTorrentNavigationOptions = {}
+) {
   const { enabled = true } = options;
   const navigate = useNavigate();
   const location = useLocation();
@@ -45,7 +45,8 @@ export function useTorrentNavigation(options: UseTorrentNavigationOptions = {}) 
     if (currentFilteredTorrents.length === 0) return;
 
     setFocusedTorrentIndex((prevIndex) => {
-      const nextIndex = prevIndex < currentFilteredTorrents.length - 1 ? prevIndex + 1 : 0; // Wrap to first
+      const nextIndex =
+        prevIndex < currentFilteredTorrents.length - 1 ? prevIndex + 1 : 0; // Wrap to first
 
       selectTorrent(currentFilteredTorrents[nextIndex].hash);
       return nextIndex;
@@ -58,7 +59,8 @@ export function useTorrentNavigation(options: UseTorrentNavigationOptions = {}) 
     if (currentFilteredTorrents.length === 0) return;
 
     setFocusedTorrentIndex((prevIndex) => {
-      const newIndex = prevIndex > 0 ? prevIndex - 1 : currentFilteredTorrents.length - 1; // Wrap to last
+      const newIndex =
+        prevIndex > 0 ? prevIndex - 1 : currentFilteredTorrents.length - 1; // Wrap to last
 
       selectTorrent(currentFilteredTorrents[newIndex].hash);
       return newIndex;
@@ -66,7 +68,8 @@ export function useTorrentNavigation(options: UseTorrentNavigationOptions = {}) 
   }, []);
 
   const openDetails = useCallback(() => {
-    const { selectedTorrents, selectTorrent, getFilteredTorrents } = useTorrentStore.getState();
+    const { selectedTorrents, selectTorrent, getFilteredTorrents } =
+      useTorrentStore.getState();
 
     if (selectedTorrents.length === 1) {
       const selectedHash = selectedTorrents[0];
@@ -77,7 +80,10 @@ export function useTorrentNavigation(options: UseTorrentNavigationOptions = {}) 
       });
     } else {
       const currentFilteredTorrents = getFilteredTorrents();
-      if (focusedTorrentIndex >= 0 && currentFilteredTorrents[focusedTorrentIndex]) {
+      if (
+        focusedTorrentIndex >= 0 &&
+        currentFilteredTorrents[focusedTorrentIndex]
+      ) {
         const torrent = currentFilteredTorrents[focusedTorrentIndex];
         selectTorrent(torrent.hash);
         navigate({
@@ -92,7 +98,8 @@ export function useTorrentNavigation(options: UseTorrentNavigationOptions = {}) 
   const closeDetails = useCallback(() => {
     // Check if we're currently on a torrent detail page
     const isOnDetailPage =
-      location.pathname.includes('/torrents/') && location.pathname !== '/torrents/';
+      location.pathname.includes('/torrents/') &&
+      location.pathname !== '/torrents/';
 
     if (isOnDetailPage) {
       navigate({ to: '/torrents' });
@@ -129,7 +136,8 @@ export function useTorrentNavigation(options: UseTorrentNavigationOptions = {}) 
       {
         key: 'Home',
         action: () => {
-          const { getFilteredTorrents, selectTorrent } = useTorrentStore.getState();
+          const { getFilteredTorrents, selectTorrent } =
+            useTorrentStore.getState();
           const currentFilteredTorrents = getFilteredTorrents();
           if (currentFilteredTorrents.length > 0) {
             setFocusedTorrentIndex(0);
@@ -142,7 +150,8 @@ export function useTorrentNavigation(options: UseTorrentNavigationOptions = {}) 
       {
         key: 'End',
         action: () => {
-          const { getFilteredTorrents, selectTorrent } = useTorrentStore.getState();
+          const { getFilteredTorrents, selectTorrent } =
+            useTorrentStore.getState();
           const currentFilteredTorrents = getFilteredTorrents();
           if (currentFilteredTorrents.length > 0) {
             const lastIndex = currentFilteredTorrents.length - 1;
@@ -166,7 +175,7 @@ export function useTorrentNavigation(options: UseTorrentNavigationOptions = {}) 
         category: 'Navigation',
       },
     ],
-    [selectNext, selectPrevious, openDetails, closeDetails],
+    [selectNext, selectPrevious, openDetails, closeDetails]
   );
 
   // Register shortcuts

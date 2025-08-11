@@ -1,7 +1,9 @@
 /**
  * Check if user is on Windows
  */
-export const isWindows = window.navigator.userAgent.toLowerCase().includes('windows');
+export const isWindows = window.navigator.userAgent
+  .toLowerCase()
+  .includes('windows');
 
 /**
  * Check if user is on MAC
@@ -11,24 +13,32 @@ export const isMac = window.navigator.userAgent.toLowerCase().includes('mac');
 /**
  * Check if user is on Linux
  */
-export const isLinux = window.navigator.userAgent.toLowerCase().includes('linux');
+export const isLinux = window.navigator.userAgent
+  .toLowerCase()
+  .includes('linux');
 
 /**
  * Check if user is on mobile device
  */
-export const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-  window.navigator.userAgent,
-);
+export const isMobile =
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    window.navigator.userAgent
+  );
 
 /**
  * Check if user is on tablet
  */
-export const isTablet = /iPad|Android(?!.*Mobile)/i.test(window.navigator.userAgent);
+export const isTablet = /iPad|Android(?!.*Mobile)/i.test(
+  window.navigator.userAgent
+);
 
 /**
  * Check Ctrl/Cmd key
  */
-export function doesCommand(e: { metaKey: boolean; ctrlKey: boolean }): boolean {
+export function doesCommand(e: {
+  metaKey: boolean;
+  ctrlKey: boolean;
+}): boolean {
   return isMac ? e.metaKey : e.ctrlKey;
 }
 

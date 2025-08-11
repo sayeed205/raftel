@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-
+import { useRSSStore } from '@/stores/rss-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -16,10 +16,12 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useRSSStore } from '@/stores/rss-store';
 
 const feedSchema = z.object({
-  name: z.string().min(1, 'Feed name is required').max(100, 'Feed name too long'),
+  name: z
+    .string()
+    .min(1, 'Feed name is required')
+    .max(100, 'Feed name too long'),
   url: z.string().url('Please enter a valid URL'),
 });
 
@@ -32,7 +34,12 @@ interface RSSFeedDialogProps {
   feedName?: string;
 }
 
-export function RSSFeedDialog({ open, onOpenChange, mode, feedName }: RSSFeedDialogProps) {
+export function RSSFeedDialog({
+  open,
+  onOpenChange,
+  mode,
+  feedName,
+}: RSSFeedDialogProps) {
   const { addFeed, setFeedUrl, getFeedByName, feeds } = useRSSStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -104,9 +111,11 @@ export function RSSFeedDialog({ open, onOpenChange, mode, feedName }: RSSFeedDia
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className='sm:max-w-md'>
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{mode === 'add' ? 'Add RSS Feed' : 'Edit RSS Feed'}</DialogTitle>
+          <DialogTitle>
+            {mode === 'add' ? 'Add RSS Feed' : 'Edit RSS Feed'}
+          </DialogTitle>
           <DialogDescription>
             {mode === 'add'
               ? 'Add a new RSS feed to monitor for torrents.'
@@ -114,28 +123,32 @@ export function RSSFeedDialog({ open, onOpenChange, mode, feedName }: RSSFeedDia
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
-          <div className='space-y-2'>
-            <Label htmlFor='name'>Feed Name</Label>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="name">Feed Name</Label>
             <Input
-              id='name'
-              placeholder='Enter feed name'
+              id="name"
+              placeholder="Enter feed name"
               disabled={mode === 'edit' || isSubmitting}
               {...register('name')}
             />
-            {errors.name && <p className='text-destructive text-sm'>{errors.name.message}</p>}
+            {errors.name && (
+              <p className="text-destructive text-sm">{errors.name.message}</p>
+            )}
           </div>
 
-          <div className='space-y-2'>
-            <Label htmlFor='url'>Feed URL</Label>
+          <div className="space-y-2">
+            <Label htmlFor="url">Feed URL</Label>
             <Input
-              id='url'
-              type='url'
-              placeholder='https://example.com/rss.xml'
+              id="url"
+              type="url"
+              placeholder="https://example.com/rss.xml"
               disabled={isSubmitting}
               {...register('url')}
             />
-            {errors.url && <p className='text-destructive text-sm'>{errors.url.message}</p>}
+            {errors.url && (
+              <p className="text-destructive text-sm">{errors.url.message}</p>
+            )}
           </div>
 
           {error && (
@@ -145,10 +158,15 @@ export function RSSFeedDialog({ open, onOpenChange, mode, feedName }: RSSFeedDia
           )}
 
           <DialogFooter>
-            <Button type='button' variant='outline' onClick={handleClose} disabled={isSubmitting}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleClose}
+              disabled={isSubmitting}
+            >
               Cancel
             </Button>
-            <Button type='submit' disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting}>
               {isSubmitting
                 ? mode === 'add'
                   ? 'Adding...'

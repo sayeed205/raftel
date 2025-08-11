@@ -1,13 +1,17 @@
-import { Search, X } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from '@tanstack/react-router';
+import { Search, X } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogOverlay } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { useNavigate } from '@tanstack/react-router';
-import { searchSettings, type SearchResult } from '../utils/settings-categories';
+
+import {
+  searchSettings,
+  type SearchResult,
+} from '../utils/settings-categories';
 
 export function SettingsSearchDialog() {
   const navigate = useNavigate();
@@ -18,7 +22,8 @@ export function SettingsSearchDialog() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Detect OS to show correct keyboard shortcut
-  const isMac = typeof window !== 'undefined' && 
+  const isMac =
+    typeof window !== 'undefined' &&
     /Mac|iPod|iPhone|iPad/.test(window.navigator.userAgent);
 
   // Handle keyboard shortcuts
@@ -31,7 +36,7 @@ export function SettingsSearchDialog() {
         setSearchQuery('');
         setSelectedIndex(0);
       }
-      
+
       // Close dialog with Escape
       if (event.key === 'Escape' && isOpen) {
         setIsOpen(false);
@@ -50,7 +55,7 @@ export function SettingsSearchDialog() {
         inputRef.current?.focus();
         inputRef.current?.select(); // Select all text for better UX
       }, 100);
-      
+
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
@@ -71,7 +76,9 @@ export function SettingsSearchDialog() {
     switch (event.key) {
       case 'ArrowDown':
         event.preventDefault();
-        setSelectedIndex((prev) => Math.min(prev + 1, searchResults.length - 1));
+        setSelectedIndex((prev) =>
+          Math.min(prev + 1, searchResults.length - 1)
+        );
         break;
       case 'ArrowUp':
         event.preventDefault();
@@ -95,40 +102,40 @@ export function SettingsSearchDialog() {
   return (
     <>
       {/* Add custom styles for highlighted text */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
           mark {
             background-color: hsl(var(--primary) / 0.2);
             color: hsl(var(--primary));
             padding: 0 2px;
             border-radius: 2px;
           }
-        `
-      }} />
-      
+        `,
+        }}
+      />
+
       {/* Search trigger button - visible in header */}
       <Button
         variant="outline"
         size="sm"
-        className="flex items-center gap-2 text-muted-foreground"
+        className="text-muted-foreground flex items-center gap-2"
         onClick={() => setIsOpen(true)}
       >
         <Search className="h-4 w-4" />
         <span>Search settings...</span>
         <div className="hidden items-center gap-0.5 text-xs md:flex">
           <kbd className="bg-muted text-muted-foreground pointer-events-none inline-flex h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none">
-          <span className="text-xs">{isMac ? '⌘' : 'Ctrl'}</span>K
-        </kbd>
+            <span className="text-xs">{isMac ? '⌘' : 'Ctrl'}</span>K
+          </kbd>
         </div>
       </Button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogOverlay className="bg-black/30" />
-        <DialogContent 
-          className="top-[20vh] max-w-2xl translate-y-0 p-0 sm:rounded-lg"
-        >
+        <DialogContent className="top-[20vh] max-w-2xl translate-y-0 p-0 sm:rounded-lg">
           <div className="p-4">
-            <div className="relative mt-5 mx-5">
+            <div className="relative mx-5 mt-5">
               <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
               <Input
                 ref={inputRef}
@@ -136,7 +143,7 @@ export function SettingsSearchDialog() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleResultNavigation}
-                className="pl-9 pr-9 text-base"
+                className="pr-9 pl-9 text-base"
               />
               {searchQuery && (
                 <Button
@@ -164,8 +171,9 @@ export function SettingsSearchDialog() {
               </div>
             ) : searchResults.length > 0 ? (
               <div className="p-2">
-                <div className="mb-2 px-2 text-sm text-muted-foreground">
-                  {searchResults.length} result{searchResults.length !== 1 ? 's' : ''} found
+                <div className="text-muted-foreground mb-2 px-2 text-sm">
+                  {searchResults.length} result
+                  {searchResults.length !== 1 ? 's' : ''} found
                 </div>
                 <div className="space-y-1">
                   {searchResults.map((result, index) => {
@@ -183,24 +191,28 @@ export function SettingsSearchDialog() {
                           <Icon className="mt-0.5 h-5 w-5 flex-shrink-0" />
                           <div className="flex-1 text-left">
                             <div className="mb-1 flex items-center gap-2">
-                              <span 
+                              <span
                                 className="font-medium"
                                 dangerouslySetInnerHTML={{
-                                  __html: result.highlightedText && result.matchType === 'title'
-                                    ? result.highlightedText
-                                    : result.section.title
+                                  __html:
+                                    result.highlightedText &&
+                                    result.matchType === 'title'
+                                      ? result.highlightedText
+                                      : result.section.title,
                                 }}
                               />
                               <Badge variant="secondary" className="text-xs">
                                 {result.category.title}
                               </Badge>
                             </div>
-                            <p 
+                            <p
                               className="text-muted-foreground line-clamp-2 text-sm"
                               dangerouslySetInnerHTML={{
-                                __html: result.highlightedText && result.matchType === 'description'
-                                  ? result.highlightedText
-                                  : result.section.description
+                                __html:
+                                  result.highlightedText &&
+                                  result.matchType === 'description'
+                                    ? result.highlightedText
+                                    : result.section.description,
                               }}
                             />
                             {result.matchType === 'keyword' && (
@@ -226,7 +238,7 @@ export function SettingsSearchDialog() {
                     Find settings by name, description, or keywords
                   </p>
                 </div>
-                
+
                 <div className="mt-6">
                   <h4 className="mb-3 text-sm font-medium">Quick actions</h4>
                   <div className="grid grid-cols-2 gap-2">
@@ -282,7 +294,7 @@ export function SettingsSearchDialog() {
 
           <Separator />
 
-          <div className="flex items-center justify-between p-3 text-xs text-muted-foreground">
+          <div className="text-muted-foreground flex items-center justify-between p-3 text-xs">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-1">
                 <kbd className="bg-muted rounded px-1.5 py-0.5">↑</kbd>

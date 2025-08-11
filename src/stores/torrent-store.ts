@@ -1,8 +1,8 @@
+import qbit from '@/services/qbit';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 
 import type { ServerState, TorrentInfo, TorrentsInfoParams } from '@/types/api';
-import qbit from '@/services/qbit';
 
 interface TorrentState {
   torrents: Array<TorrentInfo>;
@@ -19,7 +19,10 @@ interface TorrentState {
   syncId: number;
   // Enhanced features
   searchQuery: string;
-  columnSettings: Record<string, { visible: boolean; width: number; order: number }>;
+  columnSettings: Record<
+    string,
+    { visible: boolean; width: number; order: number }
+  >;
   savedFilters: Array<{
     id: string;
     name: string;
@@ -65,7 +68,7 @@ interface TorrentActions {
   // Column management
   updateColumnSettings: (
     columnId: string,
-    settings: Partial<{ visible: boolean; width: number; order: number }>,
+    settings: Partial<{ visible: boolean; width: number; order: number }>
   ) => void;
   resetColumnSettings: () => void;
 
@@ -87,14 +90,20 @@ interface TorrentActions {
   // Torrent actions
   pauseTorrents: (hashes?: Array<string>) => Promise<void>;
   resumeTorrents: (hashes?: Array<string>) => Promise<void>;
-  deleteTorrents: (hashes: Array<string>, deleteFiles?: boolean) => Promise<void>;
+  deleteTorrents: (
+    hashes: Array<string>,
+    deleteFiles?: boolean
+  ) => Promise<void>;
   recheckTorrents: (hashes?: Array<string>) => Promise<void>;
   reannounceTorrents: (hashes?: Array<string>) => Promise<void>;
-  setTorrentCategory: (category: string, hashes?: Array<string>) => Promise<void>;
+  setTorrentCategory: (
+    category: string,
+    hashes?: Array<string>
+  ) => Promise<void>;
   setTorrentTags: (tags: string, hashes?: Array<string>) => Promise<void>;
   setTorrentPriority: (
     priority: 'increasePrio' | 'decreasePrio' | 'topPrio' | 'bottomPrio',
-    hashes?: Array<string>,
+    hashes?: Array<string>
   ) => Promise<void>;
 
   // Utility
@@ -155,10 +164,12 @@ export const useTorrentStore = create<TorrentStore>()(
         if (data.torrents) {
           if (currentSyncId === 0 || 'full_update' in data) {
             // Full update - replace all torrents
-            const torrents = Object.entries(data.torrents).map(([hash, torrentData]) => ({
-              hash,
-              ...(torrentData as Record<string, any>),
-            })) as Array<TorrentInfo>;
+            const torrents = Object.entries(data.torrents).map(
+              ([hash, torrentData]) => ({
+                hash,
+                ...(torrentData as Record<string, any>),
+              })
+            ) as Array<TorrentInfo>;
 
             console.log('Full update - setting torrents:', torrents);
             set({
@@ -171,7 +182,9 @@ export const useTorrentStore = create<TorrentStore>()(
             const updatedTorrents = [...state.torrents];
 
             Object.entries(data.torrents).forEach(([hash, torrentData]) => {
-              const existingIndex = updatedTorrents.findIndex((t) => t.hash === hash);
+              const existingIndex = updatedTorrents.findIndex(
+                (t) => t.hash === hash
+              );
               if (existingIndex >= 0) {
                 // Update existing torrent
                 updatedTorrents[existingIndex] = {
@@ -187,7 +200,10 @@ export const useTorrentStore = create<TorrentStore>()(
               }
             });
 
-            console.log('Incremental update - updated torrents:', updatedTorrents);
+            console.log(
+              'Incremental update - updated torrents:',
+              updatedTorrents
+            );
             set({
               torrents: updatedTorrents,
               isLoading: false,
@@ -210,7 +226,7 @@ export const useTorrentStore = create<TorrentStore>()(
         if ('torrents_removed' in data) {
           const currentTorrents = get().torrents;
           const filteredTorrents = currentTorrents.filter(
-            (torrent) => !data.torrents_removed!.includes(torrent.hash),
+            (torrent) => !data.torrents_removed!.includes(torrent.hash)
           );
           set({ torrents: filteredTorrents });
         }
@@ -227,7 +243,8 @@ export const useTorrentStore = create<TorrentStore>()(
         }
       } catch (error) {
         console.error('Sync failed:', error);
-        const message = error instanceof Error ? error.message : 'Failed to sync data';
+        const message =
+          error instanceof Error ? error.message : 'Failed to sync data';
         set({
           error: message,
           isLoading: false,
@@ -389,9 +406,13 @@ export const useTorrentStore = create<TorrentStore>()(
               break;
             case 'seeding':
               if (
-                !['uploading', 'stalledUP', 'queuedUP', 'checkingUP', 'forcedUP'].includes(
-                  torrent.state,
-                )
+                ![
+                  'uploading',
+                  'stalledUP',
+                  'queuedUP',
+                  'checkingUP',
+                  'forcedUP',
+                ].includes(torrent.state)
               ) {
                 return false;
               }
@@ -454,8 +475,12 @@ export const useTorrentStore = create<TorrentStore>()(
         if (searchQuery.trim()) {
           const query = searchQuery.toLowerCase();
           const matchesName = torrent.name.toLowerCase().includes(query);
-          const matchesCategory = (torrent.category || '').toLowerCase().includes(query);
-          const matchesTags = (torrent.tags || '').toLowerCase().includes(query);
+          const matchesCategory = (torrent.category || '')
+            .toLowerCase()
+            .includes(query);
+          const matchesTags = (torrent.tags || '')
+            .toLowerCase()
+            .includes(query);
 
           if (!matchesName && !matchesCategory && !matchesTags) {
             return false;
@@ -475,7 +500,8 @@ export const useTorrentStore = create<TorrentStore>()(
         await qbit.stopTorrents(targetHashes);
         await get().fetchTorrents();
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to pause torrents';
+        const message =
+          error instanceof Error ? error.message : 'Failed to pause torrents';
         set({ error: message });
         throw error;
       }
@@ -489,7 +515,8 @@ export const useTorrentStore = create<TorrentStore>()(
         await qbit.startTorrents(targetHashes);
         await get().fetchTorrents();
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to resume torrents';
+        const message =
+          error instanceof Error ? error.message : 'Failed to resume torrents';
         set({ error: message });
         throw error;
       }
@@ -503,7 +530,8 @@ export const useTorrentStore = create<TorrentStore>()(
         await get().fetchTorrents();
         get().clearSelection();
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to delete torrents';
+        const message =
+          error instanceof Error ? error.message : 'Failed to delete torrents';
         set({ error: message });
         throw error;
       }
@@ -517,7 +545,8 @@ export const useTorrentStore = create<TorrentStore>()(
         await qbit.recheckTorrents(targetHashes);
         await get().fetchTorrents();
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to recheck torrents';
+        const message =
+          error instanceof Error ? error.message : 'Failed to recheck torrents';
         set({ error: message });
         throw error;
       }
@@ -530,7 +559,10 @@ export const useTorrentStore = create<TorrentStore>()(
       try {
         await qbit.reannounceTorrents(targetHashes);
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to reannounce torrents';
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'Failed to reannounce torrents';
         set({ error: message });
         throw error;
       }
@@ -544,7 +576,8 @@ export const useTorrentStore = create<TorrentStore>()(
         await qbit.setCategory(targetHashes, category);
         await get().fetchTorrents();
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to set category';
+        const message =
+          error instanceof Error ? error.message : 'Failed to set category';
         set({ error: message });
         throw error;
       }
@@ -558,7 +591,8 @@ export const useTorrentStore = create<TorrentStore>()(
         await qbit.addTorrentTag(targetHashes, [tags]);
         await get().fetchTorrents();
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to set tags';
+        const message =
+          error instanceof Error ? error.message : 'Failed to set tags';
         set({ error: message });
         throw error;
       }
@@ -572,7 +606,8 @@ export const useTorrentStore = create<TorrentStore>()(
         await qbit.setTorrentPriority(targetHashes, priority);
         await get().fetchTorrents();
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'Failed to set priority';
+        const message =
+          error instanceof Error ? error.message : 'Failed to set priority';
         set({ error: message });
         throw error;
       }
@@ -590,7 +625,7 @@ export const useTorrentStore = create<TorrentStore>()(
     getSelectedHashes: () => {
       return get().selectedTorrents.join('|');
     },
-  })),
+  }))
 );
 
 // Selector hooks for convenience

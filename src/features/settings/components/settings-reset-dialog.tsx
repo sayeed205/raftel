@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-
+import type { WebUISettings } from '@/stores/settings-store';
 import { AlertTriangle, RotateCcw, Settings } from 'lucide-react';
 
-import type { WebUISettings } from '@/stores/settings-store';
 import type { QBittorrentPreferences } from '@/types/api';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
@@ -103,7 +102,8 @@ export function SettingsResetDialog({
       await onReset(resetOptions);
       onOpenChange(false);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to reset settings';
+      const message =
+        err instanceof Error ? err.message : 'Failed to reset settings';
       setError(message);
     } finally {
       setIsLoading(false);
@@ -124,43 +124,43 @@ export function SettingsResetDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-lg'>
+      <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle className='text-destructive flex items-center gap-2'>
-            <AlertTriangle className='h-5 w-5' />
+          <DialogTitle className="text-destructive flex items-center gap-2">
+            <AlertTriangle className="h-5 w-5" />
             Reset Settings
           </DialogTitle>
           <DialogDescription>
-            This action will permanently reset your settings to their default values. This cannot be
-            undone.
+            This action will permanently reset your settings to their default
+            values. This cannot be undone.
           </DialogDescription>
         </DialogHeader>
 
         {error && (
-          <Alert variant='destructive'>
-            <AlertTriangle className='h-4 w-4' />
+          <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
 
-        <div className='space-y-6'>
+        <div className="space-y-6">
           {/* Warning */}
-          <Alert variant='destructive'>
-            <AlertTriangle className='h-4 w-4' />
+          <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
             <AlertDescription>
-              <strong>Warning:</strong> This action is irreversible. All your custom settings will
-              be lost and restored to their default values.
+              <strong>Warning:</strong> This action is irreversible. All your
+              custom settings will be lost and restored to their default values.
             </AlertDescription>
           </Alert>
 
           {/* Reset options */}
-          <div className='space-y-3'>
-            <Label className='text-base font-medium'>What to reset</Label>
+          <div className="space-y-3">
+            <Label className="text-base font-medium">What to reset</Label>
 
-            <div className='space-y-3'>
-              <div className='flex items-center space-x-2'>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-2">
                 <Checkbox
-                  id='reset-preferences'
+                  id="reset-preferences"
                   checked={resetOptions.resetPreferences}
                   onCheckedChange={(checked) =>
                     setResetOptions((prev) => ({
@@ -170,18 +170,23 @@ export function SettingsResetDialog({
                   }
                   disabled={!preferences}
                 />
-                <Label htmlFor='reset-preferences' className='flex items-center gap-2'>
-                  <Settings className='h-4 w-4' />
+                <Label
+                  htmlFor="reset-preferences"
+                  className="flex items-center gap-2"
+                >
+                  <Settings className="h-4 w-4" />
                   qBittorrent Preferences
                   {preferences && (
-                    <Badge variant='destructive'>{Object.keys(preferences).length} settings</Badge>
+                    <Badge variant="destructive">
+                      {Object.keys(preferences).length} settings
+                    </Badge>
                   )}
                 </Label>
               </div>
 
-              <div className='flex items-center space-x-2'>
+              <div className="flex items-center space-x-2">
                 <Checkbox
-                  id='reset-webui'
+                  id="reset-webui"
                   checked={resetOptions.resetWebUISettings}
                   onCheckedChange={(checked) =>
                     setResetOptions((prev) => ({
@@ -190,10 +195,15 @@ export function SettingsResetDialog({
                     }))
                   }
                 />
-                <Label htmlFor='reset-webui' className='flex items-center gap-2'>
-                  <RotateCcw className='h-4 w-4' />
+                <Label
+                  htmlFor="reset-webui"
+                  className="flex items-center gap-2"
+                >
+                  <RotateCcw className="h-4 w-4" />
                   WebUI Settings
-                  <Badge variant='destructive'>{Object.keys(webUISettings).length} settings</Badge>
+                  <Badge variant="destructive">
+                    {Object.keys(webUISettings).length} settings
+                  </Badge>
                 </Label>
               </div>
             </div>
@@ -202,10 +212,10 @@ export function SettingsResetDialog({
           <Separator />
 
           {/* Backup option */}
-          <div className='space-y-3'>
-            <div className='flex items-center space-x-2'>
+          <div className="space-y-3">
+            <div className="flex items-center space-x-2">
               <Checkbox
-                id='create-backup'
+                id="create-backup"
                 checked={resetOptions.createBackup}
                 onCheckedChange={(checked) =>
                   setResetOptions((prev) => ({
@@ -214,11 +224,13 @@ export function SettingsResetDialog({
                   }))
                 }
               />
-              <Label htmlFor='create-backup'>Create backup before resetting</Label>
+              <Label htmlFor="create-backup">
+                Create backup before resetting
+              </Label>
             </div>
 
             {resetOptions.createBackup && (
-              <div className='text-muted-foreground ml-6 text-sm'>
+              <div className="text-muted-foreground ml-6 text-sm">
                 A backup file will be automatically downloaded before resetting.
               </div>
             )}
@@ -227,15 +239,17 @@ export function SettingsResetDialog({
           <Separator />
 
           {/* Confirmation */}
-          <div className='space-y-3'>
-            <Label htmlFor='confirmation' className='text-base font-medium'>
+          <div className="space-y-3">
+            <Label htmlFor="confirmation" className="text-base font-medium">
               Confirmation
             </Label>
-            <div className='text-muted-foreground text-sm'>
-              Type <code className='bg-muted rounded px-1'>{CONFIRMATION_TEXT}</code> to confirm:
+            <div className="text-muted-foreground text-sm">
+              Type{' '}
+              <code className="bg-muted rounded px-1">{CONFIRMATION_TEXT}</code>{' '}
+              to confirm:
             </div>
             <Input
-              id='confirmation'
+              id="confirmation"
               value={confirmationText}
               onChange={(e) => setConfirmationText(e.target.value)}
               placeholder={CONFIRMATION_TEXT}
@@ -244,28 +258,35 @@ export function SettingsResetDialog({
           </div>
 
           {/* Summary */}
-          {(resetOptions.resetPreferences || resetOptions.resetWebUISettings) && (
-            <div className='bg-destructive/10 border-destructive/20 rounded-lg border p-4'>
-              <div className='space-y-1 text-sm'>
-                <div className='text-destructive font-medium'>Reset Summary</div>
+          {(resetOptions.resetPreferences ||
+            resetOptions.resetWebUISettings) && (
+            <div className="bg-destructive/10 border-destructive/20 rounded-lg border p-4">
+              <div className="space-y-1 text-sm">
+                <div className="text-destructive font-medium">
+                  Reset Summary
+                </div>
                 <div>Settings to reset: {getResetCount()}</div>
-                <div>Backup will be created: {resetOptions.createBackup ? 'Yes' : 'No'}</div>
+                <div>
+                  Backup will be created:{' '}
+                  {resetOptions.createBackup ? 'Yes' : 'No'}
+                </div>
               </div>
             </div>
           )}
         </div>
 
         <DialogFooter>
-          <Button variant='outline' onClick={() => onOpenChange(false)}>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
           <Button
-            variant='destructive'
+            variant="destructive"
             onClick={handleReset}
             disabled={
               !isConfirmationValid ||
               isLoading ||
-              (!resetOptions.resetPreferences && !resetOptions.resetWebUISettings)
+              (!resetOptions.resetPreferences &&
+                !resetOptions.resetWebUISettings)
             }
           >
             {isLoading ? 'Resetting...' : 'Reset Settings'}

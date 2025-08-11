@@ -1,10 +1,15 @@
+import type IProvider from '@/services/qbit/i-provider.ts';
 import ky, { HTTPError } from 'ky';
 import type { KyInstance, Options as KyOptions } from 'ky';
 
-import type IProvider from '@/services/qbit/i-provider.ts';
 import type { Category } from '@/types/api.ts';
 import type { Log } from '@/types/logs.ts';
-import type { DirectoryContentMode, FilePriority, PieceState } from '@/types/qbit/constants.ts';
+import type {
+  DirectoryContentMode,
+  FilePriority,
+  PieceState,
+} from '@/types/qbit/constants.ts';
+import { LogType } from '@/types/qbit/constants.ts';
 import type {
   AddTorrentPayload,
   AppPreferencesPayload,
@@ -12,7 +17,10 @@ import type {
   GetTorrentPayload,
   LoginPayload,
 } from '@/types/qbit/payloads.ts';
-import type { NetworkInterface, QBittorrentPreferences } from '@/types/qbit/preferences.ts';
+import type {
+  NetworkInterface,
+  QBittorrentPreferences,
+} from '@/types/qbit/preferences.ts';
 import type {
   MainDataResponse,
   SearchResultsResponse,
@@ -33,7 +41,6 @@ import type {
   TorrentCreatorParams,
   TorrentCreatorTask,
 } from '@/types/statistics.ts';
-import { LogType } from '@/types/qbit/constants.ts';
 
 interface RequestConfig {
   validateStatus?: (status: number) => boolean;
@@ -77,7 +84,11 @@ export default class QBitProvider implements IProvider {
   }
 
   async getVersion(): Promise<string> {
-    const version = await this.request<string>('app/version', {}, { responseType: 'text' });
+    const version = await this.request<string>(
+      'app/version',
+      {},
+      { responseType: 'text' }
+    );
     return version.includes('v') ? version.substring(1) : version;
   }
 
@@ -95,7 +106,7 @@ export default class QBitProvider implements IProvider {
   async shutdownApp(): Promise<boolean> {
     return this.post('app/shutdown').then(
       () => true,
-      () => false,
+      () => false
     );
   }
 
@@ -104,7 +115,9 @@ export default class QBitProvider implements IProvider {
   }
 
   async getAddresses(iface = ''): Promise<Array<string>> {
-    return this.request<Array<string>>(`app/networkInterfaceAddressList?iface=${iface}`);
+    return this.request<Array<string>>(
+      `app/networkInterfaceAddressList?iface=${iface}`
+    );
   }
 
   async sendTestEmail(): Promise<void> {
@@ -113,12 +126,12 @@ export default class QBitProvider implements IProvider {
 
   async getDirectoryContent(
     dirPath: string,
-    mode?: DirectoryContentMode,
+    mode?: DirectoryContentMode
   ): Promise<Array<string> | null> {
     return await this.post(
       'app/getDirectoryContent',
       { dirPath, mode },
-      { validateStatus: (code) => code < 500 },
+      { validateStatus: (code) => code < 500 }
     ).catch(() => null);
   }
 
@@ -142,7 +155,7 @@ export default class QBitProvider implements IProvider {
       {
         responseType: 'text',
         validateStatus: (status) => status < 500,
-      },
+      }
     );
 
     if (text === 'Ok.') {
@@ -175,7 +188,10 @@ export default class QBitProvider implements IProvider {
     }
   }
 
-  async getLogs(afterId?: number, logsToInclude?: LogType): Promise<Array<Log>> {
+  async getLogs(
+    afterId?: number,
+    logsToInclude?: LogType
+  ): Promise<Array<Log>> {
     const includeFilter = logsToInclude ?? LogType.ALL;
 
     const filterMaskInfo = includeFilter & LogType.INFO;
@@ -191,7 +207,9 @@ export default class QBitProvider implements IProvider {
       critical: filterMaskCritical === LogType.CRITICAL,
     };
 
-    return this.request<Array<Log>>(`log/main?${new URLSearchParams(params as any).toString()}`);
+    return this.request<Array<Log>>(
+      `log/main?${new URLSearchParams(params as any).toString()}`
+    );
   }
 
   async getPeerLogs(afterId?: number) {
@@ -199,7 +217,9 @@ export default class QBitProvider implements IProvider {
       last_known_id: afterId || -1,
     };
 
-    return this.request<Array<any>>(`log/peers?${new URLSearchParams(params as any).toString()}`);
+    return this.request<Array<any>>(
+      `log/peers?${new URLSearchParams(params as any).toString()}`
+    );
   }
 
   async createFeed(payload: CreateFeedPayload): Promise<void> {
@@ -211,7 +231,7 @@ export default class QBitProvider implements IProvider {
       },
       {
         responseType: 'text',
-      },
+      }
     );
   }
 
@@ -224,12 +244,14 @@ export default class QBitProvider implements IProvider {
       },
       {
         responseType: 'text',
-      },
+      }
     );
   }
 
   async getFeeds(withData: boolean): Promise<Array<Feed>> {
-    const payload = await this.request<Record<string, any>>(`rss/items?withData=${withData}`);
+    const payload = await this.request<Record<string, any>>(
+      `rss/items?withData=${withData}`
+    );
     const feeds: Array<Feed> = [];
     for (const key in payload) {
       feeds.push({ name: key, ...payload[key] });
@@ -270,7 +292,7 @@ export default class QBitProvider implements IProvider {
       },
       {
         responseType: 'text',
-      },
+      }
     );
   }
 
@@ -280,7 +302,7 @@ export default class QBitProvider implements IProvider {
       { path, url },
       {
         responseType: 'text',
-      },
+      }
     );
   }
 
@@ -293,7 +315,7 @@ export default class QBitProvider implements IProvider {
       },
       {
         responseType: 'text',
-      },
+      }
     );
   }
 
@@ -303,7 +325,7 @@ export default class QBitProvider implements IProvider {
       { ruleName },
       {
         responseType: 'text',
-      },
+      }
     );
   }
 
@@ -315,7 +337,7 @@ export default class QBitProvider implements IProvider {
       },
       {
         responseType: 'text',
-      },
+      }
     );
   }
 
@@ -337,15 +359,23 @@ export default class QBitProvider implements IProvider {
       },
       {
         responseType: 'text',
-      },
+      }
     );
   }
 
-  async getMatchingArticles(ruleName: string): Promise<Record<string, Array<string>>> {
-    return this.request<Record<string, Array<string>>>(`rss/matchingArticles?ruleName=${ruleName}`);
+  async getMatchingArticles(
+    ruleName: string
+  ): Promise<Record<string, Array<string>>> {
+    return this.request<Record<string, Array<string>>>(
+      `rss/matchingArticles?ruleName=${ruleName}`
+    );
   }
 
-  async startSearch(pattern: string, category: string, plugins: Array<string>): Promise<SearchJob> {
+  async startSearch(
+    pattern: string,
+    category: string,
+    plugins: Array<string>
+  ): Promise<SearchJob> {
     const params = {
       pattern,
       category,
@@ -358,7 +388,7 @@ export default class QBitProvider implements IProvider {
   async stopSearch(id: number): Promise<boolean> {
     return this.post('search/stop', { id }).then(
       () => true,
-      () => false,
+      () => false
     );
   }
 
@@ -371,7 +401,7 @@ export default class QBitProvider implements IProvider {
   async getSearchResults(
     id: number,
     offset?: number,
-    limit?: number,
+    limit?: number
   ): Promise<SearchResultsResponse> {
     return this.post('search/results', {
       id,
@@ -383,7 +413,7 @@ export default class QBitProvider implements IProvider {
   async deleteSearchPlugin(id: number): Promise<boolean> {
     return this.post('search/delete', { id }).then(
       () => true,
-      () => false,
+      () => false
     );
   }
 
@@ -396,7 +426,7 @@ export default class QBitProvider implements IProvider {
       sources: sources.join('|'),
     }).then(
       () => true,
-      () => false,
+      () => false
     );
   }
 
@@ -404,7 +434,10 @@ export default class QBitProvider implements IProvider {
     await this.post('search/uninstallPlugin', { names: names.join('|') });
   }
 
-  async enableSearchPlugin(names: Array<string>, enable: boolean): Promise<void> {
+  async enableSearchPlugin(
+    names: Array<string>,
+    enable: boolean
+  ): Promise<void> {
     const params = {
       names: names.join('|'),
       enable,
@@ -417,7 +450,10 @@ export default class QBitProvider implements IProvider {
     await this.post('search/updatePlugins');
   }
 
-  async downloadTorrentWithSearchPlugin(torrentUrl: string, pluginName: string): Promise<void> {
+  async downloadTorrentWithSearchPlugin(
+    torrentUrl: string,
+    pluginName: string
+  ): Promise<void> {
     await this.post('search/downloadTorrent', { torrentUrl, pluginName });
   }
 
@@ -425,11 +461,18 @@ export default class QBitProvider implements IProvider {
     return this.request<MainDataResponse>(`sync/maindata?rid=${rid || 0}`);
   }
 
-  async syncTorrentPeers(hash: string, rid?: number): Promise<TorrentPeersResponse> {
-    return this.request<TorrentPeersResponse>(`sync/torrentPeers?hash=${hash}&rid=${rid || 0}`);
+  async syncTorrentPeers(
+    hash: string,
+    rid?: number
+  ): Promise<TorrentPeersResponse> {
+    return this.request<TorrentPeersResponse>(
+      `sync/torrentPeers?hash=${hash}&rid=${rid || 0}`
+    );
   }
 
-  async addTorrentCreatorTask(taskParams: TorrentCreatorParams): Promise<string> {
+  async addTorrentCreatorTask(
+    taskParams: TorrentCreatorParams
+  ): Promise<string> {
     if (taskParams.trackers) {
       taskParams.trackers = taskParams.trackers.trim().replaceAll('\n', '|');
     }
@@ -441,9 +484,11 @@ export default class QBitProvider implements IProvider {
     return response.taskID;
   }
 
-  async getTorrentCreatorStatus(taskID?: string): Promise<Array<TorrentCreatorTask>> {
+  async getTorrentCreatorStatus(
+    taskID?: string
+  ): Promise<Array<TorrentCreatorTask>> {
     return this.request<Array<TorrentCreatorTask>>(
-      `torrentcreator/status${taskID ? `?taskID=${taskID}` : ''}`,
+      `torrentcreator/status${taskID ? `?taskID=${taskID}` : ''}`
     );
   }
 
@@ -456,7 +501,7 @@ export default class QBitProvider implements IProvider {
         headers: {
           Accept: 'application/x-bittorrent',
         },
-      },
+      }
     );
     return new Blob([arrayBuffer], { type: 'application/x-bittorrent' });
   }
@@ -471,13 +516,19 @@ export default class QBitProvider implements IProvider {
   }
 
   async getTorrents(payload?: GetTorrentPayload): Promise<Array<Torrent>> {
-    const queryString = payload ? new URLSearchParams(payload as any).toString() : '';
-    const endpoint = queryString ? `torrents/info?${queryString}` : 'torrents/info';
+    const queryString = payload
+      ? new URLSearchParams(payload as any).toString()
+      : '';
+    const endpoint = queryString
+      ? `torrents/info?${queryString}`
+      : 'torrents/info';
     return this.request<Array<Torrent>>(endpoint);
   }
 
   async getTorrentTrackers(hash: string): Promise<Array<TorrentTracker>> {
-    return this.request<Array<TorrentTracker>>(`torrents/trackers?hash=${hash}`);
+    return this.request<Array<TorrentTracker>>(
+      `torrents/trackers?hash=${hash}`
+    );
   }
 
   async setTorrentName(hash: string, name: string): Promise<void> {
@@ -488,9 +539,16 @@ export default class QBitProvider implements IProvider {
     return this.request<Array<PieceState>>(`torrents/pieceStates?hash=${hash}`);
   }
 
-  async getTorrentFiles(hash: string, indexes?: Array<number>): Promise<Array<TorrentFile>> {
-    const params = indexes ? `?hash=${hash}&indexes=${indexes.join('|')}` : `?hash=${hash}`;
-    const files = await this.request<Array<TorrentFile>>(`torrents/files${params}`);
+  async getTorrentFiles(
+    hash: string,
+    indexes?: Array<number>
+  ): Promise<Array<TorrentFile>> {
+    const params = indexes
+      ? `?hash=${hash}&indexes=${indexes.join('|')}`
+      : `?hash=${hash}`;
+    const files = await this.request<Array<TorrentFile>>(
+      `torrents/files${params}`
+    );
 
     // Add indexes if missing for compatibility with older qBittorrent versions
 
@@ -502,7 +560,7 @@ export default class QBitProvider implements IProvider {
   async getAvailableTags(): Promise<Array<string>> {
     const tags = await this.request<Array<string>>('torrents/tags');
     return tags.sort((a, b) =>
-      a.localeCompare(b.toLowerCase(), undefined, { sensitivity: 'base' }),
+      a.localeCompare(b.toLowerCase(), undefined, { sensitivity: 'base' })
     );
   }
 
@@ -513,7 +571,7 @@ export default class QBitProvider implements IProvider {
   async addTorrents(
     torrents: Array<File>,
     urls: string,
-    params?: AddTorrentPayload,
+    params?: AddTorrentPayload
   ): Promise<void> {
     let data: FormData | URLSearchParams;
 
@@ -547,14 +605,14 @@ export default class QBitProvider implements IProvider {
         body: data,
         headers: torrents.length > 0 ? {} : undefined, // Don't set Content-Type for FormData
       },
-      { responseType: 'text' },
+      { responseType: 'text' }
     );
   }
 
   async setTorrentFilePriority(
     hash: string,
     idList: Array<number>,
-    priority: FilePriority,
+    priority: FilePriority
   ): Promise<void> {
     const params = {
       hash,
@@ -565,7 +623,10 @@ export default class QBitProvider implements IProvider {
     return this.post('torrents/filePrio', params);
   }
 
-  async deleteTorrents(hashes: Array<string>, deleteFiles: boolean): Promise<void> {
+  async deleteTorrents(
+    hashes: Array<string>,
+    deleteFiles: boolean
+  ): Promise<void> {
     if (!hashes.length) return;
     return this.torrentAction('delete', hashes, { deleteFiles });
   }
@@ -622,7 +683,7 @@ export default class QBitProvider implements IProvider {
     hashes: Array<string>,
     ratioLimit: number,
     seedingTimeLimit: number,
-    inactiveSeedingTimeLimit: number,
+    inactiveSeedingTimeLimit: number
   ): Promise<void> {
     return this.torrentAction('setShareLimits', hashes, {
       ratioLimit,
@@ -639,7 +700,10 @@ export default class QBitProvider implements IProvider {
     return this.torrentAction('recheck', hashes);
   }
 
-  async setTorrentDownloadPath(hashes: Array<string>, path: string): Promise<void> {
+  async setTorrentDownloadPath(
+    hashes: Array<string>,
+    path: string
+  ): Promise<void> {
     const params = {
       id: hashes.length ? hashes.join('|') : 'all',
       path,
@@ -666,7 +730,11 @@ export default class QBitProvider implements IProvider {
     return this.post('torrents/addTrackers', params);
   }
 
-  async editTorrentTracker(hash: string, origUrl: string, newUrl: string): Promise<void> {
+  async editTorrentTracker(
+    hash: string,
+    origUrl: string,
+    newUrl: string
+  ): Promise<void> {
     const params = {
       hash,
       origUrl,
@@ -676,7 +744,10 @@ export default class QBitProvider implements IProvider {
     return this.post('torrents/editTracker', params);
   }
 
-  async removeTorrentTrackers(hash: string, trackers: Array<string>): Promise<void> {
+  async removeTorrentTrackers(
+    hash: string,
+    trackers: Array<string>
+  ): Promise<void> {
     const params = {
       hash,
       urls: trackers.join('|'),
@@ -685,13 +756,20 @@ export default class QBitProvider implements IProvider {
     return this.post('torrents/removeTrackers', params);
   }
 
-  async addTorrentPeers(hashes: Array<string>, peers: Array<string>): Promise<void> {
+  async addTorrentPeers(
+    hashes: Array<string>,
+    peers: Array<string>
+  ): Promise<void> {
     return this.torrentAction('addPeers', hashes, {
       peers: peers.join('|'),
     });
   }
 
-  async renameFile(hash: string, oldPath: string, newPath: string): Promise<void> {
+  async renameFile(
+    hash: string,
+    oldPath: string,
+    newPath: string
+  ): Promise<void> {
     const params = {
       hash,
       oldPath,
@@ -701,7 +779,11 @@ export default class QBitProvider implements IProvider {
     return this.post('torrents/renameFile', params);
   }
 
-  async renameFolder(hash: string, oldPath: string, newPath: string): Promise<void> {
+  async renameFolder(
+    hash: string,
+    oldPath: string,
+    newPath: string
+  ): Promise<void> {
     const params = {
       hash,
       oldPath,
@@ -713,18 +795,24 @@ export default class QBitProvider implements IProvider {
 
   async setTorrentPriority(
     hashes: Array<string>,
-    priority: 'increasePrio' | 'decreasePrio' | 'topPrio' | 'bottomPrio',
+    priority: 'increasePrio' | 'decreasePrio' | 'topPrio' | 'bottomPrio'
   ): Promise<void> {
     return this.post(`torrents/${priority}`, {
       hashes: hashes.join('|'),
     });
   }
 
-  async addTorrentTag(hashes: Array<string>, tags: Array<string>): Promise<void> {
+  async addTorrentTag(
+    hashes: Array<string>,
+    tags: Array<string>
+  ): Promise<void> {
     return this.torrentAction('addTags', hashes, { tags: tags.join(',') });
   }
 
-  async removeTorrentTag(hashes: Array<string>, tags?: Array<string>): Promise<void> {
+  async removeTorrentTag(
+    hashes: Array<string>,
+    tags?: Array<string>
+  ): Promise<void> {
     const options = tags ? { tags: tags.join(',') } : undefined;
     return this.torrentAction('removeTags', hashes, options);
   }
@@ -742,7 +830,9 @@ export default class QBitProvider implements IProvider {
   }
 
   async getCategories(): Promise<Array<Category>> {
-    const data = await this.request<Record<string, Category>>('torrents/categories');
+    const data = await this.request<Record<string, Category>>(
+      'torrents/categories'
+    );
     return Object.values(data);
   }
 
@@ -781,7 +871,7 @@ export default class QBitProvider implements IProvider {
         headers: {
           Accept: 'application/x-bittorrent',
         },
-      },
+      }
     );
     return new Blob([arrayBuffer], { type: 'application/x-bittorrent' });
   }
@@ -790,7 +880,10 @@ export default class QBitProvider implements IProvider {
     return this.request<SSLParameters>(`torrents/SSLParameters?hash=${hash}`);
   }
 
-  async setSSLParameters(hash: string, params: SSLParameters): Promise<boolean> {
+  async setSSLParameters(
+    hash: string,
+    params: SSLParameters
+  ): Promise<boolean> {
     try {
       await this.post('torrents/setSSLParameters', {
         hash,
@@ -841,7 +934,7 @@ export default class QBitProvider implements IProvider {
   private async request<T>(
     route: string,
     options: KyOptions = {},
-    config?: RequestConfig,
+    config?: RequestConfig
   ): Promise<T> {
     const headers = {
       Referer: window.location.origin,
@@ -890,7 +983,7 @@ export default class QBitProvider implements IProvider {
             return JSON.parse(text) as T;
           } catch (jsonError) {
             throw new Error(
-              `Failed to parse JSON response: ${jsonError instanceof Error ? jsonError.message : 'Invalid JSON'}`,
+              `Failed to parse JSON response: ${jsonError instanceof Error ? jsonError.message : 'Invalid JSON'}`
             );
           }
         case 'text':
@@ -917,7 +1010,7 @@ export default class QBitProvider implements IProvider {
   private async post(
     route: string,
     params?: Record<string, any>,
-    config?: RequestConfig,
+    config?: RequestConfig
   ): Promise<any> {
     const data = new URLSearchParams(params);
     return this.request(
@@ -926,7 +1019,7 @@ export default class QBitProvider implements IProvider {
         method: 'POST',
         body: data,
       },
-      config,
+      config
     );
   }
 
@@ -939,7 +1032,7 @@ export default class QBitProvider implements IProvider {
   private async torrentAction(
     action: string,
     hashes: Array<string>,
-    extra?: Record<string, any>,
+    extra?: Record<string, any>
   ): Promise<any> {
     const params = {
       hashes: hashes.length ? hashes.join('|') : 'all',

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import qbit from '@/services/qbit';
 import { Edit, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -26,7 +26,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
-import qbit from '@/services/qbit';
 
 interface TorrentTrackersTabProps {
   torrent: TorrentInfo;
@@ -66,10 +65,16 @@ const getTrackerStatusColor = (status: number): string => {
   }
 };
 
-export function TorrentTrackersTab({ torrent, trackers, onRefresh }: TorrentTrackersTabProps) {
+export function TorrentTrackersTab({
+  torrent,
+  trackers,
+  onRefresh,
+}: TorrentTrackersTabProps) {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [editingTracker, setEditingTracker] = useState<TorrentTracker | null>(null);
+  const [editingTracker, setEditingTracker] = useState<TorrentTracker | null>(
+    null
+  );
   const [newTrackerUrls, setNewTrackerUrls] = useState('');
   const [editTrackerUrl, setEditTrackerUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -82,7 +87,9 @@ export function TorrentTrackersTab({ torrent, trackers, onRefresh }: TorrentTrac
 
       // Note: qBittorrent API doesn't have a direct add tracker endpoint in the current implementation
       // This would need to be implemented in the API client
-      toast.info('Add tracker functionality needs to be implemented in the API client');
+      toast.info(
+        'Add tracker functionality needs to be implemented in the API client'
+      );
 
       setNewTrackerUrls('');
       setIsAddDialogOpen(false);
@@ -103,7 +110,9 @@ export function TorrentTrackersTab({ torrent, trackers, onRefresh }: TorrentTrac
 
       // Note: qBittorrent API doesn't have a direct edit tracker endpoint in the current implementation
       // This would need to be implemented in the API client
-      toast.info('Edit tracker functionality needs to be implemented in the API client');
+      toast.info(
+        'Edit tracker functionality needs to be implemented in the API client'
+      );
 
       setEditTrackerUrl('');
       setEditingTracker(null);
@@ -118,14 +127,17 @@ export function TorrentTrackersTab({ torrent, trackers, onRefresh }: TorrentTrac
   };
 
   const handleDeleteTracker = async (tracker: TorrentTracker) => {
-    if (!confirm(`Are you sure you want to remove tracker: ${tracker.url}?`)) return;
+    if (!confirm(`Are you sure you want to remove tracker: ${tracker.url}?`))
+      return;
 
     try {
       setIsLoading(true);
 
       // Note: qBittorrent API doesn't have a direct delete tracker endpoint in the current implementation
       // This would need to be implemented in the API client
-      toast.info('Delete tracker functionality needs to be implemented in the API client');
+      toast.info(
+        'Delete tracker functionality needs to be implemented in the API client'
+      );
 
       onRefresh();
     } catch (error) {
@@ -157,22 +169,29 @@ export function TorrentTrackersTab({ torrent, trackers, onRefresh }: TorrentTrac
   };
 
   return (
-    <div className='space-y-6'>
+    <div className="space-y-6">
       {/* Actions */}
       <Card>
         <CardHeader>
-          <div className='flex items-center justify-between'>
-            <CardTitle className='text-lg'>Tracker Management</CardTitle>
-            <div className='flex items-center space-x-2'>
-              <Button size='sm' variant='outline' onClick={handleReannounce} disabled={isLoading}>
-                <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg">Tracker Management</CardTitle>
+            <div className="flex items-center space-x-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleReannounce}
+                disabled={isLoading}
+              >
+                <RefreshCw
+                  className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
+                />
                 Reannounce
               </Button>
 
               <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button size='sm'>
-                    <Plus className='mr-2 h-4 w-4' />
+                  <Button size="sm">
+                    <Plus className="mr-2 h-4 w-4" />
                     Add Trackers
                   </Button>
                 </DialogTrigger>
@@ -180,19 +199,24 @@ export function TorrentTrackersTab({ torrent, trackers, onRefresh }: TorrentTrac
                   <DialogHeader>
                     <DialogTitle>Add Trackers</DialogTitle>
                   </DialogHeader>
-                  <div className='space-y-4'>
+                  <div className="space-y-4">
                     <div>
-                      <Label htmlFor='tracker-urls'>Tracker URLs (one per line)</Label>
+                      <Label htmlFor="tracker-urls">
+                        Tracker URLs (one per line)
+                      </Label>
                       <Textarea
-                        id='tracker-urls'
-                        placeholder='http://tracker.example.com:8080/announce&#10;udp://tracker.example.com:8080/announce'
+                        id="tracker-urls"
+                        placeholder="http://tracker.example.com:8080/announce&#10;udp://tracker.example.com:8080/announce"
                         value={newTrackerUrls}
                         onChange={(e) => setNewTrackerUrls(e.target.value)}
                         rows={6}
                       />
                     </div>
-                    <div className='flex justify-end space-x-2'>
-                      <Button variant='outline' onClick={() => setIsAddDialogOpen(false)}>
+                    <div className="flex justify-end space-x-2">
+                      <Button
+                        variant="outline"
+                        onClick={() => setIsAddDialogOpen(false)}
+                      >
                         Cancel
                       </Button>
                       <Button
@@ -213,13 +237,17 @@ export function TorrentTrackersTab({ torrent, trackers, onRefresh }: TorrentTrac
       {/* Trackers Table */}
       <Card>
         <CardHeader>
-          <CardTitle className='text-lg'>Trackers ({trackers.length})</CardTitle>
+          <CardTitle className="text-lg">
+            Trackers ({trackers.length})
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {trackers.length === 0 ? (
-            <div className='text-muted-foreground py-8 text-center'>No trackers found</div>
+            <div className="text-muted-foreground py-8 text-center">
+              No trackers found
+            </div>
           ) : (
-            <div className='rounded-md border'>
+            <div className="rounded-md border">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -229,54 +257,60 @@ export function TorrentTrackersTab({ torrent, trackers, onRefresh }: TorrentTrac
                     <TableHead>Seeds</TableHead>
                     <TableHead>Peers</TableHead>
                     <TableHead>Message</TableHead>
-                    <TableHead className='w-24'>Actions</TableHead>
+                    <TableHead className="w-24">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {trackers.map((tracker, index) => (
                     <TableRow key={index}>
                       <TableCell>
-                        <Badge variant='outline'>{tracker.tier}</Badge>
+                        <Badge variant="outline">{tracker.tier}</Badge>
                       </TableCell>
                       <TableCell>
-                        <div className='max-w-md'>
-                          <span className='font-mono text-sm break-all'>{tracker.url}</span>
+                        <div className="max-w-md">
+                          <span className="font-mono text-sm break-all">
+                            {tracker.url}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell>
                         <Badge
-                          variant='secondary'
+                          variant="secondary"
                           className={`${getTrackerStatusColor(tracker.status)} text-white`}
                         >
                           {getTrackerStatusText(tracker.status)}
                         </Badge>
                       </TableCell>
-                      <TableCell>{tracker.num_seeds >= 0 ? tracker.num_seeds : 'N/A'}</TableCell>
-                      <TableCell>{tracker.num_peers >= 0 ? tracker.num_peers : 'N/A'}</TableCell>
                       <TableCell>
-                        <div className='max-w-xs'>
-                          <span className='text-muted-foreground text-xs break-words'>
+                        {tracker.num_seeds >= 0 ? tracker.num_seeds : 'N/A'}
+                      </TableCell>
+                      <TableCell>
+                        {tracker.num_peers >= 0 ? tracker.num_peers : 'N/A'}
+                      </TableCell>
+                      <TableCell>
+                        <div className="max-w-xs">
+                          <span className="text-muted-foreground text-xs break-words">
                             {tracker.msg || 'No message'}
                           </span>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <div className='flex items-center space-x-1'>
+                        <div className="flex items-center space-x-1">
                           <Button
-                            size='sm'
-                            variant='ghost'
+                            size="sm"
+                            variant="ghost"
                             onClick={() => openEditDialog(tracker)}
                             disabled={isLoading}
                           >
-                            <Edit className='h-3 w-3' />
+                            <Edit className="h-3 w-3" />
                           </Button>
                           <Button
-                            size='sm'
-                            variant='ghost'
+                            size="sm"
+                            variant="ghost"
                             onClick={() => handleDeleteTracker(tracker)}
                             disabled={isLoading}
                           >
-                            <Trash2 className='h-3 w-3' />
+                            <Trash2 className="h-3 w-3" />
                           </Button>
                         </div>
                       </TableCell>
@@ -295,21 +329,27 @@ export function TorrentTrackersTab({ torrent, trackers, onRefresh }: TorrentTrac
           <DialogHeader>
             <DialogTitle>Edit Tracker</DialogTitle>
           </DialogHeader>
-          <div className='space-y-4'>
+          <div className="space-y-4">
             <div>
-              <Label htmlFor='edit-tracker-url'>Tracker URL</Label>
+              <Label htmlFor="edit-tracker-url">Tracker URL</Label>
               <Input
-                id='edit-tracker-url'
+                id="edit-tracker-url"
                 value={editTrackerUrl}
                 onChange={(e) => setEditTrackerUrl(e.target.value)}
-                placeholder='http://tracker.example.com:8080/announce'
+                placeholder="http://tracker.example.com:8080/announce"
               />
             </div>
-            <div className='flex justify-end space-x-2'>
-              <Button variant='outline' onClick={() => setIsEditDialogOpen(false)}>
+            <div className="flex justify-end space-x-2">
+              <Button
+                variant="outline"
+                onClick={() => setIsEditDialogOpen(false)}
+              >
                 Cancel
               </Button>
-              <Button onClick={handleEditTracker} disabled={!editTrackerUrl.trim() || isLoading}>
+              <Button
+                onClick={handleEditTracker}
+                disabled={!editTrackerUrl.trim() || isLoading}
+              >
                 Save Changes
               </Button>
             </div>

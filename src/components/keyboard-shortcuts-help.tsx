@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-
 import {
   Command as CommandIcon,
   HelpCircle,
@@ -15,7 +14,11 @@ import {
 } from 'lucide-react';
 
 import type { KeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
-
+import {
+  formatShortcutKey,
+  getPlatform,
+  groupShortcutsByCategory,
+} from '@/hooks/use-keyboard-shortcuts';
 import { Button } from '@/components/ui/button';
 import {
   CommandDialog,
@@ -27,12 +30,6 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from '@/components/ui/command';
-
-import {
-  formatShortcutKey,
-  getPlatform,
-  groupShortcutsByCategory,
-} from '@/hooks/use-keyboard-shortcuts';
 
 interface KeyboardShortcutsHelpProps {
   shortcuts?: Array<KeyboardShortcut>;
@@ -201,19 +198,19 @@ const DEFAULT_SHORTCUTS: Array<KeyboardShortcut> = [
 const getCategoryIcon = (category: string) => {
   switch (category) {
     case 'Navigation':
-      return <Navigation className='h-4 w-4' />;
+      return <Navigation className="h-4 w-4" />;
     case 'Actions':
-      return <Play className='h-4 w-4' />;
+      return <Play className="h-4 w-4" />;
     case 'Selection':
-      return <MousePointer className='h-4 w-4' />;
+      return <MousePointer className="h-4 w-4" />;
     case 'Bulk Actions':
-      return <Layers className='h-4 w-4' />;
+      return <Layers className="h-4 w-4" />;
     case 'Search':
-      return <Search className='h-4 w-4' />;
+      return <Search className="h-4 w-4" />;
     case 'General':
-      return <Settings className='h-4 w-4' />;
+      return <Settings className="h-4 w-4" />;
     default:
-      return <CommandIcon className='h-4 w-4' />;
+      return <CommandIcon className="h-4 w-4" />;
   }
 };
 
@@ -265,7 +262,7 @@ export function KeyboardShortcutsHelp({
 
   // Sort categories according to preferred order
   const sortedCategories = categoryOrder.filter(
-    (category) => groupedShortcuts[category]?.length > 0,
+    (category) => groupedShortcuts[category]?.length > 0
   );
 
   // Add any additional categories not in the predefined order
@@ -276,8 +273,8 @@ export function KeyboardShortcutsHelp({
   });
 
   const defaultTrigger = (
-    <Button variant='ghost' size='sm'>
-      <HelpCircle className='mr-2 h-4 w-4' />
+    <Button variant="ghost" size="sm">
+      <HelpCircle className="mr-2 h-4 w-4" />
       Help
     </Button>
   );
@@ -288,9 +285,9 @@ export function KeyboardShortcutsHelp({
       <div onClick={() => setOpen(true)}>{trigger || defaultTrigger}</div>
 
       {/* Help text */}
-      <p className='text-muted-foreground hidden text-sm md:block'>
+      <p className="text-muted-foreground hidden text-sm md:block">
         Press{' '}
-        <kbd className='bg-muted text-muted-foreground pointer-events-none inline-flex h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none'>
+        <kbd className="bg-muted text-muted-foreground pointer-events-none inline-flex h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none">
           ?
         </kbd>{' '}
         for help
@@ -298,7 +295,7 @@ export function KeyboardShortcutsHelp({
 
       {/* Command Dialog */}
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder='Search keyboard shortcuts...' />
+        <CommandInput placeholder="Search keyboard shortcuts..." />
         <CommandList>
           <CommandEmpty>No shortcuts found.</CommandEmpty>
 
@@ -342,12 +339,12 @@ export function KeyboardShortcutsHelpButton({
         shortcuts={shortcuts}
         trigger={
           <Button
-            variant='outline'
-            size='icon'
-            className='rounded-full shadow-lg transition-shadow hover:shadow-xl'
-            title='Keyboard shortcuts (Press ? for help)'
+            variant="outline"
+            size="icon"
+            className="rounded-full shadow-lg transition-shadow hover:shadow-xl"
+            title="Keyboard shortcuts (Press ? for help)"
           >
-            <Keyboard className='h-4 w-4' />
+            <Keyboard className="h-4 w-4" />
           </Button>
         }
       />
@@ -371,13 +368,13 @@ export function KeyboardShortcutsHeaderButton({
       shortcuts={shortcuts}
       trigger={
         <Button
-          variant='ghost'
-          size='sm'
-          className='text-muted-foreground hover:text-foreground'
+          variant="ghost"
+          size="sm"
+          className="text-muted-foreground hover:text-foreground"
           title={`Keyboard shortcuts (${shortcutText})`}
         >
-          <span className='mr-2'>Help</span>
-          <kbd className='bg-muted text-muted-foreground pointer-events-none inline-flex h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none'>
+          <span className="mr-2">Help</span>
+          <kbd className="bg-muted text-muted-foreground pointer-events-none inline-flex h-5 items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100 select-none">
             {shortcutText}
           </kbd>
         </Button>
@@ -423,7 +420,7 @@ export function KeyboardShortcutsCommandPalette({
 
   // Sort categories according to preferred order
   const sortedCategories = categoryOrder.filter(
-    (category) => groupedShortcuts[category]?.length > 0,
+    (category) => groupedShortcuts[category]?.length > 0
   );
 
   // Add any additional categories not in the predefined order
@@ -435,7 +432,7 @@ export function KeyboardShortcutsCommandPalette({
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
-      <CommandInput placeholder='Type a command or search shortcuts...' />
+      <CommandInput placeholder="Type a command or search shortcuts..." />
       <CommandList>
         <CommandEmpty>No shortcuts found.</CommandEmpty>
 
