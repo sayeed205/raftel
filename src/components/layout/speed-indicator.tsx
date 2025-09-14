@@ -6,6 +6,7 @@ import {
   SidebarFooter,
   SidebarMenu,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar';
 
 interface SpeedIndicatorProps {
@@ -46,15 +47,8 @@ export function SpeedIndicator({ collapsed = false }: SpeedIndicatorProps) {
         <SidebarMenu>
           <SidebarMenuItem className="flex flex-col items-center gap-1 p-1">
             <div className="flex flex-col items-center">
-              <Download className="text-muted-foreground h-3 w-3" />
-              <span className="text-muted-foreground font-mono text-[10px]">
-                {formatBytes(downloadSpeed)}/s
-              </span>
-            </div>
-            <div className="flex flex-col items-center">
-              <Upload className="text-muted-foreground h-3 w-3" />
-              <span className="text-muted-foreground font-mono text-[10px]">
-                {formatBytes(uploadSpeed)}/s
+              <span className="text-muted-foreground font-mono text-xs">
+                {formatBytes(downloadSpeed + uploadSpeed)}/s
               </span>
             </div>
           </SidebarMenuItem>
